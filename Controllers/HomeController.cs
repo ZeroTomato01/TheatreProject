@@ -6,17 +6,32 @@ namespace StarterKit.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<LoginController> _logger;
+    private readonly ILogger<HomeController> _logger;
 
+    private string AUTH_SESSION_KEY = "admin_login";
 
-    public HomeController(ILogger<LoginController> logger)
+    public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
 
-    [HttpGet("{**slug}")]
     public IActionResult Index()
     {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    public IActionResult Dashboard()
+    {
+        if (string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) 
+        {
+            return RedirectPermanent("/Login/Login");
+        }
+
         return View();
     }
 

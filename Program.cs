@@ -12,11 +12,13 @@ namespace StarterKit
 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
             builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddSession(options => 
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(3000);
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true; 
             });

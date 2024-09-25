@@ -1,45 +1,104 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using StarterKit.Services;
+using StarterKit.Models;
 
 namespace StarterKit.Controllers;
 
-
-[Route("api/v1/Login")]
 public class LoginController : Controller
 {
-    private readonly ILoginService _loginService;
-    
+    private readonly ILogger<LoginController> _logger;
 
-    public LoginController(ILoginService loginService)
+    private string AUTH_SESSION_KEY = "admin_login";
+
+    public LoginController(ILogger<LoginController> logger)
     {
-        _loginService = loginService;
+        _logger = logger;
     }
 
-    [HttpPost("Login")]
-    public IActionResult Login([FromBody] LoginBody loginBody)
+    public IActionResult Login()
     {
-        // TODO: Impelement login method
-        return Unauthorized("Incorrect password");
+        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
+        {
+            return RedirectPermanent("/Home/Dashboard");
+        }
+        return View();
     }
 
-    [HttpGet("IsAdminLoggedIn")]
-    public IActionResult IsAdminLoggedIn()
+    [HttpPost("/login/admin")]
+    public IActionResult LoginAdmin([FromForm] string username, [FromForm] string password)
     {
-        // TODO: This method should return a status 200 OK when logged in, else 403, unauthorized
-        return Unauthorized("You are not logged in");
+
+        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
+        {
+            return RedirectPermanent("/Home/Dashboard");
+        }
+
+        if (username == "admin" && password == "admin")
+        {
+            HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
+
+            return RedirectPermanent("/Home/Dashboard");
+        }
+        ViewData["message"] = "Wachtwoord of gebruikersnaam incorrect";
+        return View("Login");
     }
 
-    [HttpGet("Logout")]
+    [HttpGet("/api/login/check")]
+    public IActionResult CheckLogin()
+    {
+        string? session_user = HttpContext.Session.GetString(AUTH_SESSION_KEY);
+
+        return Json(new LoginResponseBody
+        {
+            User = session_user,
+            IsLoggedIn = !string.IsNullOrEmpty(session_user)
+        });
+    }
+
+    [HttpGet("/login/logout")]
     public IActionResult Logout()
     {
-        return Ok("Logged out");
+        HttpContext.Session.Remove(AUTH_SESSION_KEY);
+        return View("Login");
     }
 
+
+
+    [HttpPost("/api/login/admin")]
+    public IActionResult LoginAdmin([FromBody] LoginBody loginBody)
+    {
+
+        // Check if we are logged in
+        var loggedInUser = HttpContext.Session.GetString(AUTH_SESSION_KEY);
+        if (!string.IsNullOrEmpty(loggedInUser))
+        {
+            // Yes, we are logged in
+            return Json(new LoginResponseBody
+            {
+                User = loggedInUser,
+                IsLoggedIn = true
+            });
+        }
+
+        // Check if password is correct
+        if (loginBody.Username == "admin" && loginBody.Password == "admin")
+        {
+            HttpContext.Session.SetString(AUTH_SESSION_KEY, loginBody.Username);
+
+            return Json(new LoginResponseBody
+            {
+                User = loginBody.Username,
+                IsLoggedIn = true
+            });
+        }
+        // Password or username incorrect
+        return Json(new LoginResponseBody
+        {
+            User = null,
+            IsLoggedIn = false
+        });
+    }
 }
 
-public class LoginBody
-{
-    public string? Username { get; set; }
-    public string? Password { get; set; }
-}
+
