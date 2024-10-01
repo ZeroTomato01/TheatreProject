@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 
-namespace StarterKit.Utils
+namespace TheatreProject.Utils
 {
     public static class EncryptionHelper
     {

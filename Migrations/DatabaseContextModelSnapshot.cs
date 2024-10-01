@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using StarterKit.Models;
+using TheatreProject.Models;
 
 #nullable disable
 
-namespace StarterKit.Migrations
+namespace TheatreProject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace StarterKit.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("StarterKit.Models.Admin", b =>
+            modelBuilder.Entity("TheatreProject.Models.Admin", b =>
                 {
                     b.Property<int>("AdminId")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace StarterKit.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StarterKit.Models.Customer", b =>
+            modelBuilder.Entity("TheatreProject.Models.Customer", b =>
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace StarterKit.Migrations
                     b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.Reservation", b =>
+            modelBuilder.Entity("TheatreProject.Models.Reservation", b =>
                 {
                     b.Property<int>("ReservationId")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace StarterKit.Migrations
                     b.ToTable("Reservation");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.TheatreShow", b =>
+            modelBuilder.Entity("TheatreProject.Models.TheatreShow", b =>
                 {
                     b.Property<int>("TheatreShowId")
                         .ValueGeneratedOnAdd()
@@ -152,7 +152,7 @@ namespace StarterKit.Migrations
                     b.ToTable("TheatreShow");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.TheatreShowDate", b =>
+            modelBuilder.Entity("TheatreProject.Models.TheatreShowDate", b =>
                 {
                     b.Property<int>("TheatreShowDateId")
                         .ValueGeneratedOnAdd()
@@ -171,7 +171,7 @@ namespace StarterKit.Migrations
                     b.ToTable("TheatreShowDate");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.Venue", b =>
+            modelBuilder.Entity("TheatreProject.Models.Venue", b =>
                 {
                     b.Property<int>("VenueId")
                         .ValueGeneratedOnAdd()
@@ -188,13 +188,13 @@ namespace StarterKit.Migrations
                     b.ToTable("Venue");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.Reservation", b =>
+            modelBuilder.Entity("TheatreProject.Models.Reservation", b =>
                 {
-                    b.HasOne("StarterKit.Models.Customer", "Customer")
+                    b.HasOne("TheatreProject.Models.Customer", "Customer")
                         .WithMany("Reservations")
                         .HasForeignKey("CustomerId");
 
-                    b.HasOne("StarterKit.Models.TheatreShowDate", "TheatreShowDate")
+                    b.HasOne("TheatreProject.Models.TheatreShowDate", "TheatreShowDate")
                         .WithMany("Reservations")
                         .HasForeignKey("TheatreShowDateId");
 
@@ -203,40 +203,40 @@ namespace StarterKit.Migrations
                     b.Navigation("TheatreShowDate");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.TheatreShow", b =>
+            modelBuilder.Entity("TheatreProject.Models.TheatreShow", b =>
                 {
-                    b.HasOne("StarterKit.Models.Venue", "Venue")
+                    b.HasOne("TheatreProject.Models.Venue", "Venue")
                         .WithMany("TheatreShows")
                         .HasForeignKey("VenueId");
 
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.TheatreShowDate", b =>
+            modelBuilder.Entity("TheatreProject.Models.TheatreShowDate", b =>
                 {
-                    b.HasOne("StarterKit.Models.TheatreShow", "TheatreShow")
+                    b.HasOne("TheatreProject.Models.TheatreShow", "TheatreShow")
                         .WithMany("theatreShowDates")
                         .HasForeignKey("TheatreShowId");
 
                     b.Navigation("TheatreShow");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.Customer", b =>
+            modelBuilder.Entity("TheatreProject.Models.Customer", b =>
                 {
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.TheatreShow", b =>
+            modelBuilder.Entity("TheatreProject.Models.TheatreShow", b =>
                 {
                     b.Navigation("theatreShowDates");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.TheatreShowDate", b =>
+            modelBuilder.Entity("TheatreProject.Models.TheatreShowDate", b =>
                 {
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("StarterKit.Models.Venue", b =>
+            modelBuilder.Entity("TheatreProject.Models.Venue", b =>
                 {
                     b.Navigation("TheatreShows");
                 });

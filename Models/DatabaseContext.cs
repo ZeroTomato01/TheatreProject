@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using StarterKit.Utils;
+using TheatreProject.Utils;
 
-namespace StarterKit.Models
+namespace TheatreProject.Models
 {
     public class DatabaseContext : DbContext
     {

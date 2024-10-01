@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StarterKit.Models;
+using TheatreProject.Models;
 
-namespace StarterKit.Controllers
+namespace TheatreProject.Controllers
 {
     [Route("api/v1/TheatreShows")]
     [ApiController]

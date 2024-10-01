@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace StarterKit.Migrations
+namespace TheatreProject.Migrations
 {
     /// <inheritdoc />
     public partial class TestMigration : Migration

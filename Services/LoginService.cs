@@ -1,7 +1,7 @@
-using StarterKit.Models;
-using StarterKit.Utils;
+using TheatreProject.Models;
+using TheatreProject.Utils;
 
-namespace StarterKit.Services;
+namespace TheatreProject.Services;
 
 public enum LoginStatus { IncorrectPassword, IncorrectUsername, Success }
 

@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace StarterKit.Migrations
+namespace TheatreProject.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using StarterKit.Models;
+using TheatreProject.Models;
 
-namespace StarterKit.Controllers;
+namespace TheatreProject.Controllers;
 
 public class HomeController : Controller
 {

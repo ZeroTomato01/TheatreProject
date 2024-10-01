@@ -1,4 +1,4 @@
-namespace StarterKit.Models
+namespace TheatreProject.Models
 {
     public class Admin
     {

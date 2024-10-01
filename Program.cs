@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using StarterKit.Models;
-using StarterKit.Services;
+using TheatreProject.Models;
+using TheatreProject.Services;
 
-namespace StarterKit
+namespace TheatreProject
 {
     class Program
     {

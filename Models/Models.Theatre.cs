@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace StarterKit.Models
+namespace TheatreProject.Models
 {
     public class Customer
     {

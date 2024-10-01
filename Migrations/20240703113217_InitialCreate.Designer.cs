@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using StarterKit.Models;
+using TheatreProject.Models;
 
 #nullable disable
 
-namespace StarterKit.Migrations
+namespace TheatreProject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     [Migration("20240703113217_InitialCreate")]
@@ -19,7 +19,7 @@ namespace StarterKit.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
-            modelBuilder.Entity("StarterKit.Models.Admin", b =>
+            modelBuilder.Entity("TheatreProject.Models.Admin", b =>
                 {
                     b.Property<int>("AdminId")
                         .ValueGeneratedOnAdd()

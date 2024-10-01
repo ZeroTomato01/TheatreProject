@@ -1,9 +1,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using StarterKit.Services;
-using StarterKit.Models;
+using TheatreProject.Services;
+using TheatreProject.Models;
 
-namespace StarterKit.Controllers;
+namespace TheatreProject.Controllers;
 
 public class LoginController : Controller
 {
