@@ -8,8 +8,9 @@
 
 
 
-<form action="/login/admin" method="post">
+<form asp-controller="Login" asp-action="LoginAction" method="post">
     Username: <input type="text" name="username" />
     Password: <input type="password" name="password" />
     <button>Login</button>
 </form>
+

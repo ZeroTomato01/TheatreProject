@@ -5,6 +5,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
+[Route("Login")]
 public class LoginController : Controller
 {
     private readonly ILogger<LoginController> _logger;
@@ -16,17 +17,24 @@ public class LoginController : Controller
         _logger = logger;
     }
 
-    public IActionResult Login()
+    //call in the view (_Layout.cshtml) using asp-controller="Login" and asp-action="ViewLoginPage"
+    //or using "Login/ViewLoginPage"
+    [HttpGet("ViewLoginPage")]
+    public IActionResult ViewLoginPage() 
     {
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
         {
             return RedirectPermanent("/Home/Dashboard");
         }
-        return View();
+        return View("Login");
     }
 
-    [HttpPost("/login/admin")]
-    public IActionResult LoginAdmin([FromForm] string username, [FromForm] string password)
+    [HttpPost("api/LoginAction")] //this attribute isn't necessary for instances where "method" is specified
+    //like the call in View(Login.cshtml) using action="Login" and method="LoginAction"
+    //but it IS (seemingly) necessary for instances where "method" can't be specified, like in _Layout.cshtml
+    //for example Logout() being called in _Layout.cshtml doesn't work without an attribute as no method is specified
+    
+    public IActionResult LoginAction([FromForm] string username, [FromForm] string password)
     {
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
@@ -41,10 +49,10 @@ public class LoginController : Controller
             return RedirectPermanent("/Home/Dashboard");
         }
         ViewData["message"] = "Wachtwoord of gebruikersnaam incorrect";
-        return View("Login");
+        return View("Login"); 
     }
 
-    [HttpGet("/api/login/check")]
+    [HttpGet("api/CheckLogin")]
     public IActionResult CheckLogin()
     {
         string? session_user = HttpContext.Session.GetString(AUTH_SESSION_KEY);
@@ -56,16 +64,17 @@ public class LoginController : Controller
         });
     }
 
-    [HttpGet("/login/logout")]
+    [HttpGet("api/logout")]
     public IActionResult Logout()
     {
         HttpContext.Session.Remove(AUTH_SESSION_KEY);
         return View("Login");
+        //return RedirectPermanent("Login/ViewLoginPage");
     }
 
 
 
-    [HttpPost("/api/login/admin")]
+    //[HttpPost("/api/login/admin")] //this method wasn't ever used so im not sure what to change it to
     public IActionResult LoginAdmin([FromBody] LoginBody loginBody)
     {
 

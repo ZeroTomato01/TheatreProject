@@ -4,8 +4,8 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers
 {
-    [Route("api/v1/TheatreShows")]
-    [ApiController]
+    //[Route("api/v1/TheatreShows")]
+    //[ApiController]
     public class TheatreShowController : ControllerBase
     {
         private readonly DatabaseContext _context;
@@ -15,7 +15,7 @@ namespace TheatreProject.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        //[HttpGet]
         public async Task<IActionResult> GetTheatreShows(
             int? id,
             string? title,

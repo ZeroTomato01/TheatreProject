@@ -4,32 +4,35 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
+[Route("Home")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
     private string AUTH_SESSION_KEY = "admin_login";
-
+    
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
-
+    [Route("Index")]
     public IActionResult Index()
     {
         return View();
     }
 
+    [Route("Privacy")]
     public IActionResult Privacy()
     {
         return View();
     }
 
+    [Route("Dashboard")]
     public IActionResult Dashboard()
     {
         if (string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) 
         {
-            return RedirectPermanent("/Login/Login");
+            return RedirectPermanent("/Login/ViewLoginPage");
         }
 
         return View();
