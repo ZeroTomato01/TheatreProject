@@ -7,13 +7,13 @@ namespace TheatreProject.Controllers;
 
 public class LoginController : Controller
 {
-    private readonly ILogger<LoginController> _logger;
 
     private string AUTH_SESSION_KEY = "admin_login";
+    LoginService _loginService;
 
-    public LoginController(ILogger<LoginController> logger)
+    public LoginController(LoginService loginService)
     {
-        _logger = logger;
+        _loginService = loginService;
     }
 
     public IActionResult Login()
@@ -26,7 +26,7 @@ public class LoginController : Controller
     }
 
     [HttpPost("/login/admin")]
-    public IActionResult LoginAdmin([FromForm] string username, [FromForm] string password)
+    public async Task<IActionResult> LoginAdmin([FromForm] string username, [FromForm] string password)
     {
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
@@ -34,14 +34,29 @@ public class LoginController : Controller
             return RedirectPermanent("/Home/Dashboard");
         }
 
-        if (username == "admin" && password == "admin")
+        var loggedInUser = await _loginService.CheckPassword(username, password);
+
+        if (loggedInUser == LoginStatus.Success)
         {
             HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
 
             return RedirectPermanent("/Home/Dashboard");
         }
-        ViewData["message"] = "Wachtwoord of gebruikersnaam incorrect";
+
+        if (loggedInUser == LoginStatus.IncorrectPassword)
+        {
+            ViewData["message"] = "Wachtwoord incorrect";
+            return View("Login");
+        }
+
+        if (loggedInUser == LoginStatus.IncorrectUsername)
+        {
+            ViewData["message"] = "username incorrect";
+            return View("Login");
+        }
+
         return View("Login");
+
     }
 
     [HttpGet("/api/login/check")]
