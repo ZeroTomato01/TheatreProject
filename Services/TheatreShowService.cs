@@ -1,0 +1,123 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TheatreProject.Models;
+
+namespace TheatreProject.Services;
+public class TheatreShowService : ITheatreShowService
+{
+    private readonly DatabaseContext _context;
+
+        public TheatreShowService(DatabaseContext context)
+        {
+            _context = context;
+        }
+    public async Task<IActionResult> GetTheatreShows(int? id,
+            string? title,
+            string? description,
+            string? location,
+            DateTime? startDate,
+            DateTime? endDate,
+            string? sortBy = "Title",
+            bool descending = false)
+    {
+        IQueryable<TheatreShow> query = _context.Set<TheatreShow>()
+                .Include(show => show.Venue)
+                .Include(show => show.theatreShowDates);
+
+        // Filter voor ID
+        if (id.HasValue)
+        {
+            var show = await query.FirstOrDefaultAsync(s => s.TheatreShowId == id.Value);
+            if (show == null)
+            {
+                return new NotFoundObjectResult("Show not found");
+            }
+            return new OkObjectResult(show);
+
+            //return Ok(show);
+        }
+
+        // Filter voor titel of beschrijving
+        if (!string.IsNullOrEmpty(title))
+        {
+            query = query.Where(s => s.Title != null && s.Title.Contains(title));
+        }
+        if (!string.IsNullOrEmpty(description))
+        {
+            query = query.Where(s => s.Description != null && s.Description.Contains(description));
+        }
+
+        // Filter voor locatie (locatie naam)
+        if (!string.IsNullOrEmpty(location))
+        {
+            query = query.Where(s => s.Venue != null && s.Venue.Name.Contains(location));
+        }
+
+        // Filter de shows op basis van start en eind datum
+        if (startDate.HasValue && endDate.HasValue)
+        {
+            query = query.Where(s => s.theatreShowDates.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
+        }
+
+        // Sorteer de shows op basis van de sortBy parameter
+        query = sortBy switch
+        {
+            "Price" => descending ? query.OrderByDescending(s => s.Price) : query.OrderBy(s => s.Price),
+            "Date" => descending ? query.OrderByDescending(s => s.theatreShowDates.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.theatreShowDates.FirstOrDefault().DateAndTime),
+            _ => descending ? query.OrderByDescending(s => s.Title) : query.OrderBy(s => s.Title),
+        };
+
+        // Voer de query uit en geef de resultaten terug
+        var shows = await query.ToListAsync();
+        return new OkObjectResult(shows);
+    }
+    public async Task<IActionResult> PostTheatreShow(TheatreShow theatreShow)
+    {
+        if(theatreShow is not null)
+        {
+            var DBTheatreShow = _context.TheatreShow.Find(theatreShow.TheatreShowId);
+            if(DBTheatreShow is not null)
+            {
+                return new BadRequestObjectResult($"there's already a TheatreShow with id: {theatreShow.TheatreShowId}in databse, use update instead");
+            }
+            else
+            {
+                await _context.TheatreShow.AddAsync(theatreShow);
+                _context.SaveChanges();
+                return new OkObjectResult($"theatreshow was added to database: {theatreShow}");
+            }
+        }
+        else return new BadRequestObjectResult("given theatreshow was null");
+    }
+    public async Task<IActionResult> UpdateTheatreShow(TheatreShow theatreShow)
+    {
+        var DBShow =await _context.TheatreShow.FindAsync(theatreShow.TheatreShowId);
+        if(DBShow is not null)
+        {
+            DBShow.Venue = theatreShow.Venue;
+            DBShow.Title = theatreShow.Title;
+            DBShow.theatreShowDates = theatreShow.theatreShowDates;
+            DBShow.Price = theatreShow.Price;
+            DBShow.Description = theatreShow.Description;
+            //DBShow = theatreShow;
+            _context.SaveChanges();
+
+            return new OkObjectResult($"Theatre updated to {theatreShow}");
+        }
+        else return new BadRequestObjectResult($"no threatre with given id: {theatreShow.TheatreShowId} was found in database");
+        
+    }
+    public async Task<IActionResult> DeleteTheatreShow(int id)
+    {  
+        var DBShow = await _context.TheatreShow.FindAsync(id);
+        if(DBShow is not null)
+        {
+            _context.TheatreShow.Remove(DBShow);
+            _context.SaveChanges();
+            return new OkObjectResult("Theatre deleted");
+        }
+        
+        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
+    }
+}

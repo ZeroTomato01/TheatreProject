@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
+using TheatreProject.Services;
 
 namespace TheatreProject.Controllers
 {
@@ -8,11 +10,11 @@ namespace TheatreProject.Controllers
     //[ApiController]
     public class TheatreShowController : ControllerBase
     {
-        private readonly DatabaseContext _context;
+        private TheatreShowService _theatreShowService;
 
-        public TheatreShowController(DatabaseContext context)
+        public TheatreShowController(TheatreShowService theatreShowService)
         {
-            _context = context;
+            _theatreShowService = theatreShowService;
         }
 
         //[HttpGet]
@@ -26,54 +28,21 @@ namespace TheatreProject.Controllers
             string? sortBy = "Title",
             bool descending = false)
         {
-            IQueryable<TheatreShow> query = _context.Set<TheatreShow>()
-                .Include(show => show.Venue)
-                .Include(show => show.theatreShowDates);
+            return await _theatreShowService.GetTheatreShows(id, title, description, location, startDate, endDate, sortBy, descending);
+        }
 
-            // Filter voor ID
-            if (id.HasValue)
-            {
-                var show = await query.FirstOrDefaultAsync(s => s.TheatreShowId == id.Value);
-                if (show == null)
-                {
-                    return NotFound("Show not found");
-                }
-                return Ok(show);
-            }
+        protected async Task<IActionResult> PostTheatreShow([FromBody] TheatreShow theatreShow)
+        {
+            return await _theatreShowService.PostTheatreShow(theatreShow);
+        }
 
-            // Filter voor titel of beschrijving
-            if (!string.IsNullOrEmpty(title))
-            {
-                query = query.Where(s => s.Title != null && s.Title.Contains(title));
-            }
-            if (!string.IsNullOrEmpty(description))
-            {
-                query = query.Where(s => s.Description != null && s.Description.Contains(description));
-            }
-
-            // Filter voor locatie (locatie naam)
-            if (!string.IsNullOrEmpty(location))
-            {
-                query = query.Where(s => s.Venue != null && s.Venue.Name.Contains(location));
-            }
-
-            // Filter de shows op basis van start en eind datum
-            if (startDate.HasValue && endDate.HasValue)
-            {
-                query = query.Where(s => s.theatreShowDates.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
-            }
-
-            // Sorteer de shows op basis van de sortBy parameter
-            query = sortBy switch
-            {
-                "Price" => descending ? query.OrderByDescending(s => s.Price) : query.OrderBy(s => s.Price),
-                "Date" => descending ? query.OrderByDescending(s => s.theatreShowDates.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.theatreShowDates.FirstOrDefault().DateAndTime),
-                _ => descending ? query.OrderByDescending(s => s.Title) : query.OrderBy(s => s.Title),
-            };
-
-            // Voer de query uit en geef de resultaten terug
-            var shows = await query.ToListAsync();
-            return Ok(shows);
+        public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow)
+        {
+            return await _theatreShowService.UpdateTheatreShow(theatreShow);
+        }
+        public async Task<IActionResult> DeleteTheatreShow([FromQuery] int id)
+        {  
+            return await _theatreShowService.DeleteTheatreShow(id);
         }
     }
 }
