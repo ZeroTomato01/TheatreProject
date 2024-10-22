@@ -14,15 +14,15 @@ public class ReservationController : Controller
     {
         return await _reservationService.GetReservation(id);
     }
-    protected async Task<IActionResult> PostTheatreShow([FromBody] Reservation reservation)
+    protected async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
     {
         return await _reservationService.PostReservation(reservation);
     }
-    public async Task<IActionResult> UpdateTheatreShow([FromBody] Reservation reservation)
+    public async Task<IActionResult> UpdateReservation([FromBody] Reservation reservation)
     {
         return await _reservationService.UpdateReservation(reservation);
     }
-    public async Task<IActionResult> DeleteTheatreShow([FromQuery] int id)
+    public async Task<IActionResult> DeleteReservation([FromQuery] int id)
     {  
         return await _reservationService.DeleteReservation(id);
     }
