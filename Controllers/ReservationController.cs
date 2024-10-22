@@ -47,7 +47,7 @@ namespace TheatreProject.Controllers
             }
             return BadRequest();
         }
-
+        [HttpPost("batch")]
         protected async Task<IActionResult> PostBatch([FromBody] List<Reservation> reservations)
         {
             var result = await _reservationService.PostBatch(reservations);
@@ -59,7 +59,7 @@ namespace TheatreProject.Controllers
             return BadRequest();
         }
 
-        [HttpPatch()]
+        [HttpPut()]
         public async Task<IActionResult> Update([FromBody] Reservation reservation)
         {
             bool result =  await _reservationService.Update(reservation);

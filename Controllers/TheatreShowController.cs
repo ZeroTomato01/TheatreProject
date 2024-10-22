@@ -16,7 +16,7 @@ namespace TheatreProject.Controllers
             _theatreShowService = theatreShowService;
         }
 
-        //[HttpGet]
+        [HttpGet()]
         public async Task<IActionResult> GetTheatreShows(
             int? id,
             string? title,
@@ -29,16 +29,17 @@ namespace TheatreProject.Controllers
         {
             return await _theatreShowService.GetTheatreShows(id, title, description, location, startDate, endDate, sortBy, descending);
         }
-
+        [HttpPost()]
         protected async Task<IActionResult> PostTheatreShow([FromBody] TheatreShow theatreShow)
         {
             return await _theatreShowService.PostTheatreShow(theatreShow);
         }
-
+        [HttpPut()]
         public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow)
         {
             return await _theatreShowService.UpdateTheatreShow(theatreShow);
         }
+        [HttpDelete()]
         public async Task<IActionResult> DeleteTheatreShow([FromQuery] int id)
         {  
             return await _theatreShowService.DeleteTheatreShow(id);

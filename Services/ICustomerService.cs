@@ -3,8 +3,8 @@ using TheatreProject.Models;
 
 public interface ICustomerService
 {
-    public Task<IActionResult> Get(int id);
+    public Task<Customer> Get(int id);
     public Task<bool> Post(Customer customer);
-    public Task<IActionResult> Update(Customer customer);
-    public Task<IActionResult> Delete(int id);
+    public Task<bool> Update(Customer customer);
+    public Task<bool> Delete(int id);
 }

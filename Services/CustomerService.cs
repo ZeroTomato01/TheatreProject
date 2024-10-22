@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 
-[Route("Customer")]
 public class CustomerService : ICustomerService
 {
     
@@ -23,7 +22,6 @@ public class CustomerService : ICustomerService
        
         
     }
-    [HttpPost()]
     public async Task<bool> Post(Customer customer)
     {
         if(customer is not null)
