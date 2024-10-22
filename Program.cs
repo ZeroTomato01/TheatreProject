@@ -62,8 +62,10 @@ namespace TheatreProject
 
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
+
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
+            builder.Services.AddScoped<IVenueService, VenueService>();
 
             var app = builder.Build();
 

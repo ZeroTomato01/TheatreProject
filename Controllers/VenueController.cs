@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
+using TheatreProject.Services;
 
 namespace TheatreProject.Controllers
 {
     [Route($"{Globals.Version}/Venue")]
     public class VenueController : Controller
     {
-        VenueService _venueService;
+        IVenueService _venueService;
 
-        public VenueController(VenueService venueService)
+        public VenueController(IVenueService venueService)
         {
             _venueService = venueService;
         }

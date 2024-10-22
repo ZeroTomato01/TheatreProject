@@ -5,7 +5,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route("{Globals.Version}/Login")]
+[Route($"{Globals.Version}/Login")]
 public class LoginController : Controller
 {
 
@@ -24,7 +24,7 @@ public class LoginController : Controller
     {
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
         {
-            return RedirectPermanent("/Home/Dashboard");
+            return RedirectPermanent($"/{Globals.Version}/Home/Dashboard");
         }
         return View("Login");
     }
@@ -41,7 +41,7 @@ public class LoginController : Controller
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
         {
-            return RedirectPermanent("/Home/Dashboard");
+            return RedirectPermanent($"/{Globals.Version}/Home/Dashboard");
         }
 
         var loggedInUser = await _loginService.CheckCredentials(username, password);
@@ -50,7 +50,7 @@ public class LoginController : Controller
         {
             case LoginStatus.Success:
                 HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
-                return RedirectPermanent("/Home/Dashboard");
+                return RedirectPermanent($"/{Globals.Version}/Home/Dashboard");
 
             case LoginStatus.IncorrectPassword:
                 ViewData["message"] = "Wachtwoord incorrect";

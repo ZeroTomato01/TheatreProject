@@ -16,7 +16,8 @@ public class CustomerController : Controller
     }
     protected async Task<IActionResult> PostCustomer([FromBody] Customer customer)
     {
-        return await _customerService.PostCustomer(customer);
+        throw new NotImplementedException();
+        //return await _customerService.PostCustomer(customer);
     }
     public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
     {

@@ -1,6 +1,7 @@
 using TheatreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using TheatreProject.Utils;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace TheatreProject.Services;
@@ -24,7 +25,10 @@ public class LoginService : ILoginService
         var admin = await _context.Admin.FirstOrDefaultAsync(a => a.UserName == username);
         if (admin != null)
         {
-            if (admin.Password == EncryptionHelper.EncryptPassword(inputPassword)) return LoginStatus.Success;
+            if (!string.IsNullOrEmpty(inputPassword))
+            {
+                if (admin.Password == EncryptionHelper.EncryptPassword(inputPassword)) return LoginStatus.Success;
+            }
             return LoginStatus.IncorrectPassword;
         }
         return LoginStatus.IncorrectUsername;

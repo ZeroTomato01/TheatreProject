@@ -68,6 +68,6 @@ public class VenueService : IVenueService
 
       public Task<bool> CheckVenue(int id)
     {
-        
+        throw new NotImplementedException();
     }
 }
