@@ -65,4 +65,9 @@ public class VenueService : IVenueService
         else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
         
     }
+
+      public Task<bool> CheckVenue(int id)
+    {
+        
+    }
 }

@@ -5,10 +5,12 @@ public class TheatreShowDateService : ITheatreShowDateService
 {
     
     private DatabaseContext _context;
+    private TheatreShowDateService _theatreShowDateService;
 
-    public TheatreShowDateService(DatabaseContext context)
+    public TheatreShowDateService(DatabaseContext context, TheatreShowDateService theatreShowDateService)
     {
         _context = context;
+        _theatreShowDateService = theatreShowDateService;
     }
     public async Task<IActionResult> GetTheatreShowDate(int id)
     {
@@ -62,6 +64,14 @@ public class TheatreShowDateService : ITheatreShowDateService
             return new OkObjectResult("TheatreShowDate deleted");
         }
         else return new BadRequestObjectResult($"no TheatreShowDate with given id: {id} was found in database");
-        
+    }
+
+    public async Task<bool> CheckTheatreShowDate(int id)
+    {
+        var DBtheatreShowDate = await _context.TheatreShowDate.FindAsync(id);
+        if(DBtheatreShowDate is null) return false;
+        if(DBtheatreShowDate.TheatreShow is null) return false;
+        if(DBtheatreShowDate.TheatreShow.TheatreShowId is 0) return false;
+        else return await _theatreShowDateService.CheckTheatreShowDate(DBtheatreShowDate.TheatreShow.TheatreShowId);
     }
 }
