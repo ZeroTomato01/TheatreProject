@@ -4,7 +4,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route("Home")]
+[Route($"{Globals.Version}/Home")]
 public class HomeController : Controller
 {
 

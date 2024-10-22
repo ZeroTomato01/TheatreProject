@@ -5,7 +5,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route($"Login")]
+[Route($"{Globals.Version}/Login")]
 public class LoginController : Controller
 {
 
