@@ -26,5 +26,4 @@ public class CustomerController : Controller
     {  
         return await _customerService.DeleteCustomer(id);
     }
-
 }

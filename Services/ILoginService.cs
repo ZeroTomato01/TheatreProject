@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 namespace TheatreProject.Services;
 
 public interface ILoginService

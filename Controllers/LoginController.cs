@@ -5,21 +5,21 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route($"Login")]
+[Route("Login")]
 public class LoginController : Controller
 {
 
     private string AUTH_SESSION_KEY = "admin_login";
-    LoginService _loginService;
+    ILoginService _loginService;
 
-    public LoginController(LoginService loginService)
+    public LoginController(ILoginService loginService)
     {
         _loginService = loginService;
     }
 
     //call in the view (_Layout.cshtml) using asp-controller="Login" and asp-action="ViewLoginPage"
     //or using "Login/ViewLoginPage"
-    [HttpGet("ViewLoginPage")]
+    [HttpGet("api/ViewLoginPage")]
     public IActionResult ViewLoginPage() 
     {
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
@@ -57,7 +57,7 @@ public class LoginController : Controller
                 return View("Login");
 
             case LoginStatus.IncorrectUsername:
-                ViewData["message"] = "username incorrect";
+                ViewData["message"] = "Username incorrect";
                 return View("Login");
 
             default:
