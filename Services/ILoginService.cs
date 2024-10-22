@@ -3,5 +3,5 @@ namespace TheatreProject.Services;
 
 public interface ILoginService
 {
-    public Task<LoginStatus> CheckPassword(string username, string inputPassword);
+    public Task<LoginStatus> CheckCredentials(string username, string inputPassword);
 }

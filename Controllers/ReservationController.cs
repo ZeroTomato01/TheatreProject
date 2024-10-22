@@ -14,34 +14,94 @@ namespace TheatreProject.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetReservation([FromQuery] int id = 0)
+        public async Task<IActionResult> Get([FromQuery] int id = 0)
         {
-            return await _reservationService.GetReservation(id);
+            var result = await _reservationService.Get(id);
+            if (result is not null)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
         }
 
         [HttpGet("batch")]
-        public async Task<IActionResult> GetBatchReservations([FromQuery] List<int> ids)
+        public async Task<IActionResult> GetBatch([FromQuery] List<int> ids)
         {
-            return await _reservationService.GetBatchReservations(ids);
+            var result = await _reservationService.GetBatch(ids);
+            return Ok(result);
+        }
+
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _reservationService.GetAll();
+            return Ok(result);
         }
 
         [HttpPost()]
-        protected async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
+        protected async Task<IActionResult> Post([FromBody] Reservation reservation)
         {
-            return await _reservationService.PostReservation(reservation);
+            bool result = await _reservationService.Post(reservation);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        protected async Task<IActionResult> PostBatch([FromBody] List<Reservation> reservations)
+        {
+            var result = await _reservationService.PostBatch(reservations);
+            if (result.Contains(true))
+            {
+                int trueCount = result.Count(x => x == true);
+                return Ok($"{trueCount} out of {result.Count} got succesfully posted");
+            }
+            return BadRequest();
         }
 
         [HttpPatch()]
-        public async Task<IActionResult> UpdateReservation([FromBody] Reservation reservation)
+        public async Task<IActionResult> Update([FromBody] Reservation reservation)
         {
-            return await _reservationService.UpdateReservation(reservation);
+            bool result =  await _reservationService.Update(reservation);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        public async Task<IActionResult> UpdateBatch([FromBody] List<Reservation> reservations)
+        {
+            var result = await _reservationService.UpdateBatch(reservations);
+            if (result.Contains(true))
+            {
+                int trueCount = result.Count(x => x == true);
+                return Ok($"{trueCount} out of {result.Count} got succesfully updated");
+            }
+            return BadRequest();
         }
 
         [HttpDelete()]
         public async Task<IActionResult> DeleteReservation([FromQuery] int id)
 
         {  
-            return await _reservationService.DeleteReservation(id);
+            bool result =  await _reservationService.Delete(id);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        public async Task<IActionResult> DeleteBatch([FromQuery] List<int> ids)
+        {
+            var result = await _reservationService.DeleteBatch(ids);
+            if (result.Contains(true))
+            {
+                int trueCount = result.Count(x => x == true);
+                return Ok($"{trueCount} out of {result.Count} got succesfully deleted");
+            }
+            return BadRequest();
         }
     }
 }

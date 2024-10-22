@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
-using TheatreProject.Utils;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace TheatreProject.Services;
 
@@ -19,9 +18,9 @@ public class LoginService : ILoginService
         _context = context;
     }
 
-    public async Task<LoginStatus> CheckPassword(string username, string inputPassword)
+    public async Task<LoginStatus> CheckCredentials(string username, string inputPassword)
     {
-        var admin = await _context.Admin.FindAsync(username);
+        var admin = await _context.Admin.FirstOrDefaultAsync(a => a.UserName == username);
         if (admin != null)
         {
             if (admin.Password == inputPassword) return LoginStatus.Success;

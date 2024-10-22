@@ -48,8 +48,13 @@ namespace TheatreProject
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
+
             builder.Services.AddDistributedMemoryCache();
+
             builder.Services.AddSession(options => 
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(3000);
@@ -59,12 +64,6 @@ namespace TheatreProject
 
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
-
-
-
-            builder.Services.AddScoped<ILoginService, LoginService>();
-            builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
-            
 
             var app = builder.Build();
 
@@ -78,7 +77,6 @@ namespace TheatreProject
 
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             //app.UseRouting();
 
             app.UseAuthorization();
