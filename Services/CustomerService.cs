@@ -26,45 +26,47 @@ public class CustomerService : ICustomerService
     [HttpPost()]
     public async Task<bool> PostCustomer(Customer customer)
     {
-        if(customer is not null)
-        {
-            if (customer.CustomerId == 0) return new BadRequestObjectResult($"id was 0, customer isn't posted");
-            var DBCustomer = await _context.Customer.FindAsync(customer.CustomerId);
-            if(DBCustomer is not null)
-            {
-                return new BadRequestObjectResult($"there's already a customer with id: {customer.CustomerId}in databse, use update instead");
-            }
-            else
-            {
-                if(DBCustomer.Email is null) return new BadRequestObjectResult($"email was not given, customer isn't posted");
-                if(DBCustomer.FirstName is null) return new BadRequestObjectResult($"first name was not given, customer isn't posted");
-                if(DBCustomer.LastName is null) return new BadRequestObjectResult($"last name was not given, customer isn't posted");
-                if(DBCustomer.Reservations is null) return new BadRequestObjectResult($"reservations were not given, customer isn't posted");
-                else 
-                {
-                    // foreach(Reservation reservation in DBCustomer.Reservations)
-                    // {
-                    //     bool success = await _reservationService.CheckReservation(reservation.ReservationId);
-                    //     if(success is false) return new BadRequestObjectResult($"reservation with id: {reservation.ReservationId} wasn't found in database, customer isn't posted");
-                    // }
-                    foreach(Reservation reservation in DBCustomer.Reservations)
-                    {
-                        if (reservation.Customer is null) return false;
-                        if (reservation.)
+        // if(customer is not null)
+        // {
+        //     //if (customer.CustomerId == 0) return new BadRequestObjectResult($"id was 0, customer isn't posted");
+        //     var DBCustomer = await _context.Customer.FindAsync(customer.CustomerId);
+        //     if(DBCustomer is not null)
+        //     {
+        //         //return new BadRequestObjectResult($"there's already a customer with id: {customer.CustomerId}in databse, use update instead");
+        //     }
+        //     else
+        //     {
+        //         // if(DBCustomer.Email is null) return new BadRequestObjectResult($"email was not given, customer isn't posted");
+        //         // if(DBCustomer.FirstName is null) return new BadRequestObjectResult($"first name was not given, customer isn't posted");
+        //         // if(DBCustomer.LastName is null) return new BadRequestObjectResult($"last name was not given, customer isn't posted");
+        //         if(DBCustomer.Reservations is null) return new BadRequestObjectResult($"reservations were not given, customer isn't posted");
+            
+        //         else 
+        //         {
+        //             // foreach(Reservation reservation in DBCustomer.Reservations)
+        //             // {
+        //             //     bool success = await _reservationService.CheckReservation(reservation.ReservationId);
+        //             //     if(success is false) return new BadRequestObjectResult($"reservation with id: {reservation.ReservationId} wasn't found in database, customer isn't posted");
+        //             // }
+        //             foreach(Reservation reservation in DBCustomer.Reservations)
+        //             {
+        //                 if (reservation.Customer is null) return false;
+        //                 if (reservation.)
 
-                    }
+        //             }
 
-                }
+        //         }
 
                 
+        //         return true;
 
-
-                await _context.Customer.AddAsync(customer);
-                _context.SaveChanges();
-                return new OkObjectResult($"customer was added to database: {customer}");
-            }
-        }
-        else return new BadRequestObjectResult("given customer was null");
+        //         await _context.Customer.AddAsync(customer);
+        //         _context.SaveChanges();
+        //         //return new OkObjectResult($"customer was added to database: {customer}");
+        //     }
+        // }
+        // //else return new BadRequestObjectResult("given customer was null");
+        return false;
     }
     public async Task<IActionResult> UpdateCustomer(Customer customer)
     {
