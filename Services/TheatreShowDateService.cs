@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
+using TheatreProject.Services;
 
 public class TheatreShowDateService : ITheatreShowDateService
 {
     
     private DatabaseContext _context;
-    private TheatreShowDateService _theatreShowDateService;
+    private TheatreShowService _theatreShowService;
 
-    public TheatreShowDateService(DatabaseContext context, TheatreShowDateService theatreShowDateService)
+    public TheatreShowDateService(DatabaseContext context, TheatreShowService theatreShowService)
     {
         _context = context;
-        _theatreShowDateService = theatreShowDateService;
+        _theatreShowService = theatreShowService;
     }
     public async Task<IActionResult> GetTheatreShowDate(int id)
     {
@@ -72,6 +73,6 @@ public class TheatreShowDateService : ITheatreShowDateService
         if(DBtheatreShowDate is null) return false;
         if(DBtheatreShowDate.TheatreShow is null) return false;
         if(DBtheatreShowDate.TheatreShow.TheatreShowId is 0) return false;
-        else return await _theatreShowDateService.CheckTheatreShowDate(DBtheatreShowDate.TheatreShow.TheatreShowId);
+        else return await _theatreShowService.CheckTheatreShow(DBtheatreShowDate.TheatreShow.TheatreShowId);
     }
 }
