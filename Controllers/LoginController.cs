@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Services;
 using TheatreProject.Models;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace TheatreProject.Controllers;
 
@@ -36,27 +37,23 @@ public class LoginController : Controller
 
         var loggedInUser = await _loginService.CheckPassword(username, password);
 
-        if (loggedInUser == LoginStatus.Success)
+        switch (loggedInUser)
         {
-            HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
+            case LoginStatus.Success:
+                HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
+                return RedirectPermanent("/Home/Dashboard");
 
-            return RedirectPermanent("/Home/Dashboard");
+            case LoginStatus.IncorrectPassword:
+                ViewData["message"] = "Wachtwoord incorrect";
+                return View("Login");
+
+            case LoginStatus.IncorrectUsername:
+                ViewData["message"] = "username incorrect";
+                return View("Login");
+
+            default:
+                return View("Login");
         }
-
-        if (loggedInUser == LoginStatus.IncorrectPassword)
-        {
-            ViewData["message"] = "Wachtwoord incorrect";
-            return View("Login");
-        }
-
-        if (loggedInUser == LoginStatus.IncorrectUsername)
-        {
-            ViewData["message"] = "username incorrect";
-            return View("Login");
-        }
-
-        return View("Login");
-
     }
 
     [HttpGet("/api/login/check")]

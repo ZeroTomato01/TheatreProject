@@ -6,14 +6,8 @@ namespace TheatreProject.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
     private string AUTH_SESSION_KEY = "admin_login";
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
 
     public IActionResult Index()
     {
