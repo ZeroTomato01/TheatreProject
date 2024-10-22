@@ -11,17 +11,12 @@ public class ReservationService : IReservationService
         _context = context;
     }
 
-    public async Task<IActionResult> GetReservation(int id)
+    public async Task<Reservation?> GetReservation(int id)
     {
         var DBReservation = await _context.Reservation.FindAsync(id);
-
-        if(DBReservation is not null)
-        {
-            return new OkObjectResult(DBReservation);
-        }
-        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
-        
+        return DBReservation;
     }
+
     public async Task<IActionResult> PostReservation(Reservation reservation)
     {
         if(reservation is not null)

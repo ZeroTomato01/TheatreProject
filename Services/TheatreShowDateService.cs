@@ -61,7 +61,7 @@ public class TheatreShowDateService : ITheatreShowDateService
             _context.SaveChanges();
             return new OkObjectResult("TheatreShowDate deleted");
         }
-        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
+        else return new BadRequestObjectResult($"no TheatreShowDate with given id: {id} was found in database");
         
     }
 }

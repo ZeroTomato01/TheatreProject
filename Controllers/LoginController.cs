@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace TheatreProject.Controllers;
 
-[Route("Login")]
+[Route($"Login")]
 public class LoginController : Controller
 {
 
     private string AUTH_SESSION_KEY = "admin_login";
-    LoginService _loginService;
+    ILoginService _loginService;
 
-    public LoginController(LoginService loginService)
+    public LoginController(ILoginService loginService)
     {
         _loginService = loginService;
     }
@@ -31,12 +31,7 @@ public class LoginController : Controller
     }
 
 
-
-    [HttpPost("api/LoginAction")] //this attribute isn't necessary for instances where "method" is specified
-    //like the call in View(Login.cshtml) using action="Login" and method="LoginAction"
-    //but it IS (seemingly) necessary for instances where "method" can't be specified, like in _Layout.cshtml
-    //for example Logout() being called in _Layout.cshtml doesn't work without an attribute as no method is specified
-    
+    [HttpPost("api/LoginAction")]
     public async Task<IActionResult> LoginAction([FromForm] string username, [FromForm] string password)
     {
 
@@ -101,8 +96,6 @@ public class LoginController : Controller
         return View("Login");
         //return RedirectPermanent("Login/ViewLoginPage");
     }
-
-
 
     //[HttpPost("/api/login/admin")] //this method wasn't ever used so im not sure what to change it to
     public IActionResult LoginAdmin([FromBody] LoginBody loginBody)
