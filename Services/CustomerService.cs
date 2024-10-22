@@ -6,10 +6,12 @@ public class CustomerService : ICustomerService
 {
     
     private DatabaseContext _context;
+    private IReservationService _reservationService;
 
-    public CustomerService(DatabaseContext context)
+    public CustomerService(DatabaseContext context, IReservationService reservationService)
     {
         _context = context;
+        _reservationService = reservationService;
     }
     public async Task<IActionResult> GetCustomer(int id)
     {
@@ -21,7 +23,8 @@ public class CustomerService : ICustomerService
         else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
         
     }
-    public async Task<IActionResult> PostCustomer(Customer customer)
+    [HttpPost()]
+    public async Task<bool> PostCustomer(Customer customer)
     {
         if(customer is not null)
         {
@@ -34,6 +37,28 @@ public class CustomerService : ICustomerService
             else
             {
                 if(DBCustomer.Email is null) return new BadRequestObjectResult($"email was not given, customer isn't posted");
+                if(DBCustomer.FirstName is null) return new BadRequestObjectResult($"first name was not given, customer isn't posted");
+                if(DBCustomer.LastName is null) return new BadRequestObjectResult($"last name was not given, customer isn't posted");
+                if(DBCustomer.Reservations is null) return new BadRequestObjectResult($"reservations were not given, customer isn't posted");
+                else 
+                {
+                    // foreach(Reservation reservation in DBCustomer.Reservations)
+                    // {
+                    //     bool success = await _reservationService.CheckReservation(reservation.ReservationId);
+                    //     if(success is false) return new BadRequestObjectResult($"reservation with id: {reservation.ReservationId} wasn't found in database, customer isn't posted");
+                    // }
+                    foreach(Reservation reservation in DBCustomer.Reservations)
+                    {
+                        if (reservation.Customer is null) return false;
+                        if (reservation.)
+
+                    }
+
+                }
+
+                
+
+
                 await _context.Customer.AddAsync(customer);
                 _context.SaveChanges();
                 return new OkObjectResult($"customer was added to database: {customer}");

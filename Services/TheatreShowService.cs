@@ -7,10 +7,12 @@ namespace TheatreProject.Services;
 public class TheatreShowService : ITheatreShowService
 {
     private readonly DatabaseContext _context;
+    private VenueService _venueService;
 
-        public TheatreShowService(DatabaseContext context)
+        public TheatreShowService(DatabaseContext context, VenueService venueService)
         {
             _context = context;
+            _venueService = venueService;
         }
     public async Task<IActionResult> GetTheatreShows(int? id,
             string? title,
@@ -119,5 +121,14 @@ public class TheatreShowService : ITheatreShowService
         }
         
         else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
+    }
+
+    public async Task<bool> CheckTheatreShow(int id)
+    {
+        var DBtheatreShow = await _context.TheatreShow.FindAsync(id);
+        if(DBtheatreShow is null) return false;
+        if(DBtheatreShow.Venue is null) return false;
+        if(DBtheatreShow.Venue.VenueId is 0) return false;
+        else return await _venueService.CheckVenue(DBtheatreShow.Venue.VenueId);
     }
 }

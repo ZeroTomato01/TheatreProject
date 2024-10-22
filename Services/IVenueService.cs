@@ -12,4 +12,7 @@ public interface IVenueService
     public Task<IActionResult> UpdateVenue(Venue venue);
 
     public Task<IActionResult> DeleteVenue(int id);
+
+    public Task<bool> CheckVenue(int id);
+
 }

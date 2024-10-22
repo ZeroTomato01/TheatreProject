@@ -5,10 +5,12 @@ public class ReservationService : IReservationService
 {
     
     private DatabaseContext _context;
+    private TheatreShowDateService _theatreShowDateService;
 
-    public ReservationService(DatabaseContext context)
+    public ReservationService(DatabaseContext context, TheatreShowDateService theatreShowDateService)
     {
         _context = context;
+        _theatreShowDateService = theatreShowDateService;
     }
 
     public async Task<Reservation?> GetReservation(int id)
@@ -63,7 +65,19 @@ public class ReservationService : IReservationService
             _context.SaveChanges();
             return new OkObjectResult("reservation deleted");
         }
-        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
+        else return new BadRequestObjectResult($"no reservation with given id: {id} was found in database");
         
+    }
+
+    public async Task<bool> CheckReservation(int id)
+    {
+        var DBReservation = await _context.Reservation.FindAsync(id);
+        if(DBReservation is not null)
+        {
+            if(DBReservation.TheatreShowDate is null) return false;
+            if(DBReservation.TheatreShowDate.TheatreShowDateId == 0) return false;
+            return await _theatreShowDateService.CheckTheatreShowDate(DBReservation.TheatreShowDate.TheatreShowDateId);
+        }
+        else return false;
     }
 }

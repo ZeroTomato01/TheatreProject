@@ -18,7 +18,6 @@ public class ReservationController : Controller
             return new OkObjectResult(DBReservation);
         }
         else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
-        return 
     }
     protected async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
     {

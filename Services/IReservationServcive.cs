@@ -7,4 +7,6 @@ public interface IReservationService
     public Task<IActionResult> PostReservation(Reservation reservation);
     public Task<IActionResult> UpdateReservation(Reservation reservation);
     public Task<IActionResult> DeleteReservation(int id);
+
+    public Task<bool> CheckReservation(int id);
 }
