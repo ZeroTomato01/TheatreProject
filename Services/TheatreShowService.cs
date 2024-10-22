@@ -7,9 +7,9 @@ namespace TheatreProject.Services;
 public class TheatreShowService : ITheatreShowService
 {
     private readonly DatabaseContext _context;
-    private VenueService _venueService;
+    private IVenueService _venueService;
 
-        public TheatreShowService(DatabaseContext context, VenueService venueService)
+        public TheatreShowService(DatabaseContext context, IVenueService venueService)
         {
             _context = context;
             _venueService = venueService;

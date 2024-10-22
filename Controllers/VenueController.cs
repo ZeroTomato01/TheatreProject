@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
+using TheatreProject.Services;
 
 public class VenueController : Controller
 {
@@ -8,6 +9,7 @@ public class VenueController : Controller
     public VenueController(VenueService venueService)
     {
         _venueService = venueService;
+
     }
 
     public async Task<IActionResult> GetVenue([FromQuery] int id)

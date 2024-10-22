@@ -21,6 +21,7 @@ public class CustomerController : Controller
         bool success = await _customerService.Post(customer);
         if(success) return Ok("Customer posted");
         else return BadRequest("Customer failed to post");
+
     }
     public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
     {

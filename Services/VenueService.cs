@@ -68,8 +68,10 @@ public class VenueService : IVenueService
 
       public async Task<bool> CheckVenue(int id)
     {
+
         var DBVenue = await _context.Venue.FindAsync(id);
         if(DBVenue is null) return false;
         else return true;
     }
+
 }

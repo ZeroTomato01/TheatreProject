@@ -32,7 +32,7 @@ public class HomeController : Controller
     {
         if (string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) 
         {
-            return RedirectPermanent("/Login/ViewLoginPage");
+            return RedirectPermanent($"{Globals.Version}/Login/ViewLoginPage");
         }
 
         return View();
