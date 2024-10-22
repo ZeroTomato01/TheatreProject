@@ -5,14 +5,14 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route("Login")]
+[Route($"Login")]
 public class LoginController : Controller
 {
 
     private string AUTH_SESSION_KEY = "admin_login";
-    ILoginService _loginService;
+    LoginService _loginService;
 
-    public LoginController(ILoginService loginService)
+    public LoginController(LoginService loginService)
     {
         _loginService = loginService;
     }

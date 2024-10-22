@@ -12,7 +12,13 @@ public class ReservationController : Controller
 
     public async Task<IActionResult> GetReservation([FromQuery] int id)
     {
-        return await _reservationService.GetReservation(id);
+        Reservation DBReservation = await _reservationService.GetReservation(id);
+        if(DBReservation is not null)
+        {
+            return new OkObjectResult(DBReservation);
+        }
+        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
+        return 
     }
     protected async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
     {
