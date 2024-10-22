@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class ReservationService : IReservationService
 {
@@ -11,64 +12,105 @@ public class ReservationService : IReservationService
         _context = context;
     }
 
-    public async Task<IActionResult> GetReservation(int id)
+    public async Task<Reservation?> Get(int id)
     {
-        var DBReservation = await _context.Reservation.FindAsync(id);
-
-        if(DBReservation is not null)
-        {
-            return new OkObjectResult(DBReservation);
-        }
-        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
-        
+        var result = await _context.Reservation.FindAsync(id);
+        return result;
     }
-    public async Task<IActionResult> PostReservation(Reservation reservation)
+
+    public async Task<List<Reservation>> GetBatch(List<int> ids)
+    {
+        var result = await _context.Reservation.
+                                    Where(x=>ids.Contains(x.ReservationId)).
+                                    ToListAsync();
+        return result;
+    }
+
+    public async Task<List<Reservation>> GetAll()
+    {
+        var result = await _context.Reservation.ToListAsync();
+        return result;
+    }
+
+    public async Task<bool> Post(Reservation reservation)
     {
         if(reservation is not null)
         {
-            var DBReservation = await _context.Reservation.FindAsync(reservation.ReservationId);
+            var register = await _context.Reservation.FindAsync(reservation.ReservationId);
 
-            if(DBReservation is not null)
+            if(register is not null)
             {
-                return new BadRequestObjectResult($"there's already a reservation with id: {reservation.ReservationId}in databse, use update instead");
+                return false;
             }
             else
             {
                 await _context.Reservation.AddAsync(reservation);
                 _context.SaveChanges();
-                return new OkObjectResult($"reservation was added to database: {reservation}");
+                return true;
             }
         }
-        else return new BadRequestObjectResult("given reservation was null");
+        return false;
     }
-    public async Task<IActionResult> UpdateReservation(Reservation reservation)
+    public async Task<List<bool>> PostBatch(List<Reservation> reservations)
     {
-        var DBReservation = await _context.Reservation.FindAsync(reservation.ReservationId);
-        if(DBReservation is not null)
+        var results = new List<bool> {};
+        foreach (Reservation reservation in reservations)
         {
-            DBReservation.AmountOfTickets = reservation.AmountOfTickets;
-            DBReservation.Customer = reservation.Customer;
-            DBReservation.TheatreShowDate = reservation.TheatreShowDate;
-            DBReservation.Used = reservation.Used;
+            bool result = await Post(reservation);
+            results.Add(result);
+        }
+        return results;
+    }
+    public async Task<bool> Update(Reservation reservation)
+    {
+        var register = await _context.Reservation.FindAsync(reservation.ReservationId);
+        if(register is not null)
+        {
+            register.AmountOfTickets = reservation.AmountOfTickets;
+            register.Customer = reservation.Customer;
+            register.TheatreShowDate = reservation.TheatreShowDate;
+            register.Used = reservation.Used;
     
             //DBShow = theatreShow;
             _context.SaveChanges();
 
-            return new OkObjectResult($"Reservation updated to {reservation}");
+            return true;
         }
-        else return new BadRequestObjectResult($"no reservation with given id: {reservation.ReservationId} was found in database");
+        return false;
     }
-    public async Task<IActionResult> DeleteReservation(int id)
-    {
-        var DBReservation = await _context.Reservation.FindAsync(id);
 
-        if(DBReservation is not null)
+    public async Task<List<bool>> UpdateBatch(List<Reservation> reservations)
+    {
+        var results = new List<bool> {};
+        foreach (Reservation reservation in reservations)
         {
-            _context.Remove(DBReservation);
-            _context.SaveChanges();
-            return new OkObjectResult("reservation deleted");
+            bool result = await Update(reservation);
+            results.Add(result);
         }
-        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
-        
+        return results;
+    }
+
+    public async Task<bool> Delete(int id)
+    {
+        var register = await _context.Reservation.FindAsync(id);
+
+        if(register is not null)
+        {
+            _context.Remove(register);
+            _context.SaveChanges();
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<List<bool>> DeleteBatch(List<int> ids)
+    {
+        var results = new List<bool> {};
+        foreach (int id in ids)
+        {
+            bool result = await Delete(id);
+            results.Add(result);
+        }
+        return results;
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace TheatreProject.Controllers;
 
-[Route("Login")]
+[Route($"{Globals.Version}/Login")]
 public class LoginController : Controller
 {
 

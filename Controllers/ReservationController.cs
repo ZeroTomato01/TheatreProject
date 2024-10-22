@@ -1,31 +1,47 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 
-public class ReservationController : Controller
+namespace TheatreProject.Controllers
 {
-    ReservationService _reservationService;
-
-    public ReservationController(ReservationService reservationService)
+    [Route($"{Globals.Version}/Reservation")]
+    public class ReservationController : Controller
     {
-        _reservationService = reservationService;
-    }
+        ReservationService _reservationService;
 
-    public async Task<IActionResult> GetReservation([FromQuery] int id)
-    {
-        return await _reservationService.GetReservation(id);
-    }
-    protected async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
-    {
-        return await _reservationService.PostReservation(reservation);
-    }
-    public async Task<IActionResult> UpdateReservation([FromBody] Reservation reservation)
-    {
-        return await _reservationService.UpdateReservation(reservation);
-    }
-    public async Task<IActionResult> DeleteReservation([FromQuery] int id)
+        public ReservationController(ReservationService reservationService)
+        {
+            _reservationService = reservationService;
+        }
 
-    {  
-        return await _reservationService.DeleteReservation(id);
-    }
+        [HttpGet()]
+        public async Task<IActionResult> GetReservation([FromQuery] int id = 0)
+        {
+            return await _reservationService.GetReservation(id);
+        }
 
+        [HttpGet("batch")]
+        public async Task<IActionResult> GetBatchReservations([FromQuery] List<int> ids)
+        {
+            return await _reservationService.GetBatchReservations(ids);
+        }
+
+        [HttpPost()]
+        protected async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
+        {
+            return await _reservationService.PostReservation(reservation);
+        }
+
+        [HttpPatch()]
+        public async Task<IActionResult> UpdateReservation([FromBody] Reservation reservation)
+        {
+            return await _reservationService.UpdateReservation(reservation);
+        }
+
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteReservation([FromQuery] int id)
+
+        {  
+            return await _reservationService.DeleteReservation(id);
+        }
+    }
 }
