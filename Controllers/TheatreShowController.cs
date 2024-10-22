@@ -6,8 +6,8 @@ using TheatreProject.Services;
 
 namespace TheatreProject.Controllers
 {
-    [Route("api/v1/TheatreShows")]
-    [ApiController]
+    //[Route("api/v1/TheatreShows")]
+    //[ApiController]
     public class TheatreShowController : ControllerBase
     {
         private TheatreShowService _theatreShowService;
@@ -17,7 +17,7 @@ namespace TheatreProject.Controllers
             _theatreShowService = theatreShowService;
         }
 
-        [HttpGet]
+        //[HttpGet]
         public async Task<IActionResult> GetTheatreShows(
             int? id,
             string? title,

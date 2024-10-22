@@ -23,6 +23,7 @@ public class ReservationController : Controller
         return await _reservationService.UpdateReservation(reservation);
     }
     public async Task<IActionResult> DeleteReservation([FromQuery] int id)
+
     {  
         return await _reservationService.DeleteReservation(id);
     }

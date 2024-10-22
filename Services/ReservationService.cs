@@ -14,6 +14,7 @@ public class ReservationService : IReservationService
     public async Task<IActionResult> GetReservation(int id)
     {
         var DBReservation = await _context.Reservation.FindAsync(id);
+
         if(DBReservation is not null)
         {
             return new OkObjectResult(DBReservation);
@@ -26,6 +27,7 @@ public class ReservationService : IReservationService
         if(reservation is not null)
         {
             var DBReservation = await _context.Reservation.FindAsync(reservation.ReservationId);
+
             if(DBReservation is not null)
             {
                 return new BadRequestObjectResult($"there's already a reservation with id: {reservation.ReservationId}in databse, use update instead");
@@ -59,6 +61,7 @@ public class ReservationService : IReservationService
     public async Task<IActionResult> DeleteReservation(int id)
     {
         var DBReservation = await _context.Reservation.FindAsync(id);
+
         if(DBReservation is not null)
         {
             _context.Remove(DBReservation);
