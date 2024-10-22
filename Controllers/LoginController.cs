@@ -37,7 +37,7 @@ public class LoginController : Controller
     //but it IS (seemingly) necessary for instances where "method" can't be specified, like in _Layout.cshtml
     //for example Logout() being called in _Layout.cshtml doesn't work without an attribute as no method is specified
     
-    public IActionResult LoginAction([FromForm] string username, [FromForm] string password)
+    public async Task<IActionResult> LoginAction([FromForm] string username, [FromForm] string password)
     {
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
