@@ -76,7 +76,7 @@ public class TheatreShowService : ITheatreShowService
     {
         if(theatreShow is not null)
         {
-            var DBTheatreShow = _context.TheatreShow.Find(theatreShow.TheatreShowId);
+            var DBTheatreShow = await _context.TheatreShow.FindAsync(theatreShow.TheatreShowId);
             if(DBTheatreShow is not null)
             {
                 return new BadRequestObjectResult($"there's already a TheatreShow with id: {theatreShow.TheatreShowId}in databse, use update instead");
