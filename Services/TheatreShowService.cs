@@ -89,7 +89,7 @@ public class TheatreShowService : ITheatreShowService
         return result;
     }
 
-    public async Task<List<T>> GetAll()
+    public async Task<List<TheatreShow>> GetAll()
     {
         var result = await _context.TheatreShow.ToListAsync();
         return result;

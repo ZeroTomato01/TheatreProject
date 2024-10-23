@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 using TheatreProject.Services;
+using Microsoft.EntityFrameworkCore;
 
 public class VenueService : IVenueService
 {
@@ -71,7 +72,7 @@ public class VenueService : IVenueService
         return result;
     }
 
-    public async Task<List<T>> GetBatch(List<int> ids)
+    public async Task<List<Venue>> GetBatch(List<int> ids)
     {
         var result = await _context.Venue.
                                     Where(x=>ids.Contains(x.VenueId)).

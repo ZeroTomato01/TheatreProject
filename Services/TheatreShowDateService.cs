@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 using TheatreProject.Services;
+using Microsoft.EntityFrameworkCore;
 
 public class TheatreShowDateService : ITheatreShowDateService
 {

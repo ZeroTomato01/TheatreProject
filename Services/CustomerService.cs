@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class CustomerService : ICustomerService
 {
