@@ -1,7 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
-
-namespace TheatreProject.Services;
 
 public interface IVenueService
 {

@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
 
@@ -7,73 +5,11 @@ namespace TheatreProject.Services;
 public class TheatreShowService : ITheatreShowService
 {
     private readonly DatabaseContext _context;
-    // private IVenueService _venueService;
 
-        public TheatreShowService(DatabaseContext context, IVenueService venueService)
-        {
-            _context = context;
-            // _venueService = venueService;
-        }
-    // public async Task<IActionResult> GetTheatreShows(int? id,
-    //         string? title,
-    //         string? description,
-    //         string? location,
-    //         DateTime? startDate,
-    //         DateTime? endDate,
-    //         string? sortBy = "Title",
-    //         bool descending = false)
-    // {
-    //     IQueryable<TheatreShow> query = _context.Set<TheatreShow>()
-    //             .Include(show => show.Venue)
-    //             .Include(show => show.theatreShowDates);
-
-    //     // Filter voor ID
-    //     if (id.HasValue)
-    //     {
-    //         var show = await query.FirstOrDefaultAsync(s => s.TheatreShowId == id.Value);
-    //         if (show == null)
-    //         {
-    //             return new NotFoundObjectResult("Show not found");
-    //         }
-    //         return new OkObjectResult(show);
-
-    //         //return Ok(show);
-    //     }
-
-    //     // Filter voor titel of beschrijving
-    //     if (!string.IsNullOrEmpty(title))
-    //     {
-    //         query = query.Where(s => s.Title != null && s.Title.Contains(title));
-    //     }
-    //     if (!string.IsNullOrEmpty(description))
-    //     {
-    //         query = query.Where(s => s.Description != null && s.Description.Contains(description));
-    //     }
-
-    //     // Filter voor locatie (locatie naam)
-    //     if (!string.IsNullOrEmpty(location))
-    //     {
-    //         query = query.Where(s => s.Venue != null && s.Venue.Name.Contains(location));
-    //     }
-
-    //     // Filter de shows op basis van start en eind datum
-    //     if (startDate.HasValue && endDate.HasValue)
-    //     {
-    //         query = query.Where(s => s.theatreShowDates.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
-    //     }
-
-    //     // Sorteer de shows op basis van de sortBy parameter
-    //     query = sortBy switch
-    //     {
-    //         "Price" => descending ? query.OrderByDescending(s => s.Price) : query.OrderBy(s => s.Price),
-    //         "Date" => descending ? query.OrderByDescending(s => s.theatreShowDates.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.theatreShowDates.FirstOrDefault().DateAndTime),
-    //         _ => descending ? query.OrderByDescending(s => s.Title) : query.OrderBy(s => s.Title),
-    //     };
-
-    //     // Voer de query uit en geef de resultaten terug
-    //     var shows = await query.ToListAsync();
-    //     return new OkObjectResult(shows);
-    // }
+    public TheatreShowService(DatabaseContext context, IVenueService venueService)
+    {
+        _context = context;
+    }
 
     public async Task<TheatreShow?> Get(int id)
     {
@@ -136,7 +72,7 @@ public class TheatreShowService : ITheatreShowService
             DBShow.theatreShowDates = theatreShow.theatreShowDates;
             DBShow.Price = theatreShow.Price;
             DBShow.Description = theatreShow.Description;
-            //DBShow = theatreShow;
+
             _context.SaveChanges();
 
             return true;
@@ -180,13 +116,4 @@ public class TheatreShowService : ITheatreShowService
         }
         return results;
     }
-    
-    // public async Task<bool> CheckTheatreShow(int id)
-    // {
-    //     var DBtheatreShow = await _context.TheatreShow.FindAsync(id);
-    //     if(DBtheatreShow is null) return false;
-    //     if(DBtheatreShow.Venue is null) return false;
-    //     if(DBtheatreShow.Venue.VenueId is 0) return false;
-    //     else return await _venueService.CheckVenue(DBtheatreShow.Venue.VenueId);
-    // }
 }

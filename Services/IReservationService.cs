@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 
 public interface IReservationService
@@ -12,6 +11,5 @@ public interface IReservationService
     public Task<List<bool>> UpdateBatch(List<Reservation> reservations);
     public Task<bool> Delete(int id);
     public Task<List<bool>> DeleteBatch(List<int> ids);
-    // public Task<bool> CheckReservation(int id);
 }
 

@@ -1,18 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
-using TheatreProject.Services;
 using Microsoft.EntityFrameworkCore;
 
 public class TheatreShowDateService : ITheatreShowDateService
 {
-    
     private DatabaseContext _context;
-    // private TheatreShowService _theatreShowService;
 
-    public TheatreShowDateService(DatabaseContext context, TheatreShowService theatreShowService)
+    public TheatreShowDateService(DatabaseContext context)
     {
         _context = context;
-        // _theatreShowService = theatreShowService;
     }
     
     public async Task<TheatreShowDate?> Get(int id)
@@ -21,8 +16,6 @@ public class TheatreShowDateService : ITheatreShowDateService
         return result;
     }
 
-
-
     public async Task<List<TheatreShowDate>> GetBatch(List<int> ids)
     {
         var result = await _context.TheatreShowDate.
@@ -30,8 +23,6 @@ public class TheatreShowDateService : ITheatreShowDateService
                                     ToListAsync();
         return result;
     }
-
-
 
     public async Task<List<TheatreShowDate>> GetAll()
     {
@@ -119,13 +110,4 @@ public class TheatreShowDateService : ITheatreShowDateService
         }
         return results;
     }
-
-    // public async Task<bool> CheckTheatreShowDate(int id)
-    // {
-    //     var DBtheatreShowDate = await _context.TheatreShowDate.FindAsync(id);
-    //     if(DBtheatreShowDate is null) return false;
-    //     if(DBtheatreShowDate.TheatreShow is null) return false;
-    //     if(DBtheatreShowDate.TheatreShow.TheatreShowId is 0) return false;
-    //     else return await _theatreShowService.CheckTheatreShow(DBtheatreShowDate.TheatreShow.TheatreShowId);
-    // }
 }

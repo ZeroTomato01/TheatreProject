@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 
-namespace TheatreProject.Services;
-
-
-public interface ITheatreShowService {
+public interface ITheatreShowService
+{
     public Task<TheatreShow?> Get(int id);
     public Task<List<TheatreShow>> GetBatch(List<int> ids);
     public Task<List<TheatreShow>> GetAll();

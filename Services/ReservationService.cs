@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,12 +5,10 @@ public class ReservationService : IReservationService
 {
     
     private DatabaseContext _context;
-    private TheatreShowDateService _theatreShowDateService;
 
-    public ReservationService(DatabaseContext context, TheatreShowDateService theatreShowDateService)
+    public ReservationService(DatabaseContext context)
     {
         _context = context;
-        _theatreShowDateService = theatreShowDateService;
     }
 
     public async Task<Reservation?> Get(int id)
@@ -73,7 +70,6 @@ public class ReservationService : IReservationService
             register.TheatreShowDate = reservation.TheatreShowDate;
             register.Used = reservation.Used;
     
-            //DBShow = theatreShow;
             _context.SaveChanges();
 
             return true;
@@ -116,16 +112,4 @@ public class ReservationService : IReservationService
         }
         return results;
     }
-
-    // public async Task<bool> CheckReservation(int id)
-    // {
-    //     var DBReservation = await _context.Reservation.FindAsync(id);
-    //     if(DBReservation is not null)
-    //     {
-    //         if(DBReservation.TheatreShowDate is null) return false;
-    //         if(DBReservation.TheatreShowDate.TheatreShowDateId == 0) return false;
-    //         return await _theatreShowDateService.CheckTheatreShowDate(DBReservation.TheatreShowDate.TheatreShowDateId);
-    //     }
-    //     else return false;
-    // }
 }

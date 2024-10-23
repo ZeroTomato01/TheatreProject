@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 
 public interface ITheatreShowDateService
