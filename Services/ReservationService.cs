@@ -27,9 +27,21 @@ public class ReservationService : IReservationService
         return result;
     }
 
-    public async Task<List<Reservation>> GetAll()
+    public async Task<List<Reservation>> GetAll(int? customerId = null, DateTime? startDate = null)
     {
-        var result = await _context.Reservation.ToListAsync();
+        var query = _context.Reservation.AsQueryable();
+
+        if (customerId != null)
+        {
+            query = query.Where(x => x.Customer != null && x.Customer.CustomerId == customerId);
+        }
+        if (startDate != null)
+        {
+            query = query.Where(x => x.TheatreShowDate != null && x.TheatreShowDate.DateAndTime >= startDate);
+        }
+
+        var result = await query.ToListAsync();
+
         return result;
     }
 

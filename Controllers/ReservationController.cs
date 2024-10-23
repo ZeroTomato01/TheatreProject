@@ -1,107 +1,111 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
+using TheatreProject.Services;
 
-namespace TheatreProject.Controllers
+namespace TheatreProject.Controllers;
+
+[Route($"{Globals.Version}/Reservation")]
+public class ReservationController : Controller
 {
-    [Route($"{Globals.Version}/Reservation")]
-    public class ReservationController : Controller
+    ReservationService _reservationService;
+
+    public ReservationController(ReservationService reservationService)
     {
-        ReservationService _reservationService;
+        _reservationService = reservationService;
+    }
 
-        public ReservationController(ReservationService reservationService)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        var result = await _reservationService.Get(id);
+        if (result is not null)
         {
-            _reservationService = reservationService;
-        }
-
-        [HttpGet()]
-        public async Task<IActionResult> Get([FromQuery] int id = 0)
-        {
-            var result = await _reservationService.Get(id);
-            if (result is not null)
-            {
-                return Ok(result);
-            }
-            return NotFound(result);
-        }
-
-        [HttpGet("batch")]
-        public async Task<IActionResult> GetBatch([FromQuery] List<int> ids)
-        {
-            var result = await _reservationService.GetBatch(ids);
             return Ok(result);
         }
+        return NotFound(result);
+    }
 
-        public async Task<IActionResult> GetAll()
+    [HttpGet("batch")]
+    public async Task<IActionResult> GetBatch([FromQuery] List<int> ids)
+    {
+        var result = await _reservationService.GetBatch(ids);
+        return Ok(result);
+    }
+
+    [HttpGet()]
+    public async Task<IActionResult> GetAll([FromQuery] int? customerId = null, DateTime? startDate = null)
+    {
+        var result = await _reservationService.GetAll(customerId, startDate); //filters can be added to get all
+        return Ok(result);
+    }
+
+    [HttpPost()]
+    protected async Task<IActionResult> Post([FromBody] Reservation reservation)
+    {
+        bool result = await _reservationService.Post(reservation);
+        if (result)
         {
-            var result = await _reservationService.GetAll();
-            return Ok(result);
+            return Ok();
         }
+        return BadRequest();
+    }
 
-        [HttpPost()]
-        protected async Task<IActionResult> Post([FromBody] Reservation reservation)
+    [HttpPost("batch")]
+    protected async Task<IActionResult> PostBatch([FromBody] List<Reservation> reservations)
+    {
+        var result = await _reservationService.PostBatch(reservations);
+        if (result.Contains(true))
         {
-            bool result = await _reservationService.Post(reservation);
-            if (result)
-            {
-                return Ok();
-            }
-            return BadRequest();
+            int trueCount = result.Count(x => x == true);
+            return Ok($"{trueCount} out of {result.Count} got succesfully posted");
         }
-        [HttpPost("batch")]
-        protected async Task<IActionResult> PostBatch([FromBody] List<Reservation> reservations)
+        return BadRequest();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromBody] Reservation reservation)
+    {
+        bool result =  await _reservationService.Update(reservation);
+        if (result)
         {
-            var result = await _reservationService.PostBatch(reservations);
-            if (result.Contains(true))
-            {
-                int trueCount = result.Count(x => x == true);
-                return Ok($"{trueCount} out of {result.Count} got succesfully posted");
-            }
-            return BadRequest();
+            return Ok();
         }
+        return BadRequest();
+    }
 
-        [HttpPut()]
-        public async Task<IActionResult> Update([FromBody] Reservation reservation)
+    [HttpPut("batch")]
+    public async Task<IActionResult> UpdateBatch([FromBody] List<Reservation> reservations)
+    {
+        var result = await _reservationService.UpdateBatch(reservations);
+        if (result.Contains(true))
         {
-            bool result =  await _reservationService.Update(reservation);
-            if (result)
-            {
-                return Ok();
-            }
-            return BadRequest();
+            int trueCount = result.Count(x => x == true);
+            return Ok($"{trueCount} out of {result.Count} got succesfully updated");
         }
+        return BadRequest();
+    }
 
-        public async Task<IActionResult> UpdateBatch([FromBody] List<Reservation> reservations)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {  
+        bool result =  await _reservationService.Delete(id);
+        if (result)
         {
-            var result = await _reservationService.UpdateBatch(reservations);
-            if (result.Contains(true))
-            {
-                int trueCount = result.Count(x => x == true);
-                return Ok($"{trueCount} out of {result.Count} got succesfully updated");
-            }
-            return BadRequest();
+            return Ok();
         }
+        return BadRequest();
+    }
 
-        [HttpDelete()]
-        public async Task<IActionResult> DeleteReservation([FromQuery] int id)
-
-        {  
-            bool result =  await _reservationService.Delete(id);
-            if (result)
-            {
-                return Ok();
-            }
-            return BadRequest();
-        }
-
-        public async Task<IActionResult> DeleteBatch([FromQuery] List<int> ids)
+    [HttpDelete("batch")]
+    public async Task<IActionResult> DeleteBatch([FromQuery] List<int> ids)
+    {
+        var result = await _reservationService.DeleteBatch(ids);
+        if (result.Contains(true))
         {
-            var result = await _reservationService.DeleteBatch(ids);
-            if (result.Contains(true))
-            {
-                int trueCount = result.Count(x => x == true);
-                return Ok($"{trueCount} out of {result.Count} got succesfully deleted");
-            }
-            return BadRequest();
+            int trueCount = result.Count(x => x == true);
+            return Ok($"{trueCount} out of {result.Count} got succesfully deleted");
         }
+        return BadRequest();
     }
 }
+

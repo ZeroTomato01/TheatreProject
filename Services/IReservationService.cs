@@ -6,7 +6,7 @@ public interface IReservationService
 {
     public Task<Reservation?> Get(int id);
     public Task<List<Reservation>> GetBatch(List<int> ids);
-    public Task<List<Reservation>> GetAll();
+    public Task<List<Reservation>> GetAll(int? customerId = null, DateTime? startDate = null);
     public Task<bool> Post(Reservation reservation);
     public Task<List<bool>> PostBatch(List<Reservation> reservations);
     public Task<bool> Update(Reservation reservation);
