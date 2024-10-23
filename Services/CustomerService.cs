@@ -1,6 +1,8 @@
 using TheatreProject.Models;
 using Microsoft.EntityFrameworkCore;
 
+namespace TheatreProject.Services;
+
 public class CustomerService : ICustomerService
 {
     private DatabaseContext _context;

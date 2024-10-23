@@ -1,5 +1,7 @@
 using TheatreProject.Models;
 
+namespace TheatreProject.Services;
+
 public interface IVenueService
 {
     public Task<Venue?> Get(int id);

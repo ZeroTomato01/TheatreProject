@@ -1,5 +1,7 @@
 using TheatreProject.Models;
 
+namespace TheatreProject.Services;
+
 public interface IReservationService
 {
     public Task<Reservation?> Get(int id);

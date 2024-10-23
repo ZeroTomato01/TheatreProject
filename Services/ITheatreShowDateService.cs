@@ -1,5 +1,7 @@
 using TheatreProject.Models;
 
+namespace TheatreProject.Services;
+
 public interface ITheatreShowDateService
 {
     public Task<TheatreShowDate?> Get(int id);

@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
-using TheatreProject.Services;
 using Microsoft.EntityFrameworkCore;
+
+namespace TheatreProject.Services;
 
 public class VenueService : IVenueService
 {

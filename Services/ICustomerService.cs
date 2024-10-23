@@ -1,5 +1,7 @@
 using TheatreProject.Models;
 
+namespace TheatreProject.Services;
+
 public interface ICustomerService
 {
     public Task<Customer?> Get(int id);

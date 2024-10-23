@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
 
 namespace TheatreProject.Services;
+
 public class TheatreShowService : ITheatreShowService
 {
     private readonly DatabaseContext _context;

@@ -1,6 +1,8 @@
 using TheatreProject.Models;
 using Microsoft.EntityFrameworkCore;
 
+namespace TheatreProject.Services;
+
 public class ReservationService : IReservationService
 {
     
