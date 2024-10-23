@@ -28,7 +28,12 @@ public class TheatreShowService : ITheatreShowService
 
     public async Task<List<TheatreShow>> GetAll()
     {
-        var result = await _context.TheatreShow.ToListAsync();
+        var query = _context.TheatreShow.AsQueryable();
+
+        // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter)
+
+        var result = await query.ToListAsync();
+
         return result;
     }
 

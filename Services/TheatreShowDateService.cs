@@ -28,7 +28,12 @@ public class TheatreShowDateService : ITheatreShowDateService
 
     public async Task<List<TheatreShowDate>> GetAll()
     {
-        var result = await _context.TheatreShowDate.ToListAsync();
+        var query = _context.TheatreShowDate.AsQueryable();
+
+        // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter)
+
+        var result = await query.ToListAsync();
+
         return result;
     }
     

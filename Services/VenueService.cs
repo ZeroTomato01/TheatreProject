@@ -28,7 +28,12 @@ public class VenueService : IVenueService
 
     public async Task<List<Venue>> GetAll()
     {
-        var result = await _context.Venue.ToListAsync();
+        var query = _context.Venue.AsQueryable();
+
+        // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter);
+
+        var result = await query.ToListAsync();
+
         return result;
     }
 

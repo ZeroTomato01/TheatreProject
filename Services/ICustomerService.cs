@@ -6,7 +6,7 @@ public interface ICustomerService
 {
     public Task<Customer?> Get(int id);
     public Task<List<Customer>> GetBatch(List<int> ids);
-    public Task<List<Customer>> GetAll();
+    public Task<List<Customer>> GetAll(); // filters can be added here
     public Task<bool> Post(Customer customer);
     public Task<List<bool>> PostBatch(List<Customer> customers);
     public Task<bool> Update(Customer Customer);

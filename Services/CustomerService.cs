@@ -28,7 +28,12 @@ public class CustomerService : ICustomerService
 
     public async Task<List<Customer>> GetAll()
     {
-        var result = await _context.Customer.ToListAsync();
+        var query = _context.Customer.AsQueryable();
+
+        // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter)
+
+        var result = await query.ToListAsync();
+
         return result;
     }
 
