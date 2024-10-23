@@ -26,9 +26,22 @@ public class CustomerService : ICustomerService
         return result;
     }
 
-    public async Task<List<Customer>> GetAll()
+    public async Task<List<Customer>> GetAll(string? firstName = null, string? lastName = null, string? email = null)
     {
         var query = _context.Customer.AsQueryable();
+        
+        if (firstName != null)
+        {
+            query = query.Where(x => x.FirstName == firstName);
+        }
+        if (lastName != null)
+        {
+            query = query.Where(x => x.LastName == lastName);
+        }
+        if (email != null)
+        {
+            query = query.Where(x => x.Email == email);
+        }
 
         // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter)
 

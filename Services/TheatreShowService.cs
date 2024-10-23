@@ -26,9 +26,21 @@ public class TheatreShowService : ITheatreShowService
         return result;
     }
 
-    public async Task<List<TheatreShow>> GetAll()
+    public async Task<List<TheatreShow>> GetAll(string? title = null, double? maxPrice = null, int? venueId = null)
     {
         var query = _context.TheatreShow.AsQueryable();
+        if (title != null)
+        {
+            query.Where(x => x.Title == title);
+        }
+        if (maxPrice != null)
+        {
+            query.Where(x => x.Price <= maxPrice);
+        }
+        if (venueId != null)
+        {
+            query.Where(x => x.Venue != null && x.Venue.VenueId == venueId);
+        }
 
         // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter)
 

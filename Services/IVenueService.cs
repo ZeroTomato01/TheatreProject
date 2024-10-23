@@ -6,7 +6,7 @@ public interface IVenueService
 {
     public Task<Venue?> Get(int id);
     public Task<List<Venue>> GetBatch(List<int> ids);
-    public Task<List<Venue>> GetAll(); // filters can be added here
+    public Task<List<Venue>> GetAll(string? name = null, int? capacity = null); // filters can be added here
     public Task<bool> Post(Venue venue);
     public Task<List<bool>> PostBatch(List<Venue> venues);
     public Task<bool> Update(Venue venue);

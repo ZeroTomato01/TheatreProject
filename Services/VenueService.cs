@@ -26,10 +26,18 @@ public class VenueService : IVenueService
         return result;
     }
 
-    public async Task<List<Venue>> GetAll()
+    public async Task<List<Venue>> GetAll(string? name = null, int? capacity = null)
     {
         var query = _context.Venue.AsQueryable();
 
+        if (name != null)
+        {
+            query = query.Where(x => x.Name == name);
+        }
+        if (capacity != null)
+        {
+            query = query.Where(x => x.Capacity == capacity);
+        }
         // add filter queries here: format: if (filter is not null) query = Where(x => x == check the checks with your filter);
 
         var result = await query.ToListAsync();
