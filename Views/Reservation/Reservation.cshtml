@@ -1,0 +1,16 @@
+
+@{
+    var message = ViewData["message"];
+    if (message != null && message.ToString() != "") {
+        <h3>@message</h3>
+    }
+}
+
+
+
+<form asp-controller="Login" asp-action="LoginAction" method="post">
+    Username: <input type="text" name="username" />
+    Password: <input type="password" name="password" />
+    <button>Login</button>
+</form>
+

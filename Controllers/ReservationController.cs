@@ -6,11 +6,16 @@ namespace TheatreProject.Controllers
     [Route($"{Globals.Version}/Reservation")]
     public class ReservationController : Controller
     {
-        ReservationService _reservationService;
+        IReservationService _reservationService;
 
-        public ReservationController(ReservationService reservationService)
+        public ReservationController(IReservationService reservationService)
         {
             _reservationService = reservationService;
+        }
+
+        public IActionResult ViewReservationPage()
+        {
+            return View();
         }
 
         [HttpGet()]
@@ -69,7 +74,7 @@ namespace TheatreProject.Controllers
             }
             return BadRequest();
         }
-
+        [HttpPut("batch")]
         public async Task<IActionResult> UpdateBatch([FromBody] List<Reservation> reservations)
         {
             var result = await _reservationService.UpdateBatch(reservations);
@@ -93,6 +98,7 @@ namespace TheatreProject.Controllers
             return BadRequest();
         }
 
+        [HttpDelete("batch")]
         public async Task<IActionResult> DeleteBatch([FromQuery] List<int> ids)
         {
             var result = await _reservationService.DeleteBatch(ids);

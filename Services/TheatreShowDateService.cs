@@ -6,9 +6,9 @@ public class TheatreShowDateService : ITheatreShowDateService
 {
     
     private DatabaseContext _context;
-    private TheatreShowService _theatreShowService;
+    private ITheatreShowService _theatreShowService;
 
-    public TheatreShowDateService(DatabaseContext context, TheatreShowService theatreShowService)
+    public TheatreShowDateService(DatabaseContext context, ITheatreShowService theatreShowService)
     {
         _context = context;
         _theatreShowService = theatreShowService;

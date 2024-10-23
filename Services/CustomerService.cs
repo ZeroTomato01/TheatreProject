@@ -8,7 +8,7 @@ public class CustomerService : ICustomerService
     // private ICustomerService _customerService;
     // private IReservationService _reservationService;
 
-    public CustomerService(DatabaseContext context, ICustomerService customerService, IReservationService reservationService)
+    public CustomerService(DatabaseContext context)
     {
         _context = context;
         // _customerService = customerService;

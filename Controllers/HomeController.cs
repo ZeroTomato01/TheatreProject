@@ -4,7 +4,8 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route($"{Globals.Version}/Home")]
+//[Route($"/{Globals.Version}/Home")]
+[Route("Home")]
 public class HomeController : Controller
 {
 
@@ -15,19 +16,22 @@ public class HomeController : Controller
     //     _logger = logger;
     // }
     
+    [Route("")]
     [Route("Index")]
+    //[Route($"/{Globals.Version}/Home/Index")]
     public IActionResult Index()
     {
         return View();
     }
-
     [Route("Privacy")]
+    //[Route($"/{Globals.Version}/Home/Privacy")]
     public IActionResult Privacy()
     {
         return View();
     }
 
     [Route("Dashboard")]
+    //[Route($"/{Globals.Version}/Home/Dashboard")]
     public IActionResult Dashboard()
     {
         if (string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) 

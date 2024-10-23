@@ -10,6 +10,10 @@ public class TheatreShowDateController : Controller
         _theatreShowDateService = theatreShowDateService;
     }
 
+    // public ViewTheatreShowDatePage()
+    // {
+
+    // }
     public async Task<IActionResult> GetTheatreShowDate([FromQuery] int id)
     {
         return await _theatreShowDateService.GetTheatreShowDate(id);

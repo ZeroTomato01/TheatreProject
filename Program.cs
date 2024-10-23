@@ -64,9 +64,13 @@ namespace TheatreProject
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
             builder.Services.AddScoped<ILoginService, LoginService>();
-            builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
             builder.Services.AddScoped<IVenueService, VenueService>();
-
+            builder.Services.AddScoped<ITheatreShowService, TheatreShowService>();
+            builder.Services.AddScoped<ITheatreShowDateService, TheatreShowDateService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -78,8 +82,8 @@ namespace TheatreProject
             }
 
             //app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseRouting();
+            //app.UseStaticFiles();
+            //app.UseRouting();
 
             app.UseAuthorization();
 
@@ -94,8 +98,16 @@ namespace TheatreProject
             // app.MapControllerRoute(
             //     name: "default",
             //     pattern: "{controller=Home}/api/{action=Index}/{id?}");
+            app.Use((context, next) => 
+            {
+                //context.Request.
+                var a = context.Request;
+                return next.Invoke();
+
+            });
 
             app.Run();
+            
 
         }
     }

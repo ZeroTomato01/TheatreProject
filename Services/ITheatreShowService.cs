@@ -16,4 +16,5 @@ public interface ITheatreShowService {
     protected Task<IActionResult> PostTheatreShow(TheatreShow theatreShow);
     protected Task<IActionResult> UpdateTheatreShow(TheatreShow theatreShow);
     protected Task<IActionResult> DeleteTheatreShow(int id);
+    public Task<bool> CheckTheatreShow(int id);
 }
