@@ -89,6 +89,8 @@ namespace TheatreProject
 
             app.UseSession();
 
+            app.UseStaticFiles(); //:OOO
+
             app.MapControllers();
             // app.MapControllerRoute(
             //     name: "default",

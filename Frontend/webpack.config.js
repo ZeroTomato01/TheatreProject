@@ -58,6 +58,6 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(['../wwwroot/js'])
-    ]
+    ],
 
 };
