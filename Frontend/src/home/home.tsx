@@ -6,6 +6,7 @@ import { Person } from '../app.state';
 import { HomeState, initHomeState } from "./home.state"
 import { RegistrationForm } from '../registration/registration';
 import { Overview } from '../overview/overview';
+import MenuBar from '../components/MenuBar';
 
 export class Home extends React.Component<{}, HomeState> { //Home is a COMPONENT, just like RegistrationForm
     constructor(props: {}) {
@@ -16,9 +17,12 @@ export class Home extends React.Component<{}, HomeState> { //Home is a COMPONENT
     render(): JSX.Element {
         switch (this.state.view) {
           case "home":
+            let isLoggedIn = false;
+
             return (
               <div>
-                <div>
+                <MenuBar isLoggedIn={isLoggedIn}/>
+                  <div>
                   Welcome to the person management system!
                   <div>
                     <button
