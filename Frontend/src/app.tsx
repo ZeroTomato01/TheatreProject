@@ -7,6 +7,7 @@ import Logout from './components/Logout';
 import Register from './components/Register';
 import Privacy from './components/Privacy';
 import Account from './components/Account';
+import Home from './components/Home'
 
 
 const App: React.FC = () => (
@@ -14,6 +15,7 @@ const App: React.FC = () => (
       <MenuBar isLoggedIn={false}/>
   
       <Routes>
+        <Route path="/Home" element={<Home />} />
         <Route path="/Shows" element={<Shows />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Logout" element={<Logout />} />

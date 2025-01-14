@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import './menubar.css';
+import './styles.css';
 
 interface MenuBarProps {
     isLoggedIn: boolean
@@ -12,7 +12,7 @@ const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn}) => {
         <h1>BerserkerCinema</h1>
         <ul>
           <li><Link to='/Home'>Home</Link></li>
-          <li><Link to='/Movies'>Movies</Link></li>
+          <li><Link to='/Shows'>Shows</Link></li>
           <li><Link to='/Privacy'>Privacy</Link></li>
           {isLoggedIn ? (
             <>

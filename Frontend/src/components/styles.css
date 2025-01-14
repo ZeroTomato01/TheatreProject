@@ -4,8 +4,8 @@
     top: 0;
     left: 0;
     width: 100%;  /* Makes the menu bar span the entire width of the page */
-    background-color: #333;
-    color: white;
+    background-color: darkslategray;
+    color: crimson;
     padding: 10px;
     z-index: 1000;  /* Ensures it stays above other content */
   }
@@ -20,9 +20,14 @@
   .menu-bar li {
     margin-right: 20px;
     cursor: pointer;
+  
   }
   
   .menu-bar li:hover {
     text-decoration: underline;
+  }
+
+  .menu-bar Link:hover {
+    color:aliceblue;
   }
   

@@ -11,7 +11,21 @@ const Login: React.FC = () => {
     return (
         <div>
             <form onSubmit={handleLogin}>
-                <label htmlFor='username'>Username</label>
+            <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                    /> <br />
+                <label htmlFor="password">Password</label>
+                <input
+                    type="text"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    />
             </form>
             <br />
             <button>submit</button>

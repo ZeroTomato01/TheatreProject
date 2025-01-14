@@ -8,10 +8,37 @@ const Register: React.FC = () => {
     
     const handleRegister = () => {};
     return (
-        <form onSubmit={handleRegister}>
-            <label htmlFor='username'>Username</label>
-
-        </form>
+        <div>
+            <form onSubmit={handleRegister}>
+                <label htmlFor='username'>Username</label>
+                    <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                    /> <br />
+                <label htmlFor="email">Email</label>
+                <input
+                    type="text"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    /> <br />
+                <label htmlFor="password">Password</label>
+                <input
+                    type="text"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    />
+            </form>
+            <br />
+            <button type="submit">Register</button>
+        </div>
+        
     );
 };
 
