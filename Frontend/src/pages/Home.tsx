@@ -4,8 +4,7 @@ import React from 'react';
 import { JSX } from "react";
 import { Person } from '../app.state';
 import { HomeState, initHomeState } from "./home.state"
-import { RegistrationForm } from '../registration/registration';
-import { Overview } from '../overview/overview';
+import { RegistrationForm } from './registration';
 import { Link, Route, Routes } from "react-router-dom";
 import Login from "./Login"
 
@@ -74,17 +73,8 @@ export class Home extends React.Component<{}, HomeState> { //Home is a COMPONENT
                 />
             }
             />
-            {/* Overview Page */}
-            <Route
-            path="/overview"
-            element={
-                <Overview
-                people={this.state.storage} // Pass actual people here
-                backToHome={() => window.history.back()}
-                />
-            }
-            />
-            {/* Overview Page */}
+            
+            {/* Login Page */}
             <Route
             path="/Login"
             element={
