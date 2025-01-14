@@ -5,7 +5,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route($"{Globals.Version}/Login")]
+[Route("Login")]
 public class LoginController : Controller
 {
 
@@ -19,7 +19,8 @@ public class LoginController : Controller
 
     //call in the view (_Layout.cshtml) using asp-controller="Login" and asp-action="ViewLoginPage"
     //or using "Login/ViewLoginPage"
-    [HttpGet("api/ViewLoginPage")]
+    //[HttpGet("api/ViewLoginPage")]
+    [Route("")]
     public IActionResult ViewLoginPage() 
     {
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
@@ -31,11 +32,11 @@ public class LoginController : Controller
 
 
 
-    [HttpPost("api/LoginAction")] //this attribute isn't necessary for instances where "method" is specified
+    //[HttpPost("api/LoginAction")] //this attribute isn't necessary for instances where "method" is specified
     //like the call in View(Login.cshtml) using action="Login" and method="LoginAction"
     //but it IS (seemingly) necessary for instances where "method" can't be specified, like in _Layout.cshtml
     //for example Logout() being called in _Layout.cshtml doesn't work without an attribute as no method is specified
-    
+    [HttpPost("/LoginAction")]
     public async Task<IActionResult> LoginAction([FromForm] string username, [FromForm] string password)
     {
 

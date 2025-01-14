@@ -5,16 +5,11 @@ using TheatreProject.Models;
 namespace TheatreProject.Controllers;
 
 //[Route($"/{Globals.Version}/Home")]
-[Route("Home")]
+[Route("")]
 public class HomeController : Controller
 {
 
     private string AUTH_SESSION_KEY = "admin_login";
-    
-    // public HomeController(ILogger<HomeController> logger)
-    // {
-    //     _logger = logger;
-    // }
     
     [Route("")]
     [Route("Index")]
@@ -42,6 +37,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("Error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

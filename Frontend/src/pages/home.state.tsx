@@ -3,6 +3,9 @@
 import {Person} from "../app.state"
 import { fromJS, Map } from "immutable"
 import { RegistrationState, initRegistrationState} from "../registration/registration.state"
+
+//export type PageType = "homepage" | "products" | "product"  //replace with ViewState?
+export type Route = { kind:"homepage" } | { kind:"registration" } | { kind:"overview" }
     
 export type ViewState = 
   "home" | 
