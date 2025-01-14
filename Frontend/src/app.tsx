@@ -1,69 +1,28 @@
-//From Ch3Unit1
-
-import React from "react"
-import { Map } from "immutable"
-import { Person, AppState, initAppState } from "./app.state"
-
-
-export type ViewState = 
-  "home" | 
-  "registration" |
-  "overview"
-
-export type PersonEntry = Person & {id: number}
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Shows from './components/Shows';
+import MenuBar from './components/MenuBar';
+import Login from './components/Login';
+import Logout from './components/Logout';
+import Register from './components/Register';
+import Privacy from './components/Privacy';
+import Account from './components/Account';
 
 
-export class App extends React.Component<{}, AppState> {
-  constructor(props: {}) {
-    super(props)
-    this.state = initAppState
-  }
-
-  render(){
-    return (
-      <div>
-        <div key={`registration-form-name`}>
-          First Name:
-          <input
-            value={this.state.name}
-            onChange={e => this.setState(this.state.updateName(e.currentTarget.value))}
-          />
-        </div>
-        <div key={`registration-form-last-name`}>
-          Last Name:
-          <input
-            value={this.state.lastName}
-            onChange={e => this.setState(this.state.updateLastName(e.currentTarget.value))}
-          />
-        </div>
-        <div key={`registration-form-age`}>
-          Age:
-          <input
-            value={this.state.age}
-            type={"number"}
-            onChange={e => this.setState(this.state.updateAge(e.currentTarget.valueAsNumber))}
-          />
-        </div>
-        <div>
-          <button
-            onClick={_ => this.setState(this.state.insertPerson)}
-          >
-              Submit
-          </button>
-        </div>
-        <div>
-          {
-            this.state.storage.valueSeq().toArray().map(
-              person => (
-                <div key={`overview-list-item-${person.id}`}>
-                  Name: {person.name} Last Name: {person.lastName} Age: {person.age}
-                </div>
-              )
-            )
-          }
-        </div>
-      </div>
-    )
-  }
-}
-
+const App: React.FC = () => (
+    <Router>
+      <MenuBar isLoggedIn={false}/>
+  
+      <Routes>
+        <Route path="/Shows" element={<Shows />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Logout" element={<Logout />} />
+        <Route path="/Register" element={<Register />} />
+        <Route path="/Privacy" element={<Privacy />} />
+        <Route path="/Account" element={<Account />} />
+        
+      </Routes>
+    </Router>
+  );
+  
+  export default App;

@@ -16,7 +16,7 @@ public class CustomerController : Controller
     {
         Customer DBcustomer = await _customerService.Get(id);
         if(DBcustomer is null) return BadRequest($"Customer with id {id} couldn't be found");
-        else return Ok();
+        else return Ok(DBcustomer);
     }
     [HttpPost()]
     protected async Task<IActionResult> PostCustomer([FromBody] Customer customer)

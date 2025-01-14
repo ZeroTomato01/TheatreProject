@@ -1,27 +1,28 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './menubar.css';
 
 interface MenuBarProps {
     isLoggedIn: boolean
 };
 
-const MenuBar: React.FC<MenuBarProps> = ({ isLoggedIn}) => {
+const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn}) => {
     return (
       <nav className = 'menu-bar'>
         <h1>BerserkerCinema</h1>
         <ul>
-          <li>Home</li>
-          <li>Films</li>
-          <li>Privacy</li>
+          <li><Link to='/Home'>Home</Link></li>
+          <li><Link to='/Movies'>Movies</Link></li>
+          <li><Link to='/Privacy'>Privacy</Link></li>
           {isLoggedIn ? (
             <>
-              <li>Profile</li>
-              <li>Logout</li>
+              <li><Link to='/Profile'>Profile</Link></li>
+              <li><Link to='/Logout'>Logout</Link></li>
             </>
           ) : (
             <>
-            <li>Register</li>
-            <li>Login</li>
+            <li><Link to='/Register'>Register</Link></li>
+            <li><Link to='/Login'>Login</Link></li>
             </>
           )}
         </ul>
