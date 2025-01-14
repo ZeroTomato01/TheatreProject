@@ -1,12 +1,11 @@
-
-import { JSX } from "react"
+import { JSX } from "react";
 import React, { useState } from "react";
-import { Map } from "immutable"
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-  
+    const [data, setData] = useState(""); // Use useState for data
+
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
   
@@ -15,7 +14,7 @@ const Login: React.FC = () => {
       formData.append("password", password);
   
       try {
-        const response = await fetch("/api/LoginAction", {
+        const response = await fetch("/Login/LoginAction", {
           method: "POST",
           body: formData,
           credentials: "include", // Ensures cookies (session) are sent
@@ -24,8 +23,9 @@ const Login: React.FC = () => {
         if (response.redirected) {
           // Handle the redirect
           window.location.href = response.url;
+          setData("Redirected"); // Set the state to indicate a redirect
         } else {
-          const data = await response.text();
+          setData("Login failed"); // Set the state when login fails
           console.log("Login failed:", data);
         }
       } catch (error) {
@@ -56,8 +56,9 @@ const Login: React.FC = () => {
           </label>
         </div>
         <button type="submit">Login</button>
+        <div>aa {data} bb</div> {/* Display the value of data */}
       </form>
     );
-  };
-  
-  export default Login;
+};
+
+export default Login;

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { JSX } from "react";
-import { RegistrationState} from "./registration.state"
+import { RegistrationState} from "./Registration.state"
 import { Person } from "../app.state"
 
 

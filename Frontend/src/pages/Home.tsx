@@ -3,8 +3,8 @@
 import React from 'react';
 import { JSX } from "react";
 import { Person } from '../app.state';
-import { HomeState, initHomeState } from "./home.state"
-import { RegistrationForm } from './registration';
+import { HomeState, initHomeState } from "./Home.state"
+import { RegistrationForm } from './Registration';
 import { Link, Route, Routes } from "react-router-dom";
 import Login from "./Login"
 
