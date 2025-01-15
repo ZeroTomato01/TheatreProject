@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
-interface ShowsProps {
-  setShowID: (value: number) => void;
-}
-
-const Shows: React.FC<ShowsProps> = ( { setShowID} ) => {
+const Shows: React.FC = () => {
   const [shows, setShows] = useState<any[]>([]); // Store a list of shows
   const [message, setMessage] = useState<string>(""); // Store a list of shows
 
@@ -34,10 +29,6 @@ const Shows: React.FC<ShowsProps> = ( { setShowID} ) => {
     fetchShows(); // Fetch shows when the component mounts
   }, []);
 
-  const handleClick = (value: number) => {
-    setShowID(value); // Set the show ID before navigating
-  };
-
   return (
     <div>
       <h1>Shows</h1>
@@ -46,7 +37,7 @@ const Shows: React.FC<ShowsProps> = ( { setShowID} ) => {
         {shows.length > 0 ? (
           shows.map((show, index) => (
             <li key={index}>
-              <strong><Link to="/Reservation" onClick={() => handleClick(show.id)}>{show.title}</Link></strong>
+              <strong>{show.title}</strong>
               <p>{show.description}</p>
               <p><strong>Price:</strong> ${show.price}</p>
               <p><strong>Venue:</strong> {show.venue?.name}</p>

@@ -14,11 +14,6 @@ public class TheatreShowService : ITheatreShowService
             _context = context;
             _venueService = venueService;
         }
-
-    public async Task<TheatreShow?> GetShow(int id)
-    {
-        return await _context.TheatreShow.FindAsync(id);
-    }
     public async Task<IActionResult> GetTheatreShows(int? id,
             string? title,
             string? description,
