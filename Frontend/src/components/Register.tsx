@@ -1,42 +1,79 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-const Register: React.FC = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    
-    const handleRegister = () => {};
+interface RegisterProps {
+    setIsLoggedIn: (value: boolean) => void; 
+}
+
+const Register: React.FC<RegisterProps> = ({ setIsLoggedIn }) => {
+    const [customer, setCustomer] = useState(
+        {
+            customerId: 0,
+            firstName: '',
+            lastName: '',
+            email: ''
+        }
+    );
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setCustomer({
+            ...customer,
+            [id]: value,
+        });
+    };
+
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch("/Customer/Register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(customer) //sending here
+            });
+
+            if (response.ok) {
+                setIsLoggedIn(true);
+                const data = await response.json();
+                console.log("succes");
+            } else console.log("failure");
+        } catch (error) {
+            console.error();
+        }
+    };
+
     return (
         <div>
-            <form onSubmit={handleRegister}>
-                <label htmlFor='username'>Username</label>
+            <form onSubmit={ handleRegister }>
+                <label htmlFor='firstName'>firstName</label>
                     <input
                     type="text"
-                    id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    id="firstName"
+                    value={ customer.firstName }
+                    onChange={ handleChange }
                     required
                     /> <br />
-                <label htmlFor="email">Email</label>
+                <label htmlFor="lastName">lastName</label>
+                <input
+                    type="text"
+                    id="lastName"
+                    value={customer.lastName}
+                    onChange={handleChange}
+                    required
+                    /> <br />
+                <label htmlFor="email">email</label>
                 <input
                     type="text"
                     id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={customer.email}
+                    onChange={handleChange}
                     required
                     /> <br />
-                <label htmlFor="password">Password</label>
-                <input
-                    type="text"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    />
+                <button type="submit">Register</button>
             </form>
-            <br />
-            <button type="submit">Register</button>
         </div>
         
     );

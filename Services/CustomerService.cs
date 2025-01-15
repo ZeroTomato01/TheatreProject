@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
 
 public class CustomerService : ICustomerService
@@ -22,6 +23,14 @@ public class CustomerService : ICustomerService
        
         
     }
+
+    public async Task<Customer?> GetByMail(Customer customer)
+    {
+        var DBCustomer = await _context.Customer
+        .Where(c => c.Email == customer.Email)
+        .FirstOrDefaultAsync();
+        return DBCustomer;
+    }
     public async Task<bool> Post(Customer customer)
     {
         if(customer is not null)
@@ -34,14 +43,6 @@ public class CustomerService : ICustomerService
                 if(customer.Email is null) return false;
                 if(customer.FirstName is null) return false;
                 if(customer.LastName is null) return false;
-                if(customer.Reservations is null) return false;
-                else 
-                {
-                    foreach(Reservation reservation in customer.Reservations)
-                    {
-                        if (reservation.Customer is null) return false;
-                    }
-                }
 
                 await _context.Customer.AddAsync(customer);
                 _context.SaveChanges();
@@ -60,7 +61,6 @@ public class CustomerService : ICustomerService
             DBcustomer.Email = customer.Email;
             DBcustomer.FirstName = customer.FirstName;
             DBcustomer.LastName = customer.LastName;
-            DBcustomer.Reservations = customer.Reservations;
             _context.SaveChanges();
 
             return true;

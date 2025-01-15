@@ -18,7 +18,7 @@ public class TheatreShowDateController : Controller
     {
         return await _theatreShowDateService.GetTheatreShowDate(id);
     }
-    protected async Task<IActionResult> PostTheatreShowDate([FromBody] TheatreShowDate theatreShowDate)
+    public async Task<IActionResult> PostTheatreShowDate([FromBody] TheatreShowDate theatreShowDate)
     {
         return await _theatreShowDateService.PostTheatreShowDate(theatreShowDate);
     }

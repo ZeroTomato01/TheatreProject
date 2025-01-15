@@ -12,7 +12,6 @@ namespace TheatreProject.Models
 
         public string? Email { get; set; }
 
-        public List<Reservation>? Reservations { get; set; }
     }
 
     public class Reservation

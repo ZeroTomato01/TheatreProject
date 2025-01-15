@@ -30,7 +30,7 @@ namespace TheatreProject.Controllers
             return await _theatreShowService.GetTheatreShows(id, title, description, location, startDate, endDate, sortBy, descending);
         }
         [HttpPost()]
-        protected async Task<IActionResult> PostTheatreShow([FromBody] TheatreShow theatreShow)
+        public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShow theatreShow)
         {
             return await _theatreShowService.PostTheatreShow(theatreShow);
         }

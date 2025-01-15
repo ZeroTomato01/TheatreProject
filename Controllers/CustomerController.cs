@@ -4,9 +4,9 @@ using TheatreProject.Models;
 [Route("Customer")]
 public class CustomerController : Controller
 {
-    CustomerService _customerService;
+    ICustomerService _customerService;
 
-    public CustomerController(CustomerService customerService)
+    public CustomerController(ICustomerService customerService)
     {
         _customerService = customerService;
     }
@@ -18,13 +18,35 @@ public class CustomerController : Controller
         if(DBcustomer is null) return BadRequest($"Customer with id {id} couldn't be found");
         else return Ok(DBcustomer);
     }
-    [HttpPost()]
-    protected async Task<IActionResult> PostCustomer([FromBody] Customer customer)
+    [HttpPost("Register")]
+    public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
     {
-        bool success = await _customerService.Post(customer);
-        if(success) return Ok("Customer posted");
-        else return BadRequest("Customer failed to post");
+        bool succes;
+        if (customer.CustomerId == 0)
+        {
+            int randomId = new Random().Next();
+            Customer? exists = await _customerService.Get(randomId);
+            if (exists is null)
+            {
+                customer.CustomerId = randomId;
+                succes = await _customerService.Post(customer);
+                if(succes) return Ok("Customer posted");
+                else return BadRequest("Customer failed to post");
+            }
+    
+        }
 
+        succes = await _customerService.Post(customer);
+        if(succes) return Ok("Customer posted");
+        else return BadRequest("Customer failed to post");
+    }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> LoginCustomer([FromBody] Customer customer)
+    {
+        Customer DBcustomer = await _customerService.GetByMail(customer);
+        if(DBcustomer is null) return BadRequest($"Customer with mail {customer.Email} couldn't be found");
+        else return Ok(DBcustomer);
     }
     [HttpPut()]
     public async Task<IActionResult> UpdateCustomer([FromBody] Customer customer)
