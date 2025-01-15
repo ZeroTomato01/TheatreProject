@@ -25,7 +25,7 @@ public class TheatreShowService : ITheatreShowService
     {
         IQueryable<TheatreShow> query = _context.Set<TheatreShow>()
                 .Include(show => show.Venue)
-                .Include(show => show.theatreShowDates);
+                .Include(show => show.TheatreShowDates);
 
         // Filter voor ID
         if (id.HasValue)
@@ -59,14 +59,14 @@ public class TheatreShowService : ITheatreShowService
         // Filter de shows op basis van start en eind datum
         if (startDate.HasValue && endDate.HasValue)
         {
-            query = query.Where(s => s.theatreShowDates.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
+            query = query.Where(s => s.TheatreShowDates.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
         }
 
         // Sorteer de shows op basis van de sortBy parameter
         query = sortBy switch
         {
             "Price" => descending ? query.OrderByDescending(s => s.Price) : query.OrderBy(s => s.Price),
-            "Date" => descending ? query.OrderByDescending(s => s.theatreShowDates.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.theatreShowDates.FirstOrDefault().DateAndTime),
+            "Date" => descending ? query.OrderByDescending(s => s.TheatreShowDates.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.TheatreShowDates.FirstOrDefault().DateAndTime),
             _ => descending ? query.OrderByDescending(s => s.Title) : query.OrderBy(s => s.Title),
         };
 
@@ -99,7 +99,7 @@ public class TheatreShowService : ITheatreShowService
         {
             DBShow.Venue = theatreShow.Venue;
             DBShow.Title = theatreShow.Title;
-            DBShow.theatreShowDates = theatreShow.theatreShowDates;
+            DBShow.TheatreShowDates = theatreShow.TheatreShowDates;
             DBShow.Price = theatreShow.Price;
             DBShow.Description = theatreShow.Description;
             //DBShow = theatreShow;

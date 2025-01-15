@@ -6,7 +6,7 @@ using TheatreProject.Services;
 
 namespace TheatreProject.Controllers
 {
-    [Route($"{Globals.Version}/TheatreShow")]
+    [Route($"/TheatreShow")]
     public class TheatreShowController : ControllerBase
     {
         private TheatreShowService _theatreShowService;

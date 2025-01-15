@@ -47,7 +47,44 @@ namespace TheatreProject.Models
                 .HasData(new Admin { AdminId = 4, Email = "admin4@example.com", UserName = "admin4", Password = EncryptionHelper.EncryptPassword("Welcome123") });
             modelBuilder.Entity<Admin>()
                 .HasData(new Admin { AdminId = 5, Email = "admin5@example.com", UserName = "admin5", Password = EncryptionHelper.EncryptPassword("Whatisapassword?") });
-        }
+            
+            // Venue new_venue = new Venue { VenueId = 1, Name = "The Pen", Capacity = 100, TheatreShows = new List<TheatreShow>()};
+            // modelBuilder.Entity<Venue>()
+            //     .HasData(new_venue);
+            // modelBuilder.Entity<TheatreShow>()
+            //     .HasData(new TheatreShow { TheatreShowId = 1, Title = "Cow's Movie", Description = "moo", Price = 20, 
+            //     TheatreShowDates = {},
+            //     Venue = {}});
+
+            modelBuilder.Entity<Venue>()
+                .HasData(
+                new Venue{
+                    VenueId = 1, 
+                    Name = "The Pen", 
+                    Capacity = 300
+                }
+            );
+
+            modelBuilder.Entity<TheatreShow>()
+                .HasData(
+                new TheatreShow{
+                    TheatreShowId = 1,
+                    Title = "Cow's Movie",
+                    Description = "moo",
+                    Price = 20,
+                    VenueId = 1 
+                }
+            );
+
+            modelBuilder.Entity<TheatreShowDate>()
+                .HasData(
+                new TheatreShowDate{
+                    TheatreShowDateId = 1,
+                    DateAndTime = DateTime.Now.AddDays(7),
+                    TheatreShowId = 1 
+                }
+            );
+                }
 
     }
 

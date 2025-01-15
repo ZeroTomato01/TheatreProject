@@ -37,32 +37,53 @@ namespace TheatreProject.Models
 
         public TheatreShow? TheatreShow { get; set; }
 
+        public int? TheatreShowId {get; set;}
+
     }
 
     public class TheatreShow
     {
         public int TheatreShowId { get; set; }
-
         public string? Title { get; set; }
-
         public string? Description { get; set; }
-
         public double Price { get; set; }
-
-        public List<TheatreShowDate>? theatreShowDates { get; set; }
-
-        public Venue? Venue { get; set; }
-
+        public List<TheatreShowDate>? TheatreShowDates { get; set; }
+        public int VenueId { get; set; } // Foreign key
+        public Venue? Venue { get; set; } // Navigation property
     }
 
-    public class Venue
-    {
-        public int VenueId { get; set; }
+public class Venue
+{
+    public int VenueId { get; set; }
+    public string? Name { get; set; }
+    public int Capacity { get; set; }
+    public List<TheatreShow>? TheatreShows { get; set; } // Navigation property
+}
 
-        public string? Name { get; set; }
+    // public class TheatreShow
+    // {
+    //     public int TheatreShowId { get; set; }
 
-        public int Capacity { get; set; }
+    //     public string? Title { get; set; }
 
-        public List<TheatreShow>? TheatreShows { get; set; }
-    }
+    //     public string? Description { get; set; }
+
+    //     public double Price { get; set; }
+
+    //     public List<TheatreShowDate>? theatreShowDates { get; set; }
+
+    //     public Venue? Venue { get; set; }
+
+    // }
+
+    // public class Venue
+    // {
+    //     public int VenueId { get; set; }
+
+    //     public string? Name { get; set; }
+
+    //     public int Capacity { get; set; }
+
+    //     public List<TheatreShow>? TheatreShows { get; set; }
+    // }
 }

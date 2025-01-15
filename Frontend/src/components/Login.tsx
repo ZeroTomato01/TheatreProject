@@ -17,7 +17,7 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn, setFirstName, setLastName, 
             email: '',
         }
     )
-    const [data, setData] = useState(""); // Use useState for data
+    const [data, setData] = useState("");
     
     
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
