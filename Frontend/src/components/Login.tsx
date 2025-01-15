@@ -14,6 +14,8 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn}) => {
             email: '',
         }
     )
+    const [data, setData] = useState(""); // Use useState for data
+    
     
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,8 +32,13 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn}) => {
             if (response.ok) {
                 setIsLoggedIn(true);
                 const data = await response.json();
-                console.log("succes");
-            } else console.log("failure");
+                setData("succesful login")
+                console.log("succesful login");
+            } else {
+                setData("failed login")
+                console.log("failed login");
+            }
+
         } catch (error) {
             console.error();
         }
@@ -72,7 +79,8 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn}) => {
                     onChange={handleChange}
                     required
                     /> <br />
-                <button type="submit">Register</button>
+                <button type="submit">Login</button>
+                <div>aa {data} bb</div> {/* Display the value of data */}
             </form>
         </div>
     )
