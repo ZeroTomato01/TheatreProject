@@ -5,7 +5,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers;
 
-[Route($"{Globals.Version}/Login")]
+[Route($"Login")]
 public class LoginController : Controller
 {
 
@@ -19,19 +19,19 @@ public class LoginController : Controller
 
     //call in the view (_Layout.cshtml) using asp-controller="Login" and asp-action="ViewLoginPage"
     //or using "Login/ViewLoginPage"
-    [HttpGet("api/ViewLoginPage")]
+    [HttpGet("ViewLoginPage")]
     public IActionResult ViewLoginPage() 
     {
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
         {
-            return RedirectPermanent($"/{Globals.Version}/Home/Dashboard");
+            return RedirectPermanent($"/Dashboard");
         }
         return View("Login");
     }
 
 
 
-    [HttpPost("api/LoginAction")] //this attribute isn't necessary for instances where "method" is specified
+    [HttpPost("LoginAction")] //this attribute isn't necessary for instances where "method" is specified
     //like the call in View(Login.cshtml) using action="Login" and method="LoginAction"
     //but it IS (seemingly) necessary for instances where "method" can't be specified, like in _Layout.cshtml
     //for example Logout() being called in _Layout.cshtml doesn't work without an attribute as no method is specified
@@ -41,7 +41,7 @@ public class LoginController : Controller
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
         {
-            return RedirectPermanent($"/{Globals.Version}/Home/Dashboard");
+            return RedirectPermanent($"/Dashboard");
         }
 
         var loggedInUser = await _loginService.CheckCredentials(username, password);
@@ -50,7 +50,7 @@ public class LoginController : Controller
         {
             case LoginStatus.Success:
                 HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
-                return RedirectPermanent($"/{Globals.Version}/Home/Dashboard");
+                return RedirectPermanent($"/Dashboard");
 
             case LoginStatus.IncorrectPassword:
                 ViewData["message"] = "Wachtwoord incorrect";
@@ -65,7 +65,7 @@ public class LoginController : Controller
         }
     }
 
-    [HttpGet("api/CheckLogin")]
+    [HttpGet("CheckLogin")]
     public IActionResult CheckLogin()
     {
         string? session_user = HttpContext.Session.GetString(AUTH_SESSION_KEY);
@@ -73,7 +73,7 @@ public class LoginController : Controller
         return BadRequest("Not logged in");
     }
 
-    [HttpGet("api/logout")]
+    [HttpGet("logout")]
     public IActionResult Logout()
     {
         HttpContext.Session.Remove(AUTH_SESSION_KEY);

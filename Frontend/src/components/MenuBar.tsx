@@ -16,7 +16,7 @@ const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn}) => {
           <li><Link to='/Privacy'>Privacy</Link></li>
           {isLoggedIn ? (
             <>
-              <li><Link to='/Profile'>Profile</Link></li>
+              <li><Link to='/Account'>Profile</Link></li>
               <li><Link to='/Logout'>Logout</Link></li>
             </>
           ) : (

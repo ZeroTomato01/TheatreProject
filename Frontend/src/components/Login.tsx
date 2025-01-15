@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react';
 
 interface LoginProps {
     setIsLoggedIn: (value: boolean) => void;
+    setFirstName: (value: string) => void;
+    setLastName: (value: string) => void;
+    setEmail: (value: string) => void;
 }
-const Login: React.FC<LoginProps> = ({setIsLoggedIn}) => {
+const Login: React.FC<LoginProps> = ({setIsLoggedIn, setFirstName, setLastName, setEmail}) => {
 
     const [customer, setCustomer] = useState(
         {
@@ -31,6 +34,9 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn}) => {
 
             if (response.ok) {
                 setIsLoggedIn(true);
+                setFirstName(customer.firstName)
+                setLastName(customer.lastName)
+                setEmail(customer.email)
                 const data = await response.json();
                 setData("succesful login")
                 console.log("succesful login");

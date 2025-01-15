@@ -5,7 +5,7 @@ using TheatreProject.Models;
 namespace TheatreProject.Controllers;
 
 //[Route($"/{Globals.Version}/Home")]
-[Route("Home")]
+[Route("")]
 public class HomeController : Controller
 {
 
@@ -42,6 +42,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("Error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
