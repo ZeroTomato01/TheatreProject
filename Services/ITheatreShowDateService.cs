@@ -7,5 +7,5 @@ public interface ITheatreShowDateService
     public Task<IActionResult> PostTheatreShowDate(TheatreShowDate theatreShowDate);
     public Task<IActionResult> UpdateTheatreShowDate(TheatreShowDate theatreShowDate);
     public Task<IActionResult> DeleteTheatreShowDate(int id);
-    public Task<bool> CheckTheatreShowDate(int id);
+    // public Task<bool> CheckTheatreShowDate(int id);
 }

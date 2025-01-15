@@ -47,7 +47,11 @@ namespace TheatreProject
         static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+            .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                });
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -83,7 +87,7 @@ namespace TheatreProject
 
             //app.UseHttpsRedirection();
             //app.UseStaticFiles();
-            //app.UseRouting();
+            app.UseRouting();
 
             app.UseAuthorization();
 

@@ -9,14 +9,15 @@ namespace TheatreProject.Controllers
     [Route($"/TheatreShow")]
     public class TheatreShowController : ControllerBase
     {
-        private TheatreShowService _theatreShowService;
+        private ITheatreShowService _theatreShowService;
 
-        public TheatreShowController(TheatreShowService theatreShowService)
+        public TheatreShowController(ITheatreShowService theatreShowService)
         {
             _theatreShowService = theatreShowService;
         }
 
-        [HttpGet()]
+        //[HttpGet()]
+        [Route("/TheatreShow/get")]
         public async Task<IActionResult> GetTheatreShows(
             int? id,
             string? title,
