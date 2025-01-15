@@ -1,4 +1,4 @@
-GET http://localhost:5079/TheatreShow/get
+GET https://localhost:7119/api/v1/TheatreShows
 #####
 GET https://localhost:7119/TheatreShow/GetTheatreShows
 #####

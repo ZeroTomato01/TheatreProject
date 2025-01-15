@@ -35,6 +35,8 @@ namespace TheatreProject.Models
 
         public List<Reservation>? Reservations { get; set; }
 
+        public TheatreShow? TheatreShow { get; set; }
+
         public int? TheatreShowId {get; set;}
 
     }

@@ -184,7 +184,7 @@ namespace TheatreProject.Migrations
                         new
                         {
                             TheatreShowDateId = 1,
-                            DateAndTime = new DateTime(2025, 1, 22, 11, 8, 9, 646, DateTimeKind.Local).AddTicks(6003),
+                            DateAndTime = new DateTime(2025, 1, 22, 10, 32, 35, 152, DateTimeKind.Local).AddTicks(3619),
                             TheatreShowId = 1
                         });
                 });
@@ -242,9 +242,11 @@ namespace TheatreProject.Migrations
 
             modelBuilder.Entity("TheatreProject.Models.TheatreShowDate", b =>
                 {
-                    b.HasOne("TheatreProject.Models.TheatreShow", null)
+                    b.HasOne("TheatreProject.Models.TheatreShow", "TheatreShow")
                         .WithMany("TheatreShowDates")
                         .HasForeignKey("TheatreShowId");
+
+                    b.Navigation("TheatreShow");
                 });
 
             modelBuilder.Entity("TheatreProject.Models.TheatreShow", b =>

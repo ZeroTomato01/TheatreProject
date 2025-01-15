@@ -48,7 +48,7 @@ public class TheatreShowDateService : ITheatreShowDateService
         {
             DBTheatreShowDate.DateAndTime = theatreShowDate.DateAndTime;
             DBTheatreShowDate.Reservations = theatreShowDate.Reservations;
-            //DBTheatreShowDate.TheatreShow = theatreShowDate.TheatreShow;
+            DBTheatreShowDate.TheatreShow = theatreShowDate.TheatreShow;
             _context.SaveChanges();
 
             return new OkObjectResult($"TheatreShowDate updated to {theatreShowDate}");
@@ -66,15 +66,13 @@ public class TheatreShowDateService : ITheatreShowDateService
         }
         else return new BadRequestObjectResult($"no TheatreShowDate with given id: {id} was found in database");
     }
-}
 
-    //disabled on 15/1/2025 after removing TheatreShow from TheatreShowDate model
-//     public async Task<bool> CheckTheatreShowDate(int id)
-//     {
-//         var DBtheatreShowDate = await _context.TheatreShowDate.FindAsync(id);
-//         if(DBtheatreShowDate is null) return false;
-//         if(DBtheatreShowDate.TheatreShow is null) return false;
-//         if(DBtheatreShowDate.TheatreShow.TheatreShowId is 0) return false;
-//         else return await _theatreShowService.CheckTheatreShow(DBtheatreShowDate.TheatreShow.TheatreShowId);
-//     }
-// }
+    public async Task<bool> CheckTheatreShowDate(int id)
+    {
+        var DBtheatreShowDate = await _context.TheatreShowDate.FindAsync(id);
+        if(DBtheatreShowDate is null) return false;
+        if(DBtheatreShowDate.TheatreShow is null) return false;
+        if(DBtheatreShowDate.TheatreShow.TheatreShowId is 0) return false;
+        else return await _theatreShowService.CheckTheatreShow(DBtheatreShowDate.TheatreShow.TheatreShowId);
+    }
+}

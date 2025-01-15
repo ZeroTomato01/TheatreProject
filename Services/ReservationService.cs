@@ -117,15 +117,15 @@ public class ReservationService : IReservationService
         return results;
     }
 
-    // public async Task<bool> CheckReservation(int id)
-    // {
-    //     var DBReservation = await _context.Reservation.FindAsync(id);
-    //     if(DBReservation is not null)
-    //     {
-    //         if(DBReservation.TheatreShowDate is null) return false;
-    //         if(DBReservation.TheatreShowDate.TheatreShowDateId == 0) return false;
-    //         return await _theatreShowDateService.CheckTheatreShowDate(DBReservation.TheatreShowDate.TheatreShowDateId);
-    //     }
-    //     else return false;
-    // }
+    public async Task<bool> CheckReservation(int id)
+    {
+        var DBReservation = await _context.Reservation.FindAsync(id);
+        if(DBReservation is not null)
+        {
+            if(DBReservation.TheatreShowDate is null) return false;
+            if(DBReservation.TheatreShowDate.TheatreShowDateId == 0) return false;
+            return await _theatreShowDateService.CheckTheatreShowDate(DBReservation.TheatreShowDate.TheatreShowDateId);
+        }
+        else return false;
+    }
 }
