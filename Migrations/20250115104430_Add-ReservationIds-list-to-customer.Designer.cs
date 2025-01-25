@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheatreProject.Models;
 
@@ -10,9 +11,11 @@ using TheatreProject.Models;
 namespace TheatreProject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250115104430_Add-ReservationIds-list-to-customer")]
+    partial class AddReservationIdslisttocustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -187,7 +190,7 @@ namespace TheatreProject.Migrations
                         new
                         {
                             TheatreShowDateId = 1,
-                            DateAndTime = new DateTime(2025, 1, 22, 10, 32, 35, 152, DateTimeKind.Local).AddTicks(3619),
+                            DateAndTime = new DateTime(2025, 1, 22, 11, 44, 30, 565, DateTimeKind.Local).AddTicks(6532),
                             TheatreShowId = 1
                         });
                 });
@@ -245,11 +248,9 @@ namespace TheatreProject.Migrations
 
             modelBuilder.Entity("TheatreProject.Models.TheatreShowDate", b =>
                 {
-                    b.HasOne("TheatreProject.Models.TheatreShow", "TheatreShow")
+                    b.HasOne("TheatreProject.Models.TheatreShow", null)
                         .WithMany("TheatreShowDates")
                         .HasForeignKey("TheatreShowId");
-
-                    b.Navigation("TheatreShow");
                 });
 
             modelBuilder.Entity("TheatreProject.Models.TheatreShow", b =>

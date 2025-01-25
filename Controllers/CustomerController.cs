@@ -18,6 +18,14 @@ public class CustomerController : Controller
         if(DBcustomer is null) return BadRequest($"Customer with id {id} couldn't be found");
         else return Ok(DBcustomer);
     }
+
+    [HttpGet("Find")]
+    public async Task<IActionResult> FindCustomerId([FromQuery] string email)
+    {
+        Customer DBcustomer = await _customerService.GetByMail(email);
+        if(DBcustomer is null) return BadRequest($"Customer with id {email} couldn't be found");
+        else return Ok(DBcustomer.CustomerId);
+    }
     [HttpPost("Register")]
     public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
     {
@@ -42,10 +50,10 @@ public class CustomerController : Controller
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> LoginCustomer([FromBody] Customer customer)
+    public async Task<IActionResult> LoginCustomer([FromQuery] string email)
     {
-        Customer DBcustomer = await _customerService.GetByMail(customer);
-        if(DBcustomer is null) return BadRequest($"Customer with mail {customer.Email} couldn't be found");
+        Customer DBcustomer = await _customerService.GetByMail(email);
+        if(DBcustomer is null) return BadRequest($"Customer with mail {email} couldn't be found");
         else return Ok(DBcustomer);
     }
     [HttpPut()]

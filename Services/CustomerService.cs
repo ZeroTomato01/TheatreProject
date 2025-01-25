@@ -24,10 +24,10 @@ public class CustomerService : ICustomerService
         
     }
 
-    public async Task<Customer?> GetByMail(Customer customer)
+    public async Task<Customer?> GetByMail(string email)
     {
         var DBCustomer = await _context.Customer
-        .Where(c => c.Email == customer.Email)
+        .Where(c => c.Email == email)
         .FirstOrDefaultAsync();
         return DBCustomer;
     }

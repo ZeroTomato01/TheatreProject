@@ -1,4 +1,7 @@
-GET https://localhost:7119/api/v1/TheatreShows
+# <<<<<<< Updated upstream
+# GET https://localhost:7119/api/v1/TheatreShows
+# =======
+GET http://localhost:5097/TheatreShow
 #####
 GET https://localhost:7119/TheatreShow/GetTheatreShows
 #####

@@ -17,6 +17,8 @@ namespace TheatreProject.Controllers
         }
 
         [HttpGet()]
+
+        // [Route("/TheatreShow/get")]
         public async Task<IActionResult> GetTheatreShows(
             int? id,
             string? title,
