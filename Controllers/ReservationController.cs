@@ -3,7 +3,7 @@ using TheatreProject.Models;
 
 namespace TheatreProject.Controllers
 {
-    [Route($"{Globals.Version}/Reservation")]
+    [Route($"/Reservation")]
     public class ReservationController : Controller
     {
         IReservationService _reservationService;
