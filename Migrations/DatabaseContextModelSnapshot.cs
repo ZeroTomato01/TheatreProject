@@ -187,7 +187,7 @@ namespace TheatreProject.Migrations
                         new
                         {
                             TheatreShowDateId = 1,
-                            DateAndTime = new DateTime(2025, 1, 22, 10, 32, 35, 152, DateTimeKind.Local).AddTicks(3619),
+                            DateAndTime = new DateTime(2025, 1, 22, 11, 44, 30, 565, DateTimeKind.Local).AddTicks(6532),
                             TheatreShowId = 1
                         });
                 });
