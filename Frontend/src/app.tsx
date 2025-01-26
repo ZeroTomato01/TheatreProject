@@ -9,11 +9,13 @@ import Privacy from './components/Privacy';
 import Account from './components/Account';
 import Home from './components/Home'
 
-import { AdminDataWrapper } from './models/Admin';
+import { AdminData, AdminDataWrapper } from './models/Admin';
 //import { CustomerData } from './models/customer';
 
 const App: React.FC = () => {
-  const [adminData, setAdminData] = useState<AdminDataWrapper | null>(null);
+  const [savedLoginFormData, setSavedLoginFormData] = useState<AdminData>();
+  const getSavedLoginFormData = () => savedLoginFormData;
+  const [adminData, setAdminData] = useState<AdminData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   //const [firstName, setFirstName] = useState("");
  // const [lastName, setLastName] = useState("");
@@ -28,6 +30,8 @@ const App: React.FC = () => {
         <Route path="/Login" element={<Login 
         setIsLoggedIn={setIsLoggedIn}
         setAdminData={setAdminData}
+        setSavedLoginFormData={setSavedLoginFormData}
+        getSavedLoginFormData={getSavedLoginFormData}
         // setFirstName={setFirstName}
         // setLastName={setLastName}
         // setEmail={setEmail}
