@@ -2,6 +2,7 @@ using TheatreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using TheatreProject.Utils;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace TheatreProject.Services;
@@ -33,4 +34,22 @@ public class LoginService : ILoginService
         }
         return LoginStatus.IncorrectUsername;
     }
+
+    public async Task<object> GetAdminData(string username, string inputPassword)
+    {
+        if (await CheckCredentials(username, inputPassword) == LoginStatus.Success) //extra protection
+        {
+            var admin = await _context.Admin.FirstOrDefaultAsync(a => a.UserName == username);
+            if (admin != null)
+            {
+                return new {
+                    AdminId = admin.AdminId,
+                    UserName = admin.UserName,
+                    Email = admin.Email
+                };
+        }
+        return null;
+        
+    }
 }
+

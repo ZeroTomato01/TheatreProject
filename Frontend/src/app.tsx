@@ -9,12 +9,15 @@ import Privacy from './components/Privacy';
 import Account from './components/Account';
 import Home from './components/Home'
 
+import { AdminDataWrapper } from './models/Admin';
+//import { CustomerData } from './models/customer';
 
 const App: React.FC = () => {
+  const [adminData, setAdminData] = useState<AdminDataWrapper | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  //const [firstName, setFirstName] = useState("");
+ // const [lastName, setLastName] = useState("");
+  //const [email, setEmail] = useState("");
   return (
     <Router>
       <MenuBar isLoggedIn={isLoggedIn}/>
@@ -23,18 +26,19 @@ const App: React.FC = () => {
         <Route path="/Home" element={<Home />} />
         <Route path="/Shows" element={<Shows />} />
         <Route path="/Login" element={<Login 
-        setIsLoggedIn={setIsLoggedIn} 
-        setFirstName={setFirstName}
-        setLastName={setLastName}
-        setEmail={setEmail}
+        setIsLoggedIn={setIsLoggedIn}
+        setAdminData={setAdminData}
+        // setFirstName={setFirstName}
+        // setLastName={setLastName}
+        // setEmail={setEmail}
         />} />
         <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/Register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/Privacy" element={<Privacy />} />
-        <Route path="/Account" element={<Account 
+        {/* <Route path="/Account" element={<Account 
               firstName={firstName}
               lastName={lastName}
-              email={email}/>} />
+              email={email}/>} /> */}
         
         
       </Routes>

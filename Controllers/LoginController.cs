@@ -17,25 +17,7 @@ public class LoginController : Controller
         _loginService = loginService;
     }
 
-    //call in the view (_Layout.cshtml) using asp-controller="Login" and asp-action="ViewLoginPage"
-    //or using "Login/ViewLoginPage"
-    [HttpGet("ViewLoginPage")]
-    public IActionResult ViewLoginPage() 
-    {
-        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
-        {
-            return RedirectPermanent($"/Dashboard");
-        }
-        return View("Login");
-    }
-
-
-
-    [HttpPost("LoginAction")] //this attribute isn't necessary for instances where "method" is specified
-    //like the call in View(Login.cshtml) using action="Login" and method="LoginAction"
-    //but it IS (seemingly) necessary for instances where "method" can't be specified, like in _Layout.cshtml
-    //for example Logout() being called in _Layout.cshtml doesn't work without an attribute as no method is specified
-    
+    [HttpPost()]
     public async Task<IActionResult> LoginAction([FromForm] string username, [FromForm] string password)
     {
 
@@ -65,13 +47,19 @@ public class LoginController : Controller
         }
     }
 
-    [HttpGet("CheckLogin")]
-    public IActionResult CheckLogin()
+    [HttpPost("/AdminData")] //except for password
+    public async Task<AdminDTO> GetAdminData(string username, string password) //except for password
     {
-        string? session_user = HttpContext.Session.GetString(AUTH_SESSION_KEY);
-        if (session_user != null) return Ok();
-        return BadRequest("Not logged in");
+        return await _loginService.GetAdminData(username, password);
     }
+
+    // [HttpGet("CheckLogin")]
+    // public IActionResult CheckLogin()
+    // {
+    //     string? session_user = HttpContext.Session.GetString(AUTH_SESSION_KEY);
+    //     if (session_user != null) return Ok();
+    //     return BadRequest("Not logged in");
+    // }
 
     [HttpGet("logout")]
     public IActionResult Logout()

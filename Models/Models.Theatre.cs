@@ -2,9 +2,11 @@ using Newtonsoft.Json;
 
 namespace TheatreProject.Models
 {
-    public class Customer
+    //note, these classes aren't automatically converted and used in frontend.
+    //so make sure you change front-end definitions too if you change these here
+    public class Customer //note
     {
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
 
         public string? FirstName { get; set; }
 

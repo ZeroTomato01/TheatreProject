@@ -1,47 +1,69 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { AdminData } from '../models/Admin';
 
 interface LoginProps {
     setIsLoggedIn: (value: boolean) => void;
-    setFirstName: (value: string) => void;
-    setLastName: (value: string) => void;
-    setEmail: (value: string) => void;
+    setAdminData: (value: AdminData) => void;
+    setSavedLoginFormData: (value: AdminData) => void;
+    getSavedLoginFormData: (value: AdminData) => void;
+    //initAdminData: (value: AdminData) => void;
+    // setFirstName: (value: string) => void;
+    // setLastName: (value: string) => void;
+    // setEmail: (value: string) => void;
 }
-const Login: React.FC<LoginProps> = ({setIsLoggedIn, setFirstName, setLastName, setEmail}) => {
+const Login: React.FC<LoginProps> = ({setIsLoggedIn, setAdminData, setSavedLoginFormData, getSavedLoginFormData}) => {
 
-    const [customer, setCustomer] = useState(
+    const [formData, setFormData] = useState(
         {
-            customerId: 0,
-            firstName: '',
-            lastName: '',
-            email: '',
+            adminId: 0,
+            username: '',
+            password: '', //this should be safe
+            email: ''
         }
     )
-    const [data, setData] = useState("");
+    const [localAdminData, setLocalAdminData] = useState(
+        {
+            adminId: 0,
+            username: '',
+            password: '', //this should be safe
+            email: ''
+        }
+    )
+    const [statusMessage, setStatusMessage] = useState("");
     
     
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const response = await fetch("/Customer/Login", {
+            const loginResponse = await fetch("/Login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify(customer) //sending here
+                }
+                //body: JSON.stringify(formData) //sending here
             });
 
-            if (response.ok) {
+            if (loginResponse.ok) {
+                const getAdminDataResponse = await fetch("/Login/AdminData", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(localAdminData) //sending here 
+                    //this does not update the local data, but uses it to send. the try above only continues if its succesful
+                })
                 setIsLoggedIn(true);
-                setFirstName(customer.firstName)
-                setLastName(customer.lastName)
-                setEmail(customer.email)
-                const data = await response.json();
-                setData("succesful login")
+                setAdminData(formData)
+                // setFirstName(customer.firstName)
+                // setLastName(customer.lastName)
+                // setEmail(customer.email)
+                const data = await loginResponse.json();
+                setStatusMessage("succesful login")
                 console.log("succesful login");
             } else {
-                setData("failed login")
+                setStatusMessage("failed login")
                 console.log("failed login");
             }
 
@@ -52,8 +74,8 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn, setFirstName, setLastName, 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        setCustomer({
-            ...customer,
+        setFormData({
+            ...formData,
             [id]: value,
         });
     };
@@ -61,15 +83,15 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn, setFirstName, setLastName, 
     return (
         <div>
             <form onSubmit={handleLogin}>
-            <label htmlFor='firstName'>firstName</label>
+            <label htmlFor='username'>username</label>
                     <input
                     type="text"
-                    id="firstName"
-                    value={ customer.firstName }
+                    id="username"
+                    value={ formData.username }
                     onChange={ handleChange }
                     required
                     /> <br />
-                <label htmlFor="lastName">lastName</label>
+                {/* <label htmlFor="lastName">lastName</label>
                 <input
                     type="text"
                     id="lastName"
@@ -77,16 +99,16 @@ const Login: React.FC<LoginProps> = ({setIsLoggedIn, setFirstName, setLastName, 
                     onChange={handleChange}
                     required
                     /> <br />
-                <label htmlFor="email">email</label>
+                <label htmlFor="email">email</label> */}
                 <input
                     type="text"
-                    id="email"
-                    value={customer.email}
+                    id="password"
+                    value={formData.password}
                     onChange={handleChange}
                     required
                     /> <br />
                 <button type="submit">Login</button>
-                <div>aa {data} bb</div> {/* Display the value of data */}
+                <div>aa {statusMessage} bb</div> {/* Display the value of data */}
             </form>
         </div>
     )

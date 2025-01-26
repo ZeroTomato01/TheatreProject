@@ -1,15 +1,14 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { CustomerDataWrapper } from '../models/customer';
 
-interface AccountProps {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }
+// export interface AccountProps { //customerData should be stored in APP, 
+// // and updated by children through callbacks only
+//     customerData: CustomerData
+//   } 
   
   
-
-  const Account: React.FC<AccountProps> = ({ firstName, lastName, email }) => {
+  const Account: React.FC<CustomerDataWrapper> = ({ customerData }) => {
     const [reservations, setReservations] = useState<any[]>([]); // Store a list of shows
     const [message, setMessage] = useState<string>(""); // Store a list of shows
 
@@ -50,8 +49,8 @@ interface AccountProps {
       <div>
         <h1>Account Information</h1>
         <ul>
-          <li>Name: {firstName} {lastName}</li>
-          <li>Email: {email}</li>
+          <li>Name: {customerData.firstName} {customerData.lastName}</li>
+          <li>Email: {customerData.email}</li>
           <li>Password: ()</li>
           <li>Your Reservations:
             {message && <p>{message}</p>}
