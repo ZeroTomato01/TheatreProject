@@ -69,28 +69,55 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                 const getAdminDataResponse = await fetch("/Login/AdminData", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/x-www-form-urlencoded",
                     },
-                    body: JSON.stringify(formData) //send username and password
+                    body: new URLSearchParams(formData).toString() //send username and password
                     //this does not update the local data, but uses it to send. the try above only continues if its succesful
                 })
-                if (getAdminDataResponse.ok)
+                var errormessage;
+                try{
+                    if(getAdminDataResponse.ok)
+                        {
+                            if(!await getAdminDataResponse.text() )
+                            {
+                                setStatusMessage("there was no getAdminDataResponse");
+                            }
+                            else
+                            {
+                                const responseAdminData: AdminDataDTO = await getAdminDataResponse.json()
+                                // const localAdminDataDTO: AdminDataDTO = {
+                                //     adminId: responseAdminData.adminId,
+                                //     username: responseAdminData.username,
+                                //     email: responseAdminData.email
+                                // }
+                                updateAdminDataDTO(responseAdminData) //assumes response has same fields
+                                const data = await loginResponse.json();
+
+                                setIsLoggedIn(true);
+                                setStatusMessage("succesful login")
+                                console.log("succesful login");
+                            }
+                        }
+                    else {
+                        if(!await getAdminDataResponse.text() )
+                            {
+                                setStatusMessage("there was no getAdminDataResponse");
+                            }
+                        else {
+                            setStatusMessage("failed login1" + (await getAdminDataResponse.json()).toString())
+                        }
+                    }
+                }
+                catch (e)
                 {
-                    setIsLoggedIn(true);
-                    const responseAdminData: AdminDataDTO = await getAdminDataResponse.json()
-                    // const localAdminDataDTO: AdminDataDTO = {
-                    //     adminId: responseAdminData.adminId,
-                    //     username: responseAdminData.username,
-                    //     email: responseAdminData.email
-                    // }
-                    updateAdminDataDTO(responseAdminData) //assumes response has same fields
-                    const data = await loginResponse.json();
-                    setStatusMessage("succesful login")
-                    console.log("succesful login");
+                    //var result = e.message; // error under useUnknownInCatchVariables 
+                    if (typeof e === "string") {
+                        setStatusMessage(e.toUpperCase()) // works, `e` narrowed to string
+                    } else if (e instanceof Error) {
+                        setStatusMessage(e.message) // works, `e` narrowed to Error
+                    }
                 }
-                else {
-                    setStatusMessage("failed login1" + JSON.parse(getAdminDataResponse.json.toString()))
-                }
+                
                
             } else {
                 setStatusMessage("failed login2" + loginResponse.statusText)

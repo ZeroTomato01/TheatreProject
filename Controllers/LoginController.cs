@@ -23,7 +23,7 @@ public class LoginController : Controller
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) //if there IS a AUTH_SESSION_KEY
         {
-            return RedirectPermanent($"/Dashboard");
+            return Unauthorized(); //use should not be getting the option to log in if theyre already logged in
         }
 
         var loggedInUser = await _loginService.CheckCredentials(username, password);
@@ -48,8 +48,8 @@ public class LoginController : Controller
         }
     }
 
-    [HttpPost("/AdminData")] //except for password
-    public async Task<AdminDTO> GetAdminData(string username, string password) //except for password
+    [HttpPost("AdminData")] //except for password
+    public async Task<AdminDTO> GetAdminData([FromForm] string username, [FromForm] string password) //except for password
     {
         return await _loginService.GetAdminData(username, password);
     }
