@@ -53,14 +53,15 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
     
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        var errordata;
 
         try {
             const loginResponse = await fetch("/Login", { //returns a view along with response, which isnt used so its fine
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: JSON.stringify(formData) //send username and password
+                body: new URLSearchParams(formData).toString() //send username and password
             });
 
             if (loginResponse.ok) { //we could have Login above return AdminData itself, but it might be better to seperate concerns
@@ -73,20 +74,26 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                     body: JSON.stringify(formData) //send username and password
                     //this does not update the local data, but uses it to send. the try above only continues if its succesful
                 })
-                setIsLoggedIn(true);
-                const responseAdminData: AdminDataDTO = await getAdminDataResponse.json()
-                // const localAdminDataDTO: AdminDataDTO = {
-                //     adminId: responseAdminData.adminId,
-                //     username: responseAdminData.username,
-                //     email: responseAdminData.email
-                // }
-                updateAdminDataDTO(responseAdminData) //assumes response has same fields
-                
-                const data = await loginResponse.json();
-                setStatusMessage("succesful login")
-                console.log("succesful login");
+                if (getAdminDataResponse.ok)
+                {
+                    setIsLoggedIn(true);
+                    const responseAdminData: AdminDataDTO = await getAdminDataResponse.json()
+                    // const localAdminDataDTO: AdminDataDTO = {
+                    //     adminId: responseAdminData.adminId,
+                    //     username: responseAdminData.username,
+                    //     email: responseAdminData.email
+                    // }
+                    updateAdminDataDTO(responseAdminData) //assumes response has same fields
+                    const data = await loginResponse.json();
+                    setStatusMessage("succesful login")
+                    console.log("succesful login");
+                }
+                else {
+                    setStatusMessage("failed login1" + JSON.parse(getAdminDataResponse.json.toString()))
+                }
+               
             } else {
-                setStatusMessage("failed login")
+                setStatusMessage("failed login2" + loginResponse.statusText)
                 console.log("failed login");
             }
 

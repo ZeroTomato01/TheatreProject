@@ -18,7 +18,7 @@ public class LoginController : Controller
     }
 
     [HttpPost()]
-    public async Task<IActionResult> LoginAction([FromForm] string username, [FromForm] string password)
+    public async Task<IActionResult> LoginAction([FromForm]string username, [FromForm]string password)
     {
 
         if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) //if there IS a AUTH_SESSION_KEY

@@ -28,7 +28,8 @@ public class LoginService : ILoginService
         {
             if (!string.IsNullOrEmpty(inputPassword))
             {
-                if (admin.Password == EncryptionHelper.EncryptPassword(inputPassword)) return LoginStatus.Success;
+                var debugstep = EncryptionHelper.EncryptPassword(inputPassword);
+                if (admin.Password == debugstep) return LoginStatus.Success;
             }
             return LoginStatus.IncorrectPassword;
         }
