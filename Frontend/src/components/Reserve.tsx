@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 
 interface ReserveProps {
-    CustomerEmail: string
+    //CustomerEmail: string
     ShowId: number
 }
 
-const Reserve: React.FC<ReserveProps> = ({CustomerEmail, ShowId}) => {
+const Reserve: React.FC<ReserveProps> = (ShowId) => {
    
     const [message, setMessage] = useState<string>(""); // Store a list of shows
 

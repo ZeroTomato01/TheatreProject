@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require("webpack");
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+//const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 
 module.exports = {
@@ -12,7 +12,8 @@ module.exports = {
     output: {
         filename: 'main.js',
         publicPath: "",
-        path: path.resolve(__dirname, '../wwwroot/js')
+        path: path.resolve(__dirname, '../wwwroot/js'),
+        clean: true
     },
 
     resolve: {
@@ -57,7 +58,7 @@ module.exports = {
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new CleanWebpackPlugin(['../wwwroot/js'])
+       // new CleanWebpackPlugin(['../wwwroot/js'])
     ],
 
 };

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { CustomerDataWrapper } from '../models/customer';
+import { AdminDataWrapper } from '../models/Admin';
 
 // export interface AccountProps { //customerData should be stored in APP, 
 // // and updated by children through callbacks only
@@ -8,7 +8,7 @@ import { CustomerDataWrapper } from '../models/customer';
 //   } 
   
   
-  const Account: React.FC<CustomerDataWrapper> = ({ customerData }) => {
+  const Account: React.FC<AdminDataWrapper> = ({ adminData }) => {
     const [reservations, setReservations] = useState<any[]>([]); // Store a list of shows
     const [message, setMessage] = useState<string>(""); // Store a list of shows
 
@@ -49,8 +49,8 @@ import { CustomerDataWrapper } from '../models/customer';
       <div>
         <h1>Account Information</h1>
         <ul>
-          <li>Name: {customerData.firstName} {customerData.lastName}</li>
-          <li>Email: {customerData.email}</li>
+          <li>username: {adminData.username}</li>
+          <li>Email: {adminData.email}</li>
           <li>Password: ()</li>
           <li>Your Reservations:
             {message && <p>{message}</p>}

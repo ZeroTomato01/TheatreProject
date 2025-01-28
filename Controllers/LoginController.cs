@@ -21,7 +21,7 @@ public class LoginController : Controller
     public async Task<IActionResult> LoginAction([FromForm] string username, [FromForm] string password)
     {
 
-        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY)))
+        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) //if there IS a AUTH_SESSION_KEY
         {
             return RedirectPermanent($"/Dashboard");
         }
@@ -32,18 +32,19 @@ public class LoginController : Controller
         {
             case LoginStatus.Success:
                 HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
-                return RedirectPermanent($"/Dashboard");
+                //return RedirectPermanent($"/Dashboard");
+                return Ok();
 
             case LoginStatus.IncorrectPassword:
                 ViewData["message"] = "Wachtwoord incorrect";
-                return View("Login");
+                return NotFound();
 
             case LoginStatus.IncorrectUsername:
                 ViewData["message"] = "Username incorrect";
-                return View("Login");
+                return NotFound();
 
             default:
-                return View("Login");
+                return NotFound();
         }
     }
 

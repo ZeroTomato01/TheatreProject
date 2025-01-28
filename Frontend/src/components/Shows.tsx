@@ -7,10 +7,10 @@ import Reserve from './Reserve';
 //   const [shows, setShows] = useState<string[]>([]); // Store a list of shows
 
 interface ShowsProps {
-  CustomerEmail: string
+//  CustomerEmail: string
 }
 
-const Shows: React.FC<ShowsProps> = ({CustomerEmail}) => {
+const Shows: React.FC<ShowsProps> = () => {
   const [shows, setShows] = useState<any[]>([]); // Store a list of shows
   const [message, setMessage] = useState<string>(""); // Store a list of shows
 
@@ -51,10 +51,12 @@ const Shows: React.FC<ShowsProps> = ({CustomerEmail}) => {
                 {show.theatreShowDates?.$values.map((showDate: any, idx: number) => (
                   <li key={idx}>
                     <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
+                    <Route path="/reserve" element={<Reserve ShowId={idx }/>} /> 
+                    {/* is idx the right thign to pass? */}
                   </li>
                 ))}
               </ul>
-              <Route path="/Privacy" element={<Reserve />} />
+              
             </li>
           ))
         ) : (
