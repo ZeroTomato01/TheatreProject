@@ -47,18 +47,7 @@ namespace TheatreProject
         static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllersWithViews();
-
-            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            builder.Services.AddDistributedMemoryCache();
-
-            builder.Services.AddSession(options => 
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(40);
-                options.Cookie.HttpOnly = true; 
-                options.Cookie.IsEssential = true; 
-            });
+            builder.Services.AddControllers();
 
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
@@ -73,44 +62,30 @@ namespace TheatreProject
             
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
-            //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
-            //app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseSession();
-
-            app.UseStaticFiles(); //:OOO
+            // filepath: /c:/webdev-semester-main/Program.cs
+            app.UseStaticFiles();
 
             app.MapControllers();
-            // app.MapControllerRoute(
-            //     name: "default",
-            //     pattern: "{controller=Home}/{action=Index}/{id?}");
-            //     //example: HomeController
 
-            // app.MapControllerRoute(
-            //     name: "default",
-            //     pattern: "{controller=Home}/api/{action=Index}/{id?}");
-            app.Use((context, next) => 
+            // Serve index.html for any non-API requests
+            app.Use(async (context, next) =>
             {
-                //context.Request.
-                var a = context.Request;
-                return next.Invoke();
+                if (!context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.Request.Path = "/index.html";
+                }
+                await next();
+            });
 
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
             });
 
             app.Run();
-            
-
         }
     }
 }
