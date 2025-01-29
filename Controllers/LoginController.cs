@@ -66,7 +66,7 @@ public class LoginController : Controller
     public IActionResult Logout()
     {
         HttpContext.Session.Remove(AUTH_SESSION_KEY);
-        return View("Login");
+        return Ok();
         //return RedirectPermanent("Login/ViewLoginPage");
     }
 }

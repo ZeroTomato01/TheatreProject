@@ -7,9 +7,15 @@ interface LogoutProps {
 
 const Logout: React.FC<LogoutProps> = ({setIsLoggedIn}) => {
 
-    const handleLogOut = () => {
-        setIsLoggedIn(false);
-        alert("You have been logged out.");
+    const handleLogOut = async () => {
+        const logoutResponse = await fetch("/Login/logout", {
+            method: "GET"
+        });
+        if(logoutResponse.ok)
+        {
+            setIsLoggedIn(false);
+            alert("You have been logged out.");
+        }
     }
 
     return (

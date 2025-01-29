@@ -76,22 +76,18 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                 })
                 var errormessage;
                 try{
+                    const text = await getAdminDataResponse.text()
+                    
                     if(getAdminDataResponse.ok)
                         {
-                            if(!await getAdminDataResponse.text() )
+                            if(!text)
                             {
                                 setStatusMessage("there was no getAdminDataResponse");
                             }
                             else
                             {
-                                const responseAdminData: AdminDataDTO = await getAdminDataResponse.json()
-                                // const localAdminDataDTO: AdminDataDTO = {
-                                //     adminId: responseAdminData.adminId,
-                                //     username: responseAdminData.username,
-                                //     email: responseAdminData.email
-                                // }
+                                const responseAdminData: AdminDataDTO = await JSON.parse(text)
                                 updateAdminDataDTO(responseAdminData) //assumes response has same fields
-                                const data = await loginResponse.json();
 
                                 setIsLoggedIn(true);
                                 setStatusMessage("succesful login")
@@ -99,12 +95,12 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                             }
                         }
                     else {
-                        if(!await getAdminDataResponse.text() )
+                        if(!text)
                             {
                                 setStatusMessage("there was no getAdminDataResponse");
                             }
                         else {
-                            setStatusMessage("failed login1" + (await getAdminDataResponse.json()).toString())
+                            setStatusMessage("failed login1" + text)
                         }
                     }
                 }
@@ -112,15 +108,15 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                 {
                     //var result = e.message; // error under useUnknownInCatchVariables 
                     if (typeof e === "string") {
-                        setStatusMessage(e.toUpperCase()) // works, `e` narrowed to string
+                        setStatusMessage("error1:" + e.toUpperCase())
                     } else if (e instanceof Error) {
-                        setStatusMessage(e.message) // works, `e` narrowed to Error
+                        setStatusMessage("error2:" + e.message + " : " + e.stack)
                     }
                 }
                 
                
             } else {
-                setStatusMessage("failed login2" + loginResponse.statusText)
+                setStatusMessage("failed login2: " + loginResponse.status + " - " + loginResponse.statusText + "-")
                 console.log("failed login");
             }
 
