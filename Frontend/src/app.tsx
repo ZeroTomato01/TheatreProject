@@ -1,21 +1,16 @@
 import React, { useState, useRef } from 'react'
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Shows from './components/Shows';
 import MenuBar from './components/MenuBar';
 import Login from './components/Login';
 import Logout from './components/Logout';
-import Register from './components/Register';
 import Privacy from './components/Privacy';
-import Account from './components/Account';
 import Home from './components/Home'
-
+import AdminDashboard from './components/AdminDashboard';
 import { AdminDataDTO } from './models/Admin';
-//import { CustomerData } from './models/customer';
+
 
 const App: React.FC = () => {
-  //const [savedLoginFormData, setSavedLoginFormData] = useState<AdminData>();
-  //const getSavedLoginFormData = () => savedLoginFormData;
-  //const [adminData, setAdminData] = useState<AdminData | null>(null); passing this callback to child is basically what useRef() does
   const adminDataDTORef = useRef<AdminDataDTO>({
     adminId: 0,
     username: '',
@@ -32,28 +27,17 @@ const App: React.FC = () => {
       <MenuBar isLoggedIn={isLoggedIn}/>
   
       <Routes>
-        <Route path="/Home" element={<Home />} />
-        <Route path="/Shows" element={<Shows/>} />
-        <Route path="/Login" element={<Login 
+        <Route path="/home" element={<Home />} />
+        <Route path="/shows" element={<Shows/>} />
+        <Route path="/login" element={<Login 
         adminDataDTORef={adminDataDTORef}
         loginFormDataRef={loginFormDataRef}
         setIsLoggedIn={setIsLoggedIn}
-        //setAdminData={setAdminData}
-        //setSavedLoginFormData={setSavedLoginFormData}
-        //getSavedLoginFormData={getSavedLoginFormData}
-        // setFirstName={setFirstName}
-        // setLastName={setLastName}
-        // setEmail={setEmail}
         />} />
-        <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
-        {/* <Route path="/Register" element={<Register setIsLoggedIn={setIsLoggedIn} />} /> */}
-        <Route path="/Privacy" element={<Privacy />} />
-        {/* <Route path="/Account" element={<Account 
-              firstName={firstName}
-              lastName={lastName}
-              email={email}/>} /> */}
-        
-        
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/privacy" element={<Privacy />} />
+
       </Routes>
     </Router>
   )};

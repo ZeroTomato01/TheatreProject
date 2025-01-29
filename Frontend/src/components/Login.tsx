@@ -1,61 +1,39 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, redirect } from 'react-router-dom';
 import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
 import { AdminData, AdminDataDTO } from '../models/Admin';
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
     setIsLoggedIn: (value: boolean) => void;
-    //setAdminData: (value: AdminData) => void;
-    adminDataDTORef: MutableRefObject<AdminDataDTO>;
+    adminDataDTORef: MutableRefObject<AdminDataDTO>; //"Data Transfer Object" (excludes password)
     loginFormDataRef: MutableRefObject<{username: string}>
-    //setSavedLoginFormData: (value: AdminData) => void;
-    //getSavedLoginFormData: (value: AdminData) => void;
-    //initAdminData: (value: AdminData) => void;
-    // setFirstName: (value: string) => void;
-    // setLastName: (value: string) => void;
-    // setEmail: (value: string) => void;
 }
 const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLoggedIn}) => {
 
+    const navigate = useNavigate()
     const [formData, setFormData] = useState(
         {
             username: loginFormDataRef.current.username,
-            password: '', //this should be safe
+            password: '', //this should be safe here. we dont store this in loginFormDataRef
         }
     )
-    // const [localAdminDataDTO, setLocalAdminDataDTO] = useState(
-    //     {
-    //         adminId: 0,
-    //         username: '',
-    //         //password: '',
-    //         email: ''
-    //     }
-    // )
     const [statusMessage, setStatusMessage] = useState("");
     
-    // on submit - using local
-    // const updateAdminDataDTO= () => adminDataDTORef.current = {
-    //     ...adminDataDTORef.current,
-    //     ...localAdminDataDTO // Merge formData into adminDataRef
-    // };
-
-    //on submit
-    const updateAdminDataDTO= (localAdminDataDTO: AdminDataDTO ) => adminDataDTORef.current = {
+    //on submit - update AdminData in App.tsx using fetched DTO, which includes everything but the password
+    const updateAdminDataDTO= (newAdminDataDTO: AdminDataDTO ) => adminDataDTORef.current = {
         ...adminDataDTORef.current,
-        ...localAdminDataDTO // Merge formData into adminDataRef
+        ...newAdminDataDTO 
     };
 
-    //on change
-    //const updateLoginFormDataRef= () => {loginFormDataRef.current.username = formData.username};
-    
+    //on change - keep track of filled in username in App.tsx, to reload from when re-entering login page
     useEffect(() => {
         loginFormDataRef.current.username = formData.username;
     }, [formData.username, loginFormDataRef]);
     
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        var errordata;
 
-        try {
+        try { 
             const loginResponse = await fetch("/Login", { //returns a view along with response, which isnt used so its fine
                 method: "POST",
                 headers: {
@@ -64,7 +42,8 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                 body: new URLSearchParams(formData).toString() //send username and password
             });
 
-            if (loginResponse.ok) { //we could have Login above return AdminData itself, but it might be better to seperate concerns
+            if (loginResponse.ok) { 
+                //we could have Login above return AdminData itself, but it might be better to seperate concerns
                 //primarily to get adminId
                 const getAdminDataResponse = await fetch("/Login/AdminData", {
                     method: "POST",
@@ -72,9 +51,7 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                         "Content-Type": "application/x-www-form-urlencoded",
                     },
                     body: new URLSearchParams(formData).toString() //send username and password
-                    //this does not update the local data, but uses it to send. the try above only continues if its succesful
                 })
-                var errormessage;
                 try{
                     const text = await getAdminDataResponse.text()
                     
@@ -88,10 +65,10 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                             {
                                 const responseAdminData: AdminDataDTO = await JSON.parse(text)
                                 updateAdminDataDTO(responseAdminData) //assumes response has same fields
-
                                 setIsLoggedIn(true);
                                 setStatusMessage("succesful login")
                                 console.log("succesful login");
+                                navigate("/Home")
                             }
                         }
                     else {
@@ -113,15 +90,18 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                         setStatusMessage("error2:" + e.message + " : " + e.stack)
                     }
                 }
-                
-               
             } else {
                 setStatusMessage("failed login2: " + loginResponse.status + " - " + loginResponse.statusText + "-")
                 console.log("failed login");
             }
-
-        } catch (error) {
-            console.error();
+        } catch (e)
+        {
+            //var result = e.message; // error under useUnknownInCatchVariables 
+            if (typeof e === "string") {
+                setStatusMessage("error3:" + e.toUpperCase())
+            } else if (e instanceof Error) {
+                setStatusMessage("error4:" + e.message + " : " + e.stack)
+            }
         }
     };
 
@@ -131,7 +111,6 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
             ...formData,
             [id]: value,
         });
-        //updateLoginFormDataRef(); // now done through UseEffect() to always keep them synced, this old way didnt guarantee that
     };
     
     return (
@@ -145,15 +124,6 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                     onChange={ handleChange }
                     required
                     /> <br />
-                {/* <label htmlFor="lastName">lastName</label>
-                <input
-                    type="text"
-                    id="lastName"
-                    value={customer.lastName}
-                    onChange={handleChange}
-                    required
-                    /> <br />
-                <label htmlFor="email">email</label> */}
             <label htmlFor='password'>password</label>
                 <input
                     type="text"
@@ -163,7 +133,7 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                     required
                     /> <br />
                 <button type="submit">Login</button>
-                <div>aa {statusMessage} bb</div> {/* Display the value of data */}
+                <div>{statusMessage}</div>
             </form>
         </div>
     )

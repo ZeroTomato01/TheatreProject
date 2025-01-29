@@ -2,16 +2,13 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { AdminDataWrapper } from '../models/Admin';
 
-// export interface AccountProps { //customerData should be stored in APP, 
-// // and updated by children through callbacks only
-//     customerData: CustomerData
-//   } 
-  
   
   const Account: React.FC<AdminDataWrapper> = ({ adminData }) => {
     const [reservations, setReservations] = useState<any[]>([]); // Store a list of shows
     const [message, setMessage] = useState<string>(""); // Store a list of shows
 
+
+    //the current implementation isn't correct, we need to change this to show all reservations with filter options
     const fetchReservations = async () => {
       try {
 
@@ -31,7 +28,7 @@ import { AdminDataWrapper } from '../models/Admin';
   
         if (response2.ok) {
           const data = await response2.json();
-          setReservations(data.$values); // The shows are in the "$values" array
+          //setReservations(data.$values); // The shows are in the "$values" array
           setMessage("Your Reservations:");
         } else {
           setMessage(`We couldn't fetch your reservations :( ${response2.statusText} ${response2.status}`);

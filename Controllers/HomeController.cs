@@ -23,29 +23,29 @@ public class HomeController : Controller
     {
         return View();
     }
-    [Route("Privacy")]
-    //[Route($"/{Globals.Version}/Home/Privacy")]
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+    // [Route("Privacy")]
+    // //[Route($"/{Globals.Version}/Home/Privacy")]
+    // public IActionResult Privacy()
+    // {
+    //     return View();
+    // }
 
-    [Route("Dashboard")]
-    //[Route($"/{Globals.Version}/Home/Dashboard")]
-    public IActionResult Dashboard()
-    {
-        if (string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) 
-        {
-            return RedirectPermanent($"{Globals.Version}/Login/ViewLoginPage");
-        }
+    // [Route("Dashboard")]
+    // //[Route($"/{Globals.Version}/Home/Dashboard")]
+    // public IActionResult Dashboard()
+    // {
+    //     if (string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) 
+    //     {
+    //         return RedirectPermanent($"{Globals.Version}/Login/ViewLoginPage");
+    //     }
 
-        return View();
-    }
+    //     return View();
+    // }
 
-    [Route("Error")]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    // [Route("Error")]
+    // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    // public IActionResult Error()
+    // {
+    //     return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    // }
 }

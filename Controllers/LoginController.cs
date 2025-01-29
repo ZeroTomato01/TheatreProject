@@ -17,6 +17,11 @@ public class LoginController : Controller
         _loginService = loginService;
     }
 
+    [HttpGet()]
+    public IActionResult LoginPage()
+    {
+        return View("Index");
+    }
     [HttpPost()]
     public async Task<IActionResult> LoginAction([FromForm]string username, [FromForm]string password)
     {
