@@ -14,6 +14,14 @@ public class TheatreShowService : ITheatreShowService
             _context = context;
             _venueService = venueService;
         }
+
+    public async Task<IActionResult> GetAll()
+    {
+        var allShows = await _context.TheatreShow.ToArrayAsync();
+        allShows.OrderBy(x => x.Title);
+        return  new OkObjectResult(allShows);
+    }
+
     public async Task<IActionResult> GetTheatreShows(int? id,
             string? title,
             string? description,

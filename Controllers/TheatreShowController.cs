@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
 using TheatreProject.Services;
 
@@ -11,14 +9,18 @@ namespace TheatreProject.Controllers
     {
         private TheatreShowService _theatreShowService;
 
-        public TheatreShowController(TheatreShowService theatreShowService)
+        public TheatreShowController(ITheatreShowService theatreShowService)
         {
-            _theatreShowService = theatreShowService;
+            _theatreShowService = (TheatreShowService)theatreShowService;
         }
 
         [HttpGet()]
+        public async Task<IActionResult> GetAll()
+        {
+            return await _theatreShowService.GetAll();
+        }
 
-        // [Route("/TheatreShow/get")]
+        [HttpGet("Filtered")]
         public async Task<IActionResult> GetTheatreShows(
             int? id,
             string? title,
@@ -31,6 +33,7 @@ namespace TheatreProject.Controllers
         {
             return await _theatreShowService.GetTheatreShows(id, title, description, location, startDate, endDate, sortBy, descending);
         }
+
         [HttpPost()]
         public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShow theatreShow)
         {

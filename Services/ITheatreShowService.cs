@@ -5,6 +5,7 @@ namespace TheatreProject.Services;
 
 
 public interface ITheatreShowService {
+    public Task<IActionResult> GetAll();
     public Task<IActionResult> GetTheatreShows(int? id,
             string? title,
             string? description,
