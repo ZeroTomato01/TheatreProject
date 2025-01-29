@@ -49,9 +49,6 @@ namespace TheatreProject
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllersWithViews();
 
-        
-
-
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options => 
@@ -80,33 +77,15 @@ namespace TheatreProject
                 app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseRouting();
-            //app.rout
-            //app.UseAuthorization();
-
-            
-           
             
             app.UseSession();
-
-            //app.UseStaticFiles(); //:OOO
         
             app.MapControllers();
-            app.MapFallbackToFile("{controller=Login}","wwwroot/js/main.js");
+            app.MapFallbackToFile("index.html");
 
-            // app.MapControllerRoute(
-            //     name: "default",
-            //     pattern: "");
-                //example: HomeController
-
-            // app.MapControllerRoute(
-            //     name: "default",
-            //     pattern: "{controller=Home}/api/{action=Index}/{id?}");
             app.Use((context, next) => 
             {
-                //context.Request.
                 var a = context.Request;
                 return next.Invoke();
 

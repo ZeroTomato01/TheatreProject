@@ -37,7 +37,7 @@ const App: React.FC = () => {
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/privacy" element={<Privacy />} />
-
+        <Route path="*" element={<Home />} /> 
       </Routes>
     </Router>
   )};

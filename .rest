@@ -1,5 +1,0 @@
-
-GET http://localhost:5097/TheatreShow
-#####
-GET https://localhost:7119/TheatreShow/GetTheatreShows
-#####
