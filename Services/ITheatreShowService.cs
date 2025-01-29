@@ -14,8 +14,8 @@ public interface ITheatreShowService {
             DateTime? endDate,
             string? sortBy = "Title",
             bool descending = false);
-    protected Task<IActionResult> PostTheatreShow(TheatreShow theatreShow);
-    protected Task<IActionResult> UpdateTheatreShow(TheatreShow theatreShow);
-    protected Task<IActionResult> DeleteTheatreShow(int id);
+    public Task<IActionResult> PostTheatreShow(TheatreShow theatreShow);
+    public Task<IActionResult> UpdateTheatreShow(TheatreShow theatreShow);
+    public Task<IActionResult> DeleteTheatreShow(int id);
     public Task<bool> CheckTheatreShow(int id);
 }

@@ -4,9 +4,9 @@ using TheatreProject.Services;
 
 public class VenueController : Controller
 {
-    VenueService _venueService;
+    IVenueService _venueService;
 
-    public VenueController(VenueService venueService)
+    public VenueController(IVenueService venueService)
     {
         _venueService = venueService;
 

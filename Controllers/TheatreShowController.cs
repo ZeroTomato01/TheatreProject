@@ -7,11 +7,11 @@ namespace TheatreProject.Controllers
     [Route($"/TheatreShow")]
     public class TheatreShowController : ControllerBase
     {
-        private TheatreShowService _theatreShowService;
+        private ITheatreShowService _theatreShowService;
 
         public TheatreShowController(ITheatreShowService theatreShowService)
         {
-            _theatreShowService = (TheatreShowService)theatreShowService;
+            _theatreShowService = theatreShowService;
         }
 
         [HttpGet()]

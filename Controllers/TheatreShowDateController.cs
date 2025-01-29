@@ -3,9 +3,9 @@ using TheatreProject.Models;
 
 public class TheatreShowDateController : Controller
 {
-    TheatreShowDateService _theatreShowDateService;
+    ITheatreShowDateService _theatreShowDateService;
 
-    public TheatreShowDateController(TheatreShowDateService theatreShowDateService)
+    public TheatreShowDateController(ITheatreShowDateService theatreShowDateService)
     {
         _theatreShowDateService = theatreShowDateService;
     }
