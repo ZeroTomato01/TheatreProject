@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack -w --mode development",
     "build": "webpack --mode production",
-    "serve": "http-server ./wwwroot/js -p 5000 --proxy http://localhost:5097/?"
+    "serve": "http-server ../wwwroot -p 5000 --proxy http://localhost:5097/?"
   },
   "repository": "git+https://github.com/Steven24K/Hello-React-Typescript.git",
   "keywords": [
@@ -30,6 +30,7 @@
     "css-loader": "^2.1.0",
     "file-loader": "^3.0.1",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "http-server": "^14.1.1",
     "source-map-loader": "^5.0.0",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.2.2",
