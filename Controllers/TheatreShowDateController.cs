@@ -21,6 +21,11 @@ public class TheatreShowDateController : Controller
     {
         return await _theatreShowDateService.GetAll();
     }
+    [HttpGetAttribute("future")]
+    public async Task<IActionResult> GetAllFuture()
+    {
+        return await _theatreShowDateService.GetAllFuture();
+    }
     public async Task<IActionResult> GetTheatreShowDate([FromQuery] int id)
     {
         return await _theatreShowDateService.GetTheatreShowDate(id);

@@ -29,7 +29,7 @@ const Shows: React.FC = () => {
       .catch(error => console.error("Error fetching shows:", error));
 
     // Fetch TheatreShowDates separately
-    fetch("/TheatreShowDate")
+    fetch("/TheatreShowDate/future")
       .then(response => response.json())
       .then(data => setShowDates(data))
       .catch(error => console.error("Error fetching show dates:", error));

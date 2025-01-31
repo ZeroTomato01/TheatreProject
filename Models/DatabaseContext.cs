@@ -76,6 +76,17 @@ namespace TheatreProject.Models
                     TheatreShowDateIds = new List<int> {1} 
                 }
             );
+            modelBuilder.Entity<TheatreShow>()
+                .HasData(
+                new TheatreShow{
+                    TheatreShowId = 2,
+                    Title = "Cow's Movie 2",
+                    Description = "moo too",
+                    Price = 20,
+                    VenueId = 1,
+                    TheatreShowDateIds = new List<int> {2, 3} 
+                }
+            );
 
             modelBuilder.Entity<TheatreShowDate>()
                 .HasData(
@@ -85,7 +96,23 @@ namespace TheatreProject.Models
                     TheatreShowId = 1 
                 }
             );
+            modelBuilder.Entity<TheatreShowDate>()
+                .HasData(
+                new TheatreShowDate{
+                    TheatreShowDateId = 2,
+                    DateAndTime = DateTime.Now.AddDays(-7),
+                    TheatreShowId = 2 
                 }
+            );
+            modelBuilder.Entity<TheatreShowDate>()
+                .HasData(
+                new TheatreShowDate{
+                    TheatreShowDateId = 3,
+                    DateAndTime = DateTime.Now.AddDays(3),
+                    TheatreShowId = 2 
+                }
+            );
+        }
 
     }
 
