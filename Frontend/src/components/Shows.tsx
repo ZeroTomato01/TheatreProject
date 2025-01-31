@@ -3,37 +3,36 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 import Reserve from './Reserve';
 
-// const Shows: React.FC = () => {
-//   const [shows, setShows] = useState<string[]>([]); // Store a list of shows
-
-interface ShowsProps {
-//  CustomerEmail: string
+interface TheatreShow {
+  theatreShowId: number;
+  title: string;
+  description: string;
+  price: number;
+  venue?: { name: string };
 }
 
-const Shows: React.FC<ShowsProps> = () => {
-  const [shows, setShows] = useState<any[]>([]); // Store a list of shows
-  const [message, setMessage] = useState<string>(""); // Store a list of shows
+interface TheatreShowDate {
+  theatreShowDateId: number;
+  dateAndTime: string;
+  theatreShowId: number;
+}
 
-
-  const fetchShows = async () => {
-    try {
-      const response = await fetch("/TheatreShow", {
-        method: "GET",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setShows(data); // Assume `data` is an array of show names or objects
-      } else {
-        console.error("Failed to fetch shows");
-      }
-    } catch (error) {
-      console.error("Error fetching shows:", error);
-    }
-  };
-
+const Shows: React.FC = () => {
+  const [shows, setShows] = useState<TheatreShow[]>([]);
+  const [showDates, setShowDates] = useState<TheatreShowDate[]>([]);
+  
   useEffect(() => {
-    fetchShows(); // Fetch shows when the component mounts
+    // Fetch TheatreShows
+    fetch("/TheatreShow")
+      .then(response => response.json())
+      .then(data => setShows(data))
+      .catch(error => console.error("Error fetching shows:", error));
+
+    // Fetch TheatreShowDates separately
+    fetch("/TheatreShowDate")
+      .then(response => response.json())
+      .then(data => setShowDates(data))
+      .catch(error => console.error("Error fetching show dates:", error));
   }, []);
 
   return (
@@ -41,22 +40,24 @@ const Shows: React.FC<ShowsProps> = () => {
       <h1>Shows</h1>
       <ul>
         {shows.length > 0 ? (
-          shows.map((show, index) => (
-            <li key={index}>
+          shows.map(show => (
+            <li key={show.theatreShowId}>
               <strong>{show.title}</strong>
               <p>{show.description}</p>
               <p><strong>Price:</strong> ${show.price}</p>
               <p><strong>Venue:</strong> {show.venue?.name}</p>
+
               <ul>
-                {show.theatreShowDates?.$values.map((showDate: any, idx: number) => (
-                  <li key={idx}>
-                    <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
-                    <Route path="/reserve" element={<Reserve ShowId={idx }/>} /> 
-                    {/* is idx the right thign to pass? */}
-                  </li>
-                ))}
+                {showDates
+                  .filter(date => date.theatreShowId === show.theatreShowId) // Match ShowDates with Show ID
+                  .map((showDate) => (
+                    <li key={showDate.theatreShowDateId}>
+                      <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
+                      <Link to={`/Reserve/${showDate.theatreShowDateId}`}> Reserve</Link>
+           
+                    </li>
+                  ))}
               </ul>
-              
             </li>
           ))
         ) : (

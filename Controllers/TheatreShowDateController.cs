@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 
+[Route($"/TheatreShowDate")]
 public class TheatreShowDateController : Controller
 {
     ITheatreShowDateService _theatreShowDateService;
@@ -14,6 +15,12 @@ public class TheatreShowDateController : Controller
     // {
 
     // }
+
+    [HttpGet()]
+    public async Task<IActionResult> GetAll()
+    {
+        return await _theatreShowDateService.GetAll();
+    }
     public async Task<IActionResult> GetTheatreShowDate([FromQuery] int id)
     {
         return await _theatreShowDateService.GetTheatreShowDate(id);

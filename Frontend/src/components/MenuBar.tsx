@@ -11,17 +11,17 @@ const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn}) => {
       <nav className = 'menu-bar'>
         <h1>BerserkerCinema</h1>
         <ul>
-          <li><Link to='/home'>Home</Link></li>
-          <li><Link to='/shows'>Shows</Link></li>
-          <li><Link to='/privacy'>Privacy</Link></li>
+          <li><Link to='/Home'>Home</Link></li>
+          <li><Link to='/Shows'>Shows</Link></li>
+          <li><Link to='/Privacy'>Privacy</Link></li>
           {isLoggedIn ? (<>
-              <li><Link to='/account'>Profile</Link></li>
-              <li><Link to='/adminDashboard'>AdminDashboard</Link></li>
-              <li><Link to='/logout'>Logout</Link></li>
+              <li><Link to='/Profile'>Profile</Link></li>
+              <li><Link to='/AdminDashboard'>AdminDashboard</Link></li>
+              <li><Link to='/Logout'>Logout</Link></li>
             </>) 
             : 
             (<>
-            <li><Link to='/login'>Login</Link></li>
+            <li><Link to='/Login'>Login</Link></li>
             </>)
           }
         </ul>

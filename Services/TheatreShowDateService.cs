@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
 using TheatreProject.Services;
 
@@ -13,6 +14,17 @@ public class TheatreShowDateService : ITheatreShowDateService
         _context = context;
         _theatreShowService = theatreShowService;
     }
+
+    public async Task<IActionResult> GetAll()
+    {
+        var DBTheatreShowDates = await _context.TheatreShowDate.ToArrayAsync();
+        if(DBTheatreShowDates is not null)
+        {
+            return new OkObjectResult(DBTheatreShowDates);
+        }
+        else return new BadRequestObjectResult($"no threatrshowdates found in database");
+        
+    }
     public async Task<IActionResult> GetTheatreShowDate(int id)
     {
         var DBTheatreShowDate = await _context.TheatreShowDate.FindAsync(id);
@@ -20,7 +32,7 @@ public class TheatreShowDateService : ITheatreShowDateService
         {
             return new OkObjectResult(DBTheatreShowDate);
         }
-        else return new BadRequestObjectResult($"no threatre with given id: {id} was found in database");
+        else return new BadRequestObjectResult($"no theatreShowDate with given id: {id} was found in database");
         
     }
     public async Task<IActionResult> PostTheatreShowDate(TheatreShowDate theatreShowDate)
@@ -47,7 +59,7 @@ public class TheatreShowDateService : ITheatreShowDateService
         if(DBTheatreShowDate is not null)
         {
             DBTheatreShowDate.DateAndTime = theatreShowDate.DateAndTime;
-            DBTheatreShowDate.Reservations = theatreShowDate.Reservations;
+            DBTheatreShowDate.ReservationIds = theatreShowDate.ReservationIds;
             DBTheatreShowDate.TheatreShow = theatreShowDate.TheatreShow;
             _context.SaveChanges();
 

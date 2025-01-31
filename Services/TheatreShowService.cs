@@ -33,7 +33,7 @@ public class TheatreShowService : ITheatreShowService
     {
         IQueryable<TheatreShow> query = _context.Set<TheatreShow>()
                 .Include(show => show.Venue)
-                .Include(show => show.TheatreShowDates);
+                .Include(show => show.TheatreShowDateIds);
 
         // Filter voor ID
         if (id.HasValue)
@@ -64,17 +64,20 @@ public class TheatreShowService : ITheatreShowService
             query = query.Where(s => s.Venue != null && s.Venue.Name.Contains(location));
         }
 
-        // Filter de shows op basis van start en eind datum
-        if (startDate.HasValue && endDate.HasValue)
-        {
-            query = query.Where(s => s.TheatreShowDates.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
-        }
+        //  DOESNT WORK ANYMORE AFTER CHANGING "THEATRESHOWS" TO "THEATRESHOWIDS", NEEDS FIX
+        // // Filter de shows op basis van start en eind datum
+        // if (startDate.HasValue && endDate.HasValue)
+        // {
+        //     query = query.Where(s => s.TheatreShowDateIds.Any(d => d.DateAndTime >= startDate && d.DateAndTime <= endDate));
+        // }
+
 
         // Sorteer de shows op basis van de sortBy parameter
         query = sortBy switch
         {
             "Price" => descending ? query.OrderByDescending(s => s.Price) : query.OrderBy(s => s.Price),
-            "Date" => descending ? query.OrderByDescending(s => s.TheatreShowDates.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.TheatreShowDates.FirstOrDefault().DateAndTime),
+            //  DOESNT WORK ANYMORE AFTER CHANGING "THEATRESHOWS" TO "THEATRESHOWIDS", NEEDS FIX
+            //"Date" => descending ? query.OrderByDescending(s => s.TheatreShowDateIds.FirstOrDefault().DateAndTime) : query.OrderBy(s => s.TheatreShowDates.FirstOrDefault().DateAndTime),
             _ => descending ? query.OrderByDescending(s => s.Title) : query.OrderBy(s => s.Title),
         };
 
@@ -107,7 +110,7 @@ public class TheatreShowService : ITheatreShowService
         {
             DBShow.Venue = theatreShow.Venue;
             DBShow.Title = theatreShow.Title;
-            DBShow.TheatreShowDates = theatreShow.TheatreShowDates;
+            DBShow.TheatreShowDateIds = theatreShow.TheatreShowDateIds;
             DBShow.Price = theatreShow.Price;
             DBShow.Description = theatreShow.Description;
             //DBShow = theatreShow;

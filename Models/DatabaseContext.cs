@@ -72,7 +72,8 @@ namespace TheatreProject.Models
                     Title = "Cow's Movie",
                     Description = "moo",
                     Price = 20,
-                    VenueId = 1 
+                    VenueId = 1,
+                    TheatreShowDateIds = new List<int> {1} 
                 }
             );
 

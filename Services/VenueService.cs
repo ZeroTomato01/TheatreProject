@@ -46,7 +46,7 @@ public class VenueService : IVenueService
         {
             DBVenue.Capacity = venue.Capacity;
             DBVenue.Name = venue.Name;
-            DBVenue.TheatreShows = venue.TheatreShows;
+            DBVenue.TheatreShowIds = venue.TheatreShowIds;
             _context.SaveChanges();
 
             return new OkObjectResult($"Venue updated to {venue}");

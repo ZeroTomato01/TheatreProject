@@ -28,7 +28,7 @@ namespace TheatreProject.Models
 
         public Customer? Customer { get; set; }
 
-        public TheatreShowDate? TheatreShowDate { get; set; }
+        public int? TheatreShowDateId { get; set; }
     }
 
     public class TheatreShowDate
@@ -37,7 +37,7 @@ namespace TheatreProject.Models
 
         public DateTime DateAndTime { get; set; } //"MM-dd-yyyy HH:mm"
 
-        public List<Reservation>? Reservations { get; set; }
+        public List<int>? ReservationIds { get; set; }
 
         public TheatreShow? TheatreShow { get; set; }
 
@@ -51,7 +51,7 @@ namespace TheatreProject.Models
         public string? Title { get; set; }
         public string? Description { get; set; }
         public double Price { get; set; }
-        public List<TheatreShowDate>? TheatreShowDates { get; set; }
+        public List<int>? TheatreShowDateIds { get; set; }
         public int VenueId { get; set; } // Foreign key
         public Venue? Venue { get; set; } // Navigation property
     }
@@ -61,7 +61,7 @@ public class Venue
     public int VenueId { get; set; }
     public string? Name { get; set; }
     public int Capacity { get; set; }
-    public List<TheatreShow>? TheatreShows { get; set; } // Navigation property
+    public List<int>? TheatreShowIds { get; set; } // Navigation property
 }
 
     // public class TheatreShow

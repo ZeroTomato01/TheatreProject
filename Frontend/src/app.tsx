@@ -8,6 +8,7 @@ import Privacy from './components/Privacy';
 import Home from './components/Home'
 import AdminDashboard from './components/AdminDashboard';
 import { AdminDataDTO } from './models/Admin';
+import Reserve from './components/Reserve';
 
 
 const App: React.FC = () => {
@@ -27,16 +28,17 @@ const App: React.FC = () => {
       <MenuBar isLoggedIn={isLoggedIn}/>
   
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/shows" element={<Shows/>} />
-        <Route path="/login" element={<Login 
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Shows" element={<Shows/>} />
+        <Route path="/Login" element={<Login 
         adminDataDTORef={adminDataDTORef}
         loginFormDataRef={loginFormDataRef}
         setIsLoggedIn={setIsLoggedIn}
         />} />
-        <Route path="/adminDashboard" element={<AdminDashboard />} />
-        <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/Privacy" element={<Privacy />} />
+        <Route path="/Reserve/:showDateId" element={<Reserve />} />
         <Route path="*" element={<Home />} /> 
       </Routes>
     </Router>

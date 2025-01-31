@@ -70,7 +70,7 @@ public class ReservationService : IReservationService
         {
             register.AmountOfTickets = reservation.AmountOfTickets;
             register.Customer = reservation.Customer;
-            register.TheatreShowDate = reservation.TheatreShowDate;
+            register.TheatreShowDateId = reservation.TheatreShowDateId;
             register.Used = reservation.Used;
     
             //DBShow = theatreShow;
@@ -122,9 +122,9 @@ public class ReservationService : IReservationService
         var DBReservation = await _context.Reservation.FindAsync(id);
         if(DBReservation is not null)
         {
-            if(DBReservation.TheatreShowDate is null) return false;
-            if(DBReservation.TheatreShowDate.TheatreShowDateId == 0) return false;
-            return await _theatreShowDateService.CheckTheatreShowDate(DBReservation.TheatreShowDate.TheatreShowDateId);
+            if(DBReservation.TheatreShowDateId is null) return false;
+            if(DBReservation.TheatreShowDateId == 0) return false;
+            return await _theatreShowDateService.CheckTheatreShowDate((int)DBReservation.TheatreShowDateId);
         }
         else return false;
     }
