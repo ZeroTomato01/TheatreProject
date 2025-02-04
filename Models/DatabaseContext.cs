@@ -56,6 +56,19 @@ namespace TheatreProject.Models
             //     TheatreShowDates = {},
             //     Venue = {}});
 
+            modelBuilder.Entity<Reservation>()
+                .HasData(
+                new Reservation{
+                    ReservationId = 1,
+                    AmountOfTickets = 1,
+                    Used = false,
+                    TheatreShowDateId = 1
+
+                }
+            );
+
+
+
             modelBuilder.Entity<Venue>()
                 .HasData(
                 new Venue{

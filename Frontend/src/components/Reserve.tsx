@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-
+export interface Reservation {
+  reservationId: number,
+  amountOfTickets: number,
+  used?: boolean
+  theatreShowDateId?: number
+}
 // interface ReserveProps {
 //     //CustomerEmail: string
 //     ShowId: number
