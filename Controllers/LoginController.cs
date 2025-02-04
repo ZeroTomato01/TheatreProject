@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Services;
 using TheatreProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TheatreProject.Controllers;
 
@@ -9,7 +10,6 @@ namespace TheatreProject.Controllers;
 public class LoginController : Controller
 {
 
-    private string AUTH_SESSION_KEY = "admin_login";
     ILoginService _loginService;
 
     public LoginController(ILoginService loginService)
@@ -17,62 +17,30 @@ public class LoginController : Controller
         _loginService = loginService;
     }
 
-    // [HttpGet()]
-    // public IActionResult LoginPage()
-    // {
-    //     return View("Index");
-    // }
-    [HttpPost()]
-    public async Task<IActionResult> LoginAction([FromForm]string username, [FromForm]string password)
+    [HttpPost]
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
+        var admin = await _loginService.CheckCredentials(loginRequest.Username, loginRequest.Password);
 
-        if (!string.IsNullOrEmpty(HttpContext.Session.GetString(AUTH_SESSION_KEY))) //if there IS a AUTH_SESSION_KEY
+        if (admin == null)
         {
-            return Unauthorized(); //use should not be getting the option to log in if theyre already logged in
+            return Unauthorized("Invalid username or password.");
         }
 
-        var loggedInUser = await _loginService.CheckCredentials(username, password);
-
-        switch (loggedInUser)
+        var adminDataDTO = new AdminDTO
         {
-            case LoginStatus.Success:
-                HttpContext.Session.SetString(AUTH_SESSION_KEY, username);
-                //return RedirectPermanent($"/Dashboard");
-                return Ok();
+            AdminId = admin.AdminId,
+            UserName = admin.UserName,
+            Email = admin.Email
+        };
 
-            case LoginStatus.IncorrectPassword:
-                ViewData["message"] = "Wachtwoord incorrect";
-                return NotFound();
-
-            case LoginStatus.IncorrectUsername:
-                ViewData["message"] = "Username incorrect";
-                return NotFound();
-
-            default:
-                return NotFound();
-        }
+        return Ok(adminDataDTO);
     }
 
-    [HttpPost("AdminData")] //except for password
-    public async Task<AdminDTO> GetAdminData([FromForm] string username, [FromForm] string password) //except for password
+    public class LoginRequest
     {
-        return await _loginService.GetAdminData(username, password);
-    }
-
-    // [HttpGet("CheckLogin")]
-    // public IActionResult CheckLogin()
-    // {
-    //     string? session_user = HttpContext.Session.GetString(AUTH_SESSION_KEY);
-    //     if (session_user != null) return Ok();
-    //     return BadRequest("Not logged in");
-    // }
-
-    [HttpGet("logout")]
-    public IActionResult Logout()
-    {
-        HttpContext.Session.Remove(AUTH_SESSION_KEY);
-        return Ok();
-        //return RedirectPermanent("Login/ViewLoginPage");
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
 

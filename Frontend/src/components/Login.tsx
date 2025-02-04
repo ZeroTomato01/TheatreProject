@@ -1,142 +1,88 @@
-import { BrowserRouter as Router, Route, Routes, Link, redirect } from 'react-router-dom';
-import React, { useState, useEffect, useRef, MutableRefObject } from 'react';
-import { AdminData, AdminDataDTO } from '../models/Admin';
+import React, { useState, useEffect, MutableRefObject } from 'react';
 import { useNavigate } from "react-router-dom";
+import { AdminDataDTO } from '../models/Admin';
+import { useAdmin } from './AdminContext';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
 
 interface LoginProps {
-    setIsLoggedIn: (value: boolean) => void;
     adminDataDTORef: MutableRefObject<AdminDataDTO>; //"Data Transfer Object" (excludes password)
-    loginFormDataRef: MutableRefObject<{username: string}>
+    loginFormDataRef: MutableRefObject<{ username: string }>
 }
-const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLoggedIn}) => {
-    localStorage
-    const navigate = useNavigate()
-    const [formData, setFormData] = useState(
-        {
-            username: loginFormDataRef.current.username,
-            password: '', //this should be safe here. we dont store this in loginFormDataRef
-        }
-    )
+
+const Login: React.FC<LoginProps> = ({ adminDataDTORef, loginFormDataRef }) => {
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAdmin();
+    const [formData, setFormData] = useState({
+        username: loginFormDataRef.current.username,
+        password: '', //this should be safe here. we dont store this in loginFormDataRef
+    });
     const [statusMessage, setStatusMessage] = useState("");
-    
+
     //on submit - update AdminData in App.tsx using fetched DTO, which includes everything but the password
-    const updateAdminDataDTO= (newAdminDataDTO: AdminDataDTO ) => adminDataDTORef.current = {
+    const updateAdminDataDTO = (newAdminDataDTO: AdminDataDTO) => adminDataDTORef.current = {
         ...adminDataDTORef.current,
-        ...newAdminDataDTO 
+        ...newAdminDataDTO
     };
 
     //on change - keep track of filled in username in App.tsx, to reload from when re-entering login page
     useEffect(() => {
         loginFormDataRef.current.username = formData.username;
     }, [formData.username, loginFormDataRef]);
-    
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
 
-        try { 
-            const loginResponse = await fetch("/Login", { //returns a view along with response, which isnt used so its fine
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("/Login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "application/json",
                 },
-                body: new URLSearchParams(formData).toString() //send username and password
+                body: JSON.stringify(formData),
             });
 
-            if (loginResponse.ok) { 
-                //we could have Login above return AdminData itself, but it might be better to seperate concerns
-                //primarily to get adminId
-                const getAdminDataResponse = await fetch("/Login/AdminData", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: new URLSearchParams(formData).toString() //send username and password
-                })
-                try{
-                    const text = await getAdminDataResponse.text()
-                    
-                    if(getAdminDataResponse.ok)
-                        {
-                            if(!text)
-                            {
-                                setStatusMessage("there was no getAdminDataResponse");
-                            }
-                            else
-                            {
-                                const responseAdminData: AdminDataDTO = await JSON.parse(text)
-                                updateAdminDataDTO(responseAdminData) //assumes response has same fields
-                                setIsLoggedIn(true);
-                                setStatusMessage("succesful login")
-                                console.log("succesful login");
-                                navigate("/AdminDashboard")
-                            }
-                        }
-                    else {
-                        if(!text)
-                            {
-                                setStatusMessage("there was no getAdminDataResponse");
-                            }
-                        else {
-                            setStatusMessage("failed login1" + text)
-                        }
-                    }
-                }
-                catch (e)
-                {
-                    //var result = e.message; // error under useUnknownInCatchVariables 
-                    if (typeof e === "string") {
-                        setStatusMessage("error1:" + e.toUpperCase())
-                    } else if (e instanceof Error) {
-                        setStatusMessage("error2:" + e.message + " : " + e.stack)
-                    }
-                }
+            if (!response.ok) {
+                setStatusMessage("Login failed. Please check your credentials.");
             } else {
-                setStatusMessage("failed login2: " + loginResponse.status + " - " + loginResponse.statusText + "-")
-                console.log("failed login");
+                const data: AdminDataDTO = await response.json();
+                updateAdminDataDTO(data);
+                setIsLoggedIn(true);
+                navigate("/AdminDashboard");
             }
-        } catch (e)
-        {
-            //var result = e.message; // error under useUnknownInCatchVariables 
-            if (typeof e === "string") {
-                setStatusMessage("error3:" + e.toUpperCase())
-            } else if (e instanceof Error) {
-                setStatusMessage("error4:" + e.message + " : " + e.stack)
-            }
+        } catch (error) {
+            console.error("Login failed:", error);
+            setStatusMessage("An error occurred. Please try again.");
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            [id]: value,
-        });
-    };
-    
     return (
-        <div>
-            <form onSubmit={handleLogin}>
-            <label htmlFor='username'>username</label>
-                    <input
-                    type="text"
-                    id="username"
-                    value={ formData.username }
-                    onChange={ handleChange }
-                    required
-                    /> <br />
-            <label htmlFor='password'>password</label>
-                <input
-                    type="text"
-                    id="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    /> <br />
-                <button type="submit">Login</button>
-                <div>{statusMessage}</div>
-            </form>
-        </div>
-    )
+        <Container className="mt-5">
+            <h2 className="text-center mb-4">Login</h2>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="formUsername">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={formData.username}
+                        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group controlId="formPassword" className="mt-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        required
+                    />
+                </Form.Group>
+                <Button variant="primary" type="submit" className="mt-4 w-10">
+                    Login
+                </Button>
+            </Form>
+            {statusMessage && <Alert variant="danger" className="mt-3">{statusMessage}</Alert>}
+        </Container>
+    );
 };
 
 export default Login;

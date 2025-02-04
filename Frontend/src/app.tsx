@@ -9,11 +9,11 @@ import Home from './components/Home'
 import AdminDashboard from './components/AdminDashboard';
 import NotFound from './components/NotFound';
 import CartDrawer from './components/CartDrawer';
-import FavoriteIcon from './components/FavoriteIcon';
 import FavoriteDrawer from './components/FavoriteDrawer';
 import { CartProvider } from './components/CartContext';
 import { AdminDataDTO } from './models/Admin';
 import { FavoriteProvider } from './components/FavoriteContext';
+import { AdminProvider } from './components/AdminContext';
 import Reserve from './components/Reserve';
 import ShowDetails from './components/ShowDetails';
 
@@ -40,31 +40,32 @@ const App: React.FC = () => {
  // const [lastName, setLastName] = useState("");
   //const [email, setEmail] = useState("");
   return (
-    <CartProvider>
-      <FavoriteProvider>
-        <Router>
-        <MenuBar onFavoritesClick={handleFavoritesClick} isLoggedIn={isLoggedIn} onCartClick={handleCartClick} />
-          <Routes>
-            <Route path="/" element={<Navigate to="/Home" />} />
-            <Route path="/Home" element={<Home />} />
-            <Route path="/Shows" element={<Shows/>} />
-            <Route path="/Login" element={<Login 
-            adminDataDTORef={adminDataDTORef}
-            loginFormDataRef={loginFormDataRef}
-            setIsLoggedIn={setIsLoggedIn}
-            />} />
-            <Route path="/AdminDashboard" element={<AdminDashboard isLoggedIn={isLoggedIn}/>} />
-            <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
-            <Route path="/Privacy" element={<Privacy />} />
-            <Route path="/Reserve/:showDateId" element={<Reserve />} />
-            <Route path="/ShowDetails" element={<ShowDetails />} />
-            <Route path="*" element={<NotFound />} /> 
-          </Routes>
-          <CartDrawer show={showCart} onHide={handleCartHide} />
-          <FavoriteDrawer show={showFavorites} onHide={handleFavoritesHide} />
-        </Router>
-      </FavoriteProvider>
-    </CartProvider>
+    <AdminProvider>
+      <CartProvider>
+        <FavoriteProvider>
+          <Router>
+          <MenuBar onFavoritesClick={handleFavoritesClick} isLoggedIn={isLoggedIn} onCartClick={handleCartClick} />
+            <Routes>
+              <Route path="/" element={<Navigate to="/Home" />} />
+              <Route path="/Home" element={<Home />} />
+              <Route path="/Shows" element={<Shows/>} />
+              <Route path="/Login" element={<Login 
+              adminDataDTORef={adminDataDTORef}
+              loginFormDataRef={loginFormDataRef}
+              />} />
+              <Route path="/AdminDashboard" element={<AdminDashboard />} />
+              <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/Privacy" element={<Privacy />} />
+              <Route path="/Reserve/:showDateId" element={<Reserve />} />
+              <Route path="/ShowDetails" element={<ShowDetails />} />
+              <Route path="*" element={<NotFound />} /> 
+            </Routes>
+            <CartDrawer show={showCart} onHide={handleCartHide} />
+            <FavoriteDrawer show={showFavorites} onHide={handleFavoritesHide} />
+          </Router>
+        </FavoriteProvider>
+      </CartProvider>
+    </AdminProvider>
   )};
   
   export default App;

@@ -3,14 +3,16 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './styles.css';
 import CartIcon from './CartIcon'
 import FavoriteIcon from './FavoriteIcon';
+import { useAdmin } from './AdminContext';
 
 interface MenuBarProps {
-    isLoggedIn: boolean
     onCartClick: () => void;
     onFavoritesClick: () => void;
 };
 
-const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn, onCartClick, onFavoritesClick}) => {
+const MenuBar: React.FC<MenuBarProps> = ({onCartClick, onFavoritesClick}) => {
+  const { isLoggedIn } = useAdmin();
+
     return (
       <nav className = 'menu-bar'>
       <div className="menu-bar-content">
