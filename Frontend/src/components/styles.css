@@ -18,6 +18,21 @@
   color: var(--clr-jkRed);
   z-index: 1000;  /* Ensures it stays above other content */
 }
+
+.menu-bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu-bar-left {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menu-bar-right {
+  margin-left: auto;
+}
   
 .menu-bar ul {
     display: flex;
@@ -51,4 +66,16 @@
   text-decoration: none;
   background-color: var(--clr-jkYellow);
   color: var(--clr-jkRed);
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.text-center {
+  text-align: center !important;
 }

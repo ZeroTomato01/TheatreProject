@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from './CartContext';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Button, Card, ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
 
 import Reserve from './Reserve';
 
@@ -22,6 +24,8 @@ export interface TheatreShowDate {
 const Shows: React.FC = () => {
   const [shows, setShows] = useState<TheatreShow[]>([]);
   const [showDates, setShowDates] = useState<TheatreShowDate[]>([]);
+  const { addToCart } = useCart();
+  const [ticketCounts, setTicketCounts] = useState<{ [key: number]: number }>({});
   //maybe just add amin check, so we can use this same component in the admin dashboard?
   
   
@@ -39,36 +43,67 @@ const Shows: React.FC = () => {
       .catch(error => console.error("Error fetching show dates:", error));
   }, []);
 
+  const handleAddToCart = (show: TheatreShow, showDate: TheatreShowDate) => {
+    const count = ticketCounts[showDate.theatreShowDateId] || 1;
+    for (let i = 0; i < count; i++) {
+      addToCart({
+        showDateId: showDate.theatreShowDateId,
+        showTitle: show.title,
+        showDate: new Date(showDate.dateAndTime).toLocaleString(),
+        showPrice: show.price
+      });
+    }
+  };
+
+  const handleTicketCountChange = (showDateId: number, count: number) => {
+    setTicketCounts(prevCounts => ({
+      ...prevCounts,
+      [showDateId]: count
+    }));
+  };
+
   return (
-    <div>
+    <Container>
       <h1>Shows</h1>
-      <ul>
+      <Row>
         {shows.length > 0 ? (
           shows.map(show => (
-            <li key={show.theatreShowId}>
-              <strong>{show.title}</strong>
-              <p>{show.description}</p>
-              <p><strong>Price:</strong> ${show.price}</p>
-              <p><strong>Venue:</strong> {show.venue?.name}</p>
-
-              <ul>
-                {showDates
-                  .filter(date => date.theatreShowId === show.theatreShowId) // Match ShowDates with Show ID
-                  .map((showDate) => (
-                    <li key={showDate.theatreShowDateId}>
-                      <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
-                      <Link to={`/Reserve/${showDate.theatreShowDateId}`}> Reserve</Link>
-           
-                    </li>
-                  ))}
-              </ul>
-            </li>
+            <Col key={show.theatreShowId} md={4}>
+              <Card className="mb-4">
+                <Card.Body>
+                  <Card.Title>{show.title}</Card.Title>
+                  <Card.Text>{show.description}</Card.Text>
+                  <Card.Text><strong>Price:</strong> ${show.price}</Card.Text>
+                  <Card.Text><strong>Venue:</strong> {show.venue?.name}</Card.Text>
+                  <ListGroup variant="flush">
+                    {showDates
+                      .filter(date => date.theatreShowId === show.theatreShowId)
+                      .map(showDate => (
+                        <ListGroup.Item key={showDate.theatreShowDateId}>
+                          <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
+                          <Link to={`/Reserve/${showDate.theatreShowDateId}`}> Reserve</Link>
+                          <Form.Control
+                            type="number"
+                            min="1"
+                            value={ticketCounts[showDate.theatreShowDateId] || 1}
+                            onChange={(e) => handleTicketCountChange(showDate.theatreShowDateId, parseInt(e.target.value))}
+                            className="mb-2"
+                          />
+                          <Button variant="primary" onClick={() => handleAddToCart(show, showDate)}>Reserve Ticket</Button>
+                        </ListGroup.Item>
+                      ))}
+                  </ListGroup>
+                </Card.Body>
+              </Card>
+            </Col>
           ))
         ) : (
-          <li>Loading shows...</li>
+          <Col>
+            <p>Loading shows...</p>
+          </Col>
         )}
-      </ul>
-    </div>
+      </Row>
+    </Container>
   );
 };
 
