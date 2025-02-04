@@ -2,6 +2,8 @@ GET http://localhost:5097/TheatreShow
 #####
 GET https://localhost:7119/TheatreShow/GetTheatreShows
 #####
+GET https://localhost:5097/api/Venue/GetAll
+#####
 POST  http://localhost:5097/TheatreShow
 Content-Type: application/json
 
