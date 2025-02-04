@@ -40,7 +40,8 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
         description: "",
         price: 0,
         theatreShowDateIds: [],
-        venueId: 0
+        venueId: 0,
+        venue: undefined
         })
 
     const [isAddingShow, setIsAddingShow] = useState(false)
@@ -51,40 +52,45 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
     const toggleIsAddingShowDate = () => {setIsAddingShowDate(!isAddingShow)}
 
 
-    const AddShow = async () => {
+    const AddShow = async (e: React.FormEvent<HTMLFormElement>) => { 
+        e.preventDefault();
         console.log(JSON.stringify(showToAdd))
-       // try {
-            await fetch("http://localhost:5097/TheatreShow", {
+      
+            // await fetch("http://localhost:5097/TheatreShow", {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify(showToAdd)
+            // }).then(response => response.json())
+            // .then(data => console.log(data))
+            // .catch(error => console.log(error + "aa" + JSON.stringify(showToAdd)))
+
+    
+        console.log("Show data being sent:", JSON.stringify(showToAdd));
+    
+        try {
+            const response = await fetch("http://localhost:5097/TheatreShow", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(showToAdd)
-            }).then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.log(error + "aa" + JSON.stringify(showToAdd)))
-
-
-
-        //     if (!response.ok) {
-        //         console.log(`Error: ${response.status} : ${response.statusText}`)
-        //         throw new Error(`Error: ${response.status} : ${response.statusText}`);
-        //     }
-        //     const result = await response.json();
-        //     console.log("Successfully added show:", result);
-        //     // reset form after adding
-        //     setShowToAdd({
-        //         theatreShowId: 0,
-        //         title: "",
-        //         description: "",
-        //         price: 0,
-        //         venueId: 0,
-        //         //theatreShowDateIds: []
-        //     });
-        // } catch (error) {
-        //     console.error("Failed to add show:", error);
-        // }
+                body: JSON.stringify(showToAdd),
+            });
+    
+            if (!response.ok) {
+                console.log(`Error: ${response.status} - ${response.statusText}`);
+                const errorData = await response.json();
+                console.log("Error details:", errorData);
+            } else {
+                const data = await response.json();
+                console.log("Success:", data);
+            }
+        } catch (error) {
+            console.error("Fetch failed:", error + JSON.stringify(showToAdd));
+        }
     };
+
     const EditShow = () => {}
     const DeleteShow = () => {}
 
@@ -100,7 +106,7 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
             <p>Shows</p>
             <button onClick={e => toggleIsAddingShow()}> {isAddingShow == false ? "Add Show" : "Cancel"} </button>
             {isAddingShow == true 
-                ? <form onSubmit={e => AddShow()}>
+                ? <form onSubmit={AddShow}>
                     <div>
                         Title: <input 
                         value={showToAdd.title}
