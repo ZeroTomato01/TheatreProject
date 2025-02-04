@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { Button, Card, ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
+import { FaStar } from 'react-icons/fa';
+import { useFavorites } from './FavoriteContext';
 
 import Reserve from './Reserve';
 
@@ -28,6 +30,7 @@ const Shows: React.FC = () => {
   const [showDates, setShowDates] = useState<TheatreShowDate[]>([]);
   const { addToCart } = useCart();
   const [ticketCounts, setTicketCounts] = useState<{ [key: number]: number }>({});
+  const { addToFavorites } = useFavorites();
   //maybe just add amin check, so we can use this same component in the admin dashboard?
   
   
@@ -64,6 +67,15 @@ const Shows: React.FC = () => {
     }));
   };
 
+  const handleAddToFavorites = (show: TheatreShow, showDate: TheatreShowDate) => {
+    addToFavorites({
+      showDateId: showDate.theatreShowDateId,
+      showTitle: show.title || "Untitled Show",
+      showDate: new Date(showDate.dateAndTime).toLocaleString(),
+      showPrice: show.price || 0
+    });
+  };
+
   return (
     <Container>
       <h1>Shows</h1>
@@ -92,6 +104,7 @@ const Shows: React.FC = () => {
                             className="mb-2"
                           />
                           <Button variant="primary" onClick={() => handleAddToCart(show, showDate)}>Reserve Ticket</Button>
+                          <Button variant="warning" onClick={() => handleAddToFavorites(show, showDate)} className="ml-2">Fav</Button>
                         </ListGroup.Item>
                       ))}
                   </ListGroup>

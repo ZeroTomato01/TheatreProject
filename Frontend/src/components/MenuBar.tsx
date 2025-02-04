@@ -2,17 +2,22 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './styles.css';
 import CartIcon from './CartIcon'
+import FavoriteIcon from './FavoriteIcon';
 
 interface MenuBarProps {
     isLoggedIn: boolean
     onCartClick: () => void;
+    onFavoritesClick: () => void;
 };
 
-const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn, onCartClick}) => {
+const MenuBar: React.FC<MenuBarProps> = ({isLoggedIn, onCartClick, onFavoritesClick}) => {
     return (
       <nav className = 'menu-bar'>
       <div className="menu-bar-content">
         <div className="menu-bar-left">
+        <FavoriteIcon onClick={onFavoritesClick} />
+        </div>
+        <div className="menu-bar-center">
           <h1>BerserkerCinema</h1>
         </div>
         <div className="menu-bar-right">

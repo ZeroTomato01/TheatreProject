@@ -28,7 +28,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ show, onHide }) => {
       <Offcanvas.Header closeButton>
         <Offcanvas.Title>Cart</Offcanvas.Title>
       </Offcanvas.Header>
-      <Offcanvas.Body>
+      <Offcanvas.Body className="cart-drawer-body">
         <ListGroup variant="flush">
           {Object.values(groupedCart).map((item: any, index) => (
             <ListGroup.Item key={`${item.showDateId}-${index}`}>
@@ -49,11 +49,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ show, onHide }) => {
             </ListGroup.Item>
           ))}
         </ListGroup>
-        <div className="mt-3">
+        </Offcanvas.Body>
+        <div className="cart-drawer-footer">
           <h5>Total Price: ${totalPrice}</h5>
-          <Button variant="success" className="w-100">Checkout</Button>
+          <Button variant="success" className="w-100" disabled={cart.length === 0}>Checkout</Button>
         </div>
-      </Offcanvas.Body>
     </Offcanvas>
   );
 };

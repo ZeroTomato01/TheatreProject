@@ -27,7 +27,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [cart]);
 
   const addToCart = (item: CartItem) => {
-    setCart(prevCart => [...prevCart, item]);
+    setCart(prevCart => {
+      const newCart = [...prevCart, item];
+      newCart.sort((a, b) => a.showTitle.localeCompare(b.showTitle));
+      return newCart;
+    });
   };
 
   const removeFromCart = (showDateId: number) => {
