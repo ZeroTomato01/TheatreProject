@@ -56,7 +56,7 @@ const App: React.FC = () => {
             <Route path="/AdminDashboard" element={<AdminDashboard isLoggedIn={isLoggedIn}/>} />
             <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="/Privacy" element={<Privacy />} />
-            <Route path="/Reserve/:showDateId" element={<Reserve />} />
+            <Route path="/Reserve" element={<Reserve />} />
             <Route path="/ShowDetails" element={<ShowDetails />} />
             <Route path="*" element={<NotFound />} /> 
           </Routes>

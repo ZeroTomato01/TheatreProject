@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import { Button, Offcanvas, ListGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Reservation } from './Reserve';
+import { CartItem } from './CartContext';
 
 interface CartDrawerProps {
   show: boolean;
@@ -9,6 +12,7 @@ interface CartDrawerProps {
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ show, onHide }) => {
     const { cart, addToCart, removeFromCart, removeOneFromCart } = useCart();
+    const [reservations, setReservations] = useState<Reservation[]>([])
 
     const groupedCart = cart.reduce((acc, item) => {
         const key = `${item.showDateId}-${item.showTitle}`;
@@ -22,6 +26,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ show, onHide }) => {
 
     const totalPrice = Object.values(groupedCart).reduce((total, item: any) => total + item.showPrice * item.count, 0);
 
+    const HandleReservation = () => {
+
+    }
 
   return (
     <Offcanvas show={show} onHide={onHide} placement="end">
@@ -52,7 +59,14 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ show, onHide }) => {
         </Offcanvas.Body>
         <div className="cart-drawer-footer">
           <h5>Total Price: ${totalPrice}</h5>
-          <Button variant="success" className="w-100" disabled={cart.length === 0}>Checkout</Button>
+          <Button variant="success" className="w-100" disabled={cart.length === 0} onClick={
+            
+            HandleReservation}>Checkout</Button>
+          <Link 
+            to={"/Reserve" } 
+            state= {{reservations}}>
+            Details
+          </Link>
         </div>
     </Offcanvas>
   );
