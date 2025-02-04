@@ -50,9 +50,9 @@ const Shows: React.FC = () => {
     for (let i = 0; i < count; i++) {
       addToCart({
         showDateId: showDate.theatreShowDateId,
-        showTitle: show.title,
+        showTitle: show.title || "Untitled Show",
         showDate: new Date(showDate.dateAndTime).toLocaleString(),
-        showPrice: show.price
+        showPrice: show.price || 0
       });
     }
   };
