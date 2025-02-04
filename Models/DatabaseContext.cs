@@ -65,6 +65,15 @@ namespace TheatreProject.Models
                 }
             );
 
+             modelBuilder.Entity<Venue>()
+                .HasData(
+                new Venue{
+                    VenueId = 2, 
+                    Name = "The Pigsty", 
+                    Capacity = 50
+                }
+            );
+
             modelBuilder.Entity<TheatreShow>()
                 .HasData(
                 new TheatreShow{
