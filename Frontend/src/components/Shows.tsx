@@ -83,7 +83,12 @@ const Shows: React.FC = () => {
                       .map(showDate => (
                         <ListGroup.Item key={showDate.theatreShowDateId}>
                           <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
-                          <Link to={`/Reserve/${showDate.theatreShowDateId}`}> Reserve</Link>
+                          <Link 
+                            to={"/ShowDetails" } 
+                            state= {{show, showDate}}>
+                            Details
+                          </Link>
+                          {/* <Link to={`/Reserve/${showDate.theatreShowDateId}`}> Reserve</Link> */}
                           <Form.Control
                             type="number"
                             min="1"

@@ -12,6 +12,7 @@ import CartDrawer from './components/CartDrawer';
 import { CartProvider } from './components/CartContext';
 import { AdminDataDTO } from './models/Admin';
 import Reserve from './components/Reserve';
+import ShowDetails from './components/ShowDetails';
 
 
 const App: React.FC = () => {
@@ -48,6 +49,7 @@ const App: React.FC = () => {
           <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/Privacy" element={<Privacy />} />
           <Route path="/Reserve/:showDateId" element={<Reserve />} />
+          <Route path="/ShowDetails" element={<ShowDetails />} />
           <Route path="*" element={<NotFound />} /> 
         </Routes>
         <CartDrawer show={showCart} onHide={handleCartHide} />
