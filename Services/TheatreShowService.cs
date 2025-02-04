@@ -109,6 +109,7 @@ public class TheatreShowService : ITheatreShowService
         if(DBShow is not null)
         {
             DBShow.Venue = theatreShow.Venue;
+            DBShow.VenueId = theatreShow.VenueId;
             DBShow.Title = theatreShow.Title;
             DBShow.TheatreShowDateIds = theatreShow.TheatreShowDateIds;
             DBShow.Price = theatreShow.Price;

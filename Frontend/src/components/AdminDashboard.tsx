@@ -19,21 +19,54 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
     //load in Shows and ShowDates
     const [shows, setShows] = useState<TheatreShow[]>([]);
     const [showDates, setShowDates] = useState<TheatreShowDate[]>([]);
-    useEffect(() => {
-    // Fetch TheatreShows
-    fetch("/TheatreShow")
-        .then(response => response.json())
-        .then(data => setShows(data))
-        .catch(error => console.error("Error fetching shows:", error));
+    // useEffect(() => {
+    // // Fetch TheatreShows
+    // fetch("/TheatreShow")
+    //     .then(response => response.json())
+    //     .then(data => setShows(data))
+    //     .catch(error => console.error("Error fetching shows:", error));
 
-    // Fetch TheatreShowDates separately
-    fetch("/TheatreShowDate/future")
-        .then(response => response.json())
-        .then(data => setShowDates(data))
-        .catch(error => console.error("Error fetching show dates:", error));
-    }, []);
+    // // Fetch TheatreShowDates separately
+    // fetch("/TheatreShowDate/future")
+    //     .then(response => response.json())
+    //     .then(data => setShowDates(data))
+    //     .catch(error => console.error("Error fetching show dates:", error));
+    // }, []);
 
-    //conditional rendering of forms, Adding Shows and ShowDates
+        // Function to fetch and update the shows list
+        const fetchShows = async () => {
+            try {
+                const response = await fetch("/TheatreShow");
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch shows: ${response.statusText}`);
+                }
+                setShows(await response.json()); // Update state with fetched shows
+            } catch (error) {
+                console.error("Error fetching shows:", error);
+            }
+        };
+
+        const fetchShowDates = async () => {
+            try {
+                const response = await fetch("/TheatreShowDate/future");
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ShowDates: ${response.statusText}`);
+                }
+                setShowDates(await response.json()); // Update state with fetched shows
+                console.log(showDates)
+            } catch (error) {
+                console.error("Error fetching shows:", error);
+            }
+        };
+
+        // Fetch shows when the component mounts
+        useEffect(() => {
+            fetchShows();
+            fetchShowDates();
+        }, []);
+    
+
+    //Adding and Editing Shows
     const [showToAdd, setShowToAdd] = useState<TheatreShow>(
         {theatreShowId: 0,
         title: "",
@@ -47,62 +80,191 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
     const [isAddingShow, setIsAddingShow] = useState(false)
     const toggleIsAddingShow = () => {setIsAddingShow(!isAddingShow)}
 
-    const [showDateToAdd, setShowDateToAdd] = useState<TheatreShowDate>()
+    const [editedShow, setEditedShow] = useState<TheatreShow>({...showToAdd}) //makes shallow copy with default values
+    const [isEditingShow, setIsEditingShow] = useState(false)
+    const toggleIsEditingShow = (show: TheatreShow) => {
+        setIsEditingShow(!isEditingShow);
+        if (!isEditingShow) {
+          setEditedShow({ ...show }); // Set the edited show only when entering edit mode
+        }
+      };
+
+    //adding and editing ShowDates:
+    const [showDateToAdd, setShowDateToAdd] = useState<TheatreShowDate>(
+        { theatreShowDateId: 0,
+            dateAndTime: "",
+            theatreShowId: 0
+        })
     const [isAddingShowDate, setIsAddingShowDate] = useState(false)
-    const toggleIsAddingShowDate = () => {setIsAddingShowDate(!isAddingShow)}
+    const toggleIsAddingShowDate = (show: TheatreShow) => {
+        setIsAddingShowDate(!isAddingShowDate)
+        if (!isAddingShowDate) {
+            setShowDateToAdd({ ...showDateToAdd, theatreShowId: Number(show.theatreShowId)}); // Set the edited show only when entering edit mode
+          }
+    }
+
+    const [editedShowDate, setEditedShowDate] = useState<TheatreShowDate>({...showDateToAdd}) //makes shallow copy with default values
+    const [isEditingShowDate, setIsEditingShowDate] = useState(false)
+    const toggleIsEditingShowDate = (showDate: TheatreShowDate) => {
+        setIsEditingShowDate(!isEditingShowDate);
+        if (!isEditingShowDate) {
+          setEditedShowDate({ ...showDate }); // Set the edited show only when entering edit mode
+        }
+      };
 
 
     const AddShow = async (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault();
-        console.log(JSON.stringify(showToAdd))
-      
-            // await fetch("http://localhost:5097/TheatreShow", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify(showToAdd)
-            // }).then(response => response.json())
-            // .then(data => console.log(data))
-            // .catch(error => console.log(error + "aa" + JSON.stringify(showToAdd)))
-
-    
-        console.log("Show data being sent:", JSON.stringify(showToAdd));
-    
         try {
-            const response = await fetch("http://localhost:5097/TheatreShow", {
+            const response = await fetch("/TheatreShow", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(showToAdd),
             });
-    
+
             if (!response.ok) {
-                console.log(`Error: ${response.status} - ${response.statusText}`);
-                const errorData = await response.json();
-                console.log("Error details:", errorData);
-            } else {
-                const data = await response.json();
-                console.log("Success:", data);
-            }
-        } catch (error) {
-            console.error("Fetch failed:", error + JSON.stringify(showToAdd));
+                console.log(`Error: ${await response.json()}`);} 
+            else {
+                console.log("Success:", await response.json());
+                fetchShows()
+                fetchShowDates()}
+        } 
+        catch (error) {
+            console.error("Fetch failed:", error + JSON.stringify(showDateToAdd));
         }
     };
 
-    const EditShow = () => {}
-    const DeleteShow = () => {}
+    const EditShow = async () => {
+        if(window.confirm("Are you sure you want te edit this show?")) {
+            try {
+                const response = await fetch("/TheatreShow", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(editedShow),
+                });
+        
+                if (!response.ok) {
+                    console.log(`Error: ${response.status} : ${response.statusText} : ${await response.json()}`);
+                } else {
+                    console.log("Success:", await response.json());
+                    fetchShows()
+                    fetchShowDates()
+                }
+            } catch (error) {
+                console.error("Fetch failed:", error + JSON.stringify(showDateToAdd));
+            }
+        }
+        else
+            alert("canceled")
+    }
+    const DeleteShow = async (show: TheatreShow) => {
+        if(window.confirm("Are you sure you want te delete this show?")) {
+            try {
+                const response = await fetch(`/TheatreShow?id=${show.theatreShowId}`, {
+                    method: "DELETE",
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`Failed to delete show: ${response.statusText}`);
+                }
+                else {
+                    console.log("Show deleted successfully");
+                    fetchShows()
+                    fetchShowDates()
+                    alert("show deleted")
+                }
+            } 
+            catch (error) {
+                console.error("Error deleting show:", error);
+            }
+        }
+        else
+            alert("canceled")
+    };
 
-    const AddShowDate = () => {}
-    const EditShowDate = () => {}
-    const DeleteShowDate = () => {}
+    const AddShowDate = async (e: React.FormEvent<HTMLFormElement>) => { 
+        e.preventDefault();
+        try {
+            const response = await fetch("/TheatreShowDate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(showDateToAdd),
+            });
+            if (!response.ok) {
+                console.log(`Error: ${response.status} : ${response.statusText} : ${await response.json()}`); 
+            }
+            else {
+                console.log("Success:", await response.json());
+                fetchShows()
+                fetchShowDates()}
+        } 
+        catch (error) {
+            console.error("Fetch failed:", error + JSON.stringify(showDateToAdd));
+        }
+    };
+
+    const EditShowDate = async () => {
+        if(window.confirm("Are you sure you want te edit this show?")) {
+            try {
+                const response = await fetch("/TheatreShowDate", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(editedShowDate),
+                });
+            if (!response.ok) {
+                console.log("Error:", await response.json());
+            } else {
+                console.log("Success:", await response.json());
+                fetchShows()
+                fetchShowDates()
+            }
+        } catch (error) {
+            console.error("Fetch failed:", error + JSON.stringify(showDateToAdd));
+        }
+        }
+        else
+            alert("canceled")
+    }
+    const DeleteShowDate = async (showDate: TheatreShowDate) => {
+        if(window.confirm("Are you sure you want te delete this ShowDate?")) {
+            try {
+                const response = await fetch(`/TheatreShowDate?id=${showDate.theatreShowDateId}`, {
+                    method: "DELETE",
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`Failed to delete ShowDate: ${response.statusText}`);
+                }
+                else {
+                    console.log("ShowDate deleted successfully");
+                    fetchShows()
+                    fetchShowDates()
+                    alert("ShowDate deleted")
+                }
+                
+            } catch (error) {
+                console.error("Error deleting ShowDate:", error);
+            }
+        }
+        else
+            alert("canceled")
+        
+    };
     
 
     return (
         
         <div>
             <h1>Admin Dashboard</h1>
+            <button onClick={e => console.log(showDates)}> debug button</button>
             <p>Shows</p>
             <button onClick={e => toggleIsAddingShow()}> {isAddingShow == false ? "Add Show" : "Cancel"} </button>
             {isAddingShow == true 
@@ -138,68 +300,132 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
                         <input 
                             type="number"
                             value={showToAdd.price === 0 ? "" : showToAdd.price} // Show empty when it's 0
-                            onChange={e => {
-                                const value = e.target.value;
-                                setShowToAdd({
-                                    ...showToAdd,
-                                    price: value === "" ? 0 : Number(value) // Use 0 as empty value
-                                });
-                            }}
-                        />
+                            onChange={e => setShowToAdd({...showToAdd, price: e.target.valueAsNumber})}/>
                     </div>
                     <div>
                         VenueId: 
                         <input 
                             type="number"
                             value={showToAdd.venueId === 0 ? "" : showToAdd.venueId} // Show empty when it's 0
-                            onChange={e => {
-                                const value = e.target.value;
-                                setShowToAdd({
-                                    ...showToAdd,
-                                    venueId: value === "" ? 0 : Number(value) // Use 0 as empty value
-                                });
-                            }}
-                        />
-                    </div>
-                    <div>
-                        TheatreShowDateIds (input like 1, 2, 3): <input
-                        value={showToAdd.theatreShowDateIds?.join(", ") + ", "}
-                        onChange={e => {
-                            const newArray = e.target.value
-                                .split(",")
-                                .map(num => num.trim())
-                                .filter(num => num !== "")
-                                .map(Number);
-                            
-                            setShowToAdd({...showToAdd, theatreShowDateIds: newArray});
-                        }} 
-                        />
+                            onChange={e => setShowToAdd({...showToAdd, venueId: e.target.valueAsNumber})}/>
                     </div>
                     <button> Submit </button>
 
                 </form> 
                 : ""}
-            <form></form>
             <ul>
             {shows.length > 0 ? (
                 shows.map(show => (
                 <li key={show.theatreShowId}>
                     <strong>{show.title}     </strong> 
-                    <button onClick={EditShow}> Edit Show </button>
-                    <button onClick={DeleteShow}> Delete Show </button>
+                    {/* <button onClick={e => EditShow}> Edit Show </button> */}
+                    
+                    <button onClick={e => toggleIsEditingShow(show)}> {isEditingShow == true && editedShow.theatreShowId == show.theatreShowId ? "Cancel" : "Edit ShowDate"} </button>
+                        {isEditingShow == true && editedShow.theatreShowId == show.theatreShowId ? 
+                        
+                        <form onLoad={e=> setEditedShow({...show})}
+                        onSubmit={e=> {e.preventDefault(); EditShow();}}>
+                            <div>
+                                Title:
+                                <input
+                                    value ={editedShow.title}
+                                    onChange={e => setEditedShow({...editedShow, title: e.target.value})} />
+                            </div>
+                            <div>
+                                Description:
+                                <input
+                                    value ={editedShow.description}
+                                    onChange={e => setEditedShow({...editedShow, description: e.target.value})} />
+                            </div>
+                            <div>
+                                Price: 
+                                <input 
+                                    type="number"
+                                    value={editedShow.price === 0 ? "" : editedShow.price} // Show empty when it's 0
+                                    onChange={e => setEditedShow({...editedShow, price: e.target.valueAsNumber})}/>
+                            </div>
+                            <div>
+                                VenueId: 
+                                <input 
+                                    type="number"
+                                    value={editedShow.venueId === 0 ? "" : editedShow.venueId} // Show empty when it's 0
+                                    onChange={e => setEditedShow({...editedShow, venueId: e.target.valueAsNumber})}/>
+                            </div>
+                            <button> Submit </button>
+                        </form>
+                        : ""
+                        
+                    }
+                    <button onClick={e => DeleteShow(show)}> Delete Show </button>
                     <p>{show.description}</p>
                     <p><strong>Price:</strong> ${show.price}</p>
                     <p><strong>Venue:</strong> {show.venue?.name}</p>
                   
-                    <button onClick={AddShowDate}> Add ShowDate</button>
+                    <button onClick={e => toggleIsAddingShowDate(show)}> {isAddingShowDate == true && showDateToAdd.theatreShowId == show.theatreShowId ? "Cancel" : "Add ShowDate"} </button>
+                    {isAddingShowDate == true && showDateToAdd.theatreShowId == show.theatreShowId
+                        ?<form onSubmit={AddShowDate}>
+                            <div>
+                            TheatreShowDateId: 
+                                <input 
+                                    type="number"
+                                    value={showDateToAdd.theatreShowDateId === 0 ? "" : showDateToAdd.theatreShowDateId} // Show empty when it's 0
+                                    onChange={e => setShowDateToAdd({...showDateToAdd, theatreShowDateId: e.target.valueAsNumber})}/>
+                            </div>
+                            <div>
+                                Date and Time: <input 
+                                value={showDateToAdd.dateAndTime}
+                                onChange={e => setShowDateToAdd({...showDateToAdd, dateAndTime: e.target.value})}
+                                />
+                            </div>
+                            
+                            {/* <div>
+                            TheatreShowId: 
+                                <input 
+                                    type="number"
+                                    value={showDateToAdd.theatreShowId === 0 ? "" : showDateToAdd.theatreShowId} // Show empty when it's 0
+                                    onChange={e => setShowDateToAdd({...showDateToAdd, theatreShowId: e.target.valueAsNumber})}/>
+                            </div> */}
+                            <button> Submit </button>
+                        </form> 
+                        : ""}
+
                     <ul>
                     {showDates
                         .filter(date => date.theatreShowId === show.theatreShowId) // Match ShowDates with Show ID
                         .map((showDate) => (
                         <li key={showDate.theatreShowDateId}>
                             <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString() + "     "}   
-                            <button onClick={EditShowDate}> Edit ShowDate </button>
-                            <button onClick={DeleteShowDate}> Delete ShowDate </button>
+                            <button onClick={e => toggleIsEditingShowDate(showDate)}> 
+                            {isEditingShowDate == true 
+                            && editedShowDate.theatreShowId == showDate.theatreShowId
+                            && editedShowDate.theatreShowDateId == showDate.theatreShowDateId
+                              ? "Cancel" : "Edit ShowDate"} </button>
+                            {isEditingShowDate == true 
+                            && editedShowDate.theatreShowId == showDate.theatreShowId
+                            &&  editedShowDate.theatreShowDateId == showDate.theatreShowDateId
+                                ?
+                                <form 
+                                // onLoad={e=> setEditedShowDate({...showDate})}
+                                onSubmit={e=> {e.preventDefault(); EditShowDate();}}>
+                                    <div>
+                                        DateAndTime:
+                                        <input
+                                            value ={editedShowDate.dateAndTime}
+                                            onChange={e => setEditedShowDate({...editedShowDate, dateAndTime: e.target.value})} />
+                                    </div>
+                                    {/* <div>
+                                        TheatreShowId: 
+                                        <input 
+                                            type="number"
+                                            value={editedShowDate.theatreShowId === 0 ? "" : editedShowDate.theatreShowId} // Show empty when it's 0
+                                            onChange={e => setEditedShowDate({...editedShowDate, theatreShowId: e.target.valueAsNumber})}/>
+                                    </div> */}
+                                    <button> Submit </button>
+
+                                </form> 
+                            : ""}
+                            <button onClick={e => DeleteShowDate(showDate)}> Delete ShowDate</button>
+
                         </li>
                         ))}
                     </ul>
