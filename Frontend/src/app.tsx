@@ -35,7 +35,7 @@ const App: React.FC = () => {
         loginFormDataRef={loginFormDataRef}
         setIsLoggedIn={setIsLoggedIn}
         />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard isLoggedIn={isLoggedIn}/>} />
         <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/Privacy" element={<Privacy />} />
         <Route path="/Reserve/:showDateId" element={<Reserve />} />

@@ -4,7 +4,8 @@ using TheatreProject.Services;
 
 namespace TheatreProject.Controllers
 {
-    [Route($"/TheatreShow")]
+    [Route($"TheatreShow")]
+    [ApiController]
     public class TheatreShowController : ControllerBase
     {
         private ITheatreShowService _theatreShowService;

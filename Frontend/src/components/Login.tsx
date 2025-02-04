@@ -9,7 +9,7 @@ interface LoginProps {
     loginFormDataRef: MutableRefObject<{username: string}>
 }
 const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLoggedIn}) => {
-
+    localStorage
     const navigate = useNavigate()
     const [formData, setFormData] = useState(
         {
@@ -68,7 +68,7 @@ const Login: React.FC<LoginProps> = ({adminDataDTORef, loginFormDataRef, setIsLo
                                 setIsLoggedIn(true);
                                 setStatusMessage("succesful login")
                                 console.log("succesful login");
-                                navigate("/Home")
+                                navigate("/AdminDashboard")
                             }
                         }
                     else {

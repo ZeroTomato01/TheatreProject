@@ -1,0 +1,20 @@
+GET http://localhost:5097/TheatreShow
+#####
+GET https://localhost:7119/TheatreShow/GetTheatreShows
+#####
+POST  http://localhost:5097/TheatreShow
+Content-Type: application/json
+
+{
+    "theatreShowId": 5,
+    "title": "bb",
+    "description": "b",
+    "price": 10,
+    "venueId": 0
+}
+#####
+POST  http://localhost:5097/TheatreShow
+Content-Type: application/json
+
+{"theatreShowId":5,"title":"aaa","description":"aa","price":1,"theatreShowDateIds":[11],"venueId":1}
+#####

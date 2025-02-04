@@ -1,11 +1,14 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
 
 interface LogoutProps {
     setIsLoggedIn: (value: boolean) => void;
 };
 
 const Logout: React.FC<LogoutProps> = ({setIsLoggedIn}) => {
+    const navigate = useNavigate()
 
     const handleLogOut = async () => {
         const logoutResponse = await fetch("/Login/logout", {
@@ -15,6 +18,7 @@ const Logout: React.FC<LogoutProps> = ({setIsLoggedIn}) => {
         {
             setIsLoggedIn(false);
             alert("You have been logged out.");
+            navigate("/Login")
         }
     }
 

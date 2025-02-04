@@ -3,15 +3,17 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 import Reserve from './Reserve';
 
-interface TheatreShow {
-  theatreShowId: number;
+export interface TheatreShow {
+  theatreShowId?: number;
   title: string;
   description: string;
   price: number;
   venue?: { name: string };
+  venueId?: number
+  theatreShowDateIds?: number[]
 }
 
-interface TheatreShowDate {
+export interface TheatreShowDate {
   theatreShowDateId: number;
   dateAndTime: string;
   theatreShowId: number;
@@ -20,6 +22,8 @@ interface TheatreShowDate {
 const Shows: React.FC = () => {
   const [shows, setShows] = useState<TheatreShow[]>([]);
   const [showDates, setShowDates] = useState<TheatreShowDate[]>([]);
+  //maybe just add amin check, so we can use this same component in the admin dashboard?
+  
   
   useEffect(() => {
     // Fetch TheatreShows
