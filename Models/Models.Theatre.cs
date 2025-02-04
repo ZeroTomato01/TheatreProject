@@ -47,12 +47,12 @@ namespace TheatreProject.Models
 
     public class TheatreShow
     {
-        public int TheatreShowId { get; set; }
+        public int? TheatreShowId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public double Price { get; set; }
+        public double? Price { get; set; }
         public List<int>? TheatreShowDateIds { get; set; }
-        public int VenueId { get; set; } // Foreign key
+        public int? VenueId { get; set; } // Foreign key
         public Venue? Venue { get; set; } // Navigation property
     }
 

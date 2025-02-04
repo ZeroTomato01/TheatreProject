@@ -96,6 +96,6 @@ public class TheatreShowDateService : ITheatreShowDateService
         if(DBtheatreShowDate is null) return false;
         if(DBtheatreShowDate.TheatreShow is null) return false;
         if(DBtheatreShowDate.TheatreShow.TheatreShowId is 0) return false;
-        else return await _theatreShowService.CheckTheatreShow(DBtheatreShowDate.TheatreShow.TheatreShowId);
+        else return await _theatreShowService.CheckTheatreShow((int)DBtheatreShowDate.TheatreShow.TheatreShowId);
     }
 }

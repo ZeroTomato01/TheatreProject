@@ -5,12 +5,14 @@ import Reserve from './Reserve';
 
 export interface TheatreShow {
   theatreShowId?: number;
-  title: string;
-  description: string;
-  price: number;
+  title?: string;
+  description?: string;
+  price?: number;
+  theatreShowDateIds?: number[];
   venue?: { name: string };
-  venueId?: number
-  theatreShowDateIds?: number[]
+  venueId?: number;
+  
+ 
 }
 
 export interface TheatreShowDate {
