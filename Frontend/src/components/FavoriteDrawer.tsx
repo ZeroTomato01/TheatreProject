@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFavorites } from './FavoriteContext';
-import { useCart } from './CartContext';
 import { Button, Offcanvas, ListGroup } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 interface FavoriteDrawerProps {
   show: boolean;
@@ -10,7 +10,12 @@ interface FavoriteDrawerProps {
 
 const FavoriteDrawer: React.FC<FavoriteDrawerProps> = ({ show, onHide }) => {
   const { favorites, removeFromFavorites } = useFavorites();
-  const { addToCart } = useCart();
+  const navigate = useNavigate();
+
+  const handleDetails = (item: any) => {
+    navigate("/ShowDetails", { state: { show: item } });
+    onHide();
+  };
 
   return (
     <Offcanvas show={show} onHide={onHide} placement="start">
@@ -26,7 +31,7 @@ const FavoriteDrawer: React.FC<FavoriteDrawerProps> = ({ show, onHide }) => {
                   <strong>{item.showTitle}</strong>
                 </div>
                 <div>
-                  <Button variant="primary" size="sm" onClick={() => addToCart(item)}>Add to Cart</Button>
+                  <Button variant="primary" size="sm" onClick={() => handleDetails(item)}>Details</Button>
                   <Button variant="danger" size="sm" onClick={() => removeFromFavorites(item.showDateId)}>Remove</Button>
                 </div>
               </div>

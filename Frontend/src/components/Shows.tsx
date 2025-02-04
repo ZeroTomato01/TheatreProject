@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { Button, Card, ListGroup, Container, Row, Col, Form } from 'react-bootstrap';
-import { FaStar } from 'react-icons/fa';
 import { useFavorites } from './FavoriteContext';
-import Reserve from './Reserve';
 
 export interface TheatreShow {
   theatreShowId?: number;
@@ -33,8 +31,6 @@ const Shows: React.FC = () => {
   const [shows, setShows] = useState<TheatreShow[]>([]);
   const [showDates, setShowDates] = useState<TheatreShowDate[]>([]);
   const [venues, setVenues] = useState<Venue[]>([]);
-  const { addToCart } = useCart();
-  const [ticketCounts, setTicketCounts] = useState<{ [key: number]: number }>({});
   const { addToFavorites } = useFavorites();
 
   // Filter states
@@ -66,13 +62,13 @@ const Shows: React.FC = () => {
   const filteredShows = shows.filter(show => {
     const matchesTitle = show.title?.toLowerCase().includes(titleFilter.toLowerCase());
     const matchesPrice = show.price !== undefined && show.price <= priceFilter;
-    const matchesDate = showDates.some(date => {
-      if (date.theatreShowId === show.theatreShowId) {
-        const showDate = new Date(date.dateAndTime).toLocaleDateString('en-GB');
-        return showDate === dateFilter;
-      }
-      return false;
-    });
+    // Find the first upcoming date for the show
+    const sortedShowDates = showDates
+      .filter(date => date.theatreShowId === show.theatreShowId)
+      .sort((a, b) => new Date(a.dateAndTime).getTime() - new Date(b.dateAndTime).getTime());
+    const firstShowDate = sortedShowDates[0];
+
+    const matchesDate = firstShowDate ? new Date(firstShowDate.dateAndTime).toLocaleDateString('en-GB') === dateFilter : false;
 
     // Apply filters
     return (
@@ -82,24 +78,6 @@ const Shows: React.FC = () => {
     );
   });
 
-  const handleAddToCart = (show: TheatreShow, showDate: TheatreShowDate) => {
-    const count = ticketCounts[showDate.theatreShowDateId] || 1;
-    for (let i = 0; i < count; i++) {
-      addToCart({
-        showDateId: showDate.theatreShowDateId,
-        showTitle: show.title || "Untitled Show",
-        showDate: new Date(showDate.dateAndTime).toLocaleString(),
-        showPrice: show.price || 0
-      });
-    }
-  };
-
-  const handleTicketCountChange = (showDateId: number, count: number) => {
-    setTicketCounts(prevCounts => ({
-      ...prevCounts,
-      [showDateId]: count
-    }));
-  };
 
   const handleAddToFavorites = (show: TheatreShow, showDate: TheatreShowDate) => {
     addToFavorites({
@@ -109,6 +87,18 @@ const Shows: React.FC = () => {
       showPrice: show.price || 0
     });
   };
+
+  const handleDetails = (show: TheatreShow) => (
+    <Link
+      to={"/ShowDetails"}
+      state={{ show }}
+      className="mr-2"
+    >
+      <Button variant="danger">
+        Details
+      </Button>
+    </Link>
+  );
 
   const getVenue = (venueId: number, venues: Venue[]) => {
     const venue = venues.find(v => v.venueId === venueId);
@@ -158,51 +148,47 @@ const Shows: React.FC = () => {
 
         {/* Shows List */}
         <Col md={9}>
-          <Row>
-            {filteredShows.length > 0 ? (
-              filteredShows.map(show => (
-                <Col key={show.theatreShowId} md={4}>
-                  <Card className="mb-4">
-                    <Card.Body>
-                      <Card.Title>{show.title}</Card.Title>
-                      <Card.Text>{show.description}</Card.Text>
-                      <Card.Text><strong>Price:</strong> ${show.price}</Card.Text>
-                      <Card.Text><strong>Venue:</strong> {getVenue(show.venueId ?? -1, venues)}</Card.Text>
+        <Row>
+        {filteredShows.length > 0 ? (
+          filteredShows.map(show => {
+            // Find the first upcoming date for the show
+            const sortedShowDates = showDates
+              .filter(date => date.theatreShowId === show.theatreShowId)
+              .sort((a, b) => new Date(a.dateAndTime).getTime() - new Date(b.dateAndTime).getTime());
+            const firstShowDate = sortedShowDates[0];
+
+            return (
+              <Col key={show.theatreShowId} md={4}>
+                <Card className="mb-4">
+                  <Card.Body>
+                    <Card.Title>{show.title}</Card.Title>
+                    <Card.Text>{show.description}</Card.Text>
+                    <Card.Text><strong>Price:</strong> ${show.price}</Card.Text>
+                    <Card.Text><strong>Venue:</strong> {getVenue(show.venueId ?? -1, venues)}</Card.Text>
+                    {firstShowDate && (
                       <ListGroup variant="flush">
-                        {showDates
-                          .filter(date => date.theatreShowId === show.theatreShowId).map(showDate => (
-                            <ListGroup.Item key={showDate.theatreShowDateId}>
-                              <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
-                              <Link 
-                                to={"/ShowDetails"} 
-                                state={{ show, showDate }}>
-                                Details
-                              </Link>
-                              <Form.Control
-                                type="number"
-                                min="1"
-                                value={ticketCounts[showDate.theatreShowDateId] || 1}
-                                onChange={(e) => handleTicketCountChange(showDate.theatreShowDateId, parseInt(e.target.value))}
-                                className="mb-2"
-                              />
-                              <Button variant="primary" onClick={() => handleAddToCart(show, showDate)}>Reserve Ticket</Button>
-                              <Button variant="warning" onClick={() => handleAddToFavorites(show, showDate)} className="ml-2">Fav</Button>
-                            </ListGroup.Item>
-                          ))}
+                        <ListGroup.Item>
+                          <strong>Upcoming Showing:</strong>
+                          <div>{new Date(firstShowDate.dateAndTime).toLocaleString()}</div>
+                          <div className="mt-2">
+                            {handleDetails(show)}
+                            <Button variant="warning" onClick={() => handleAddToFavorites(show, firstShowDate)}>Fav</Button>
+                          </div>
+                        </ListGroup.Item>
                       </ListGroup>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))
-            ) : (
-              <Col>
-                <p>No shows match the filters.</p>
+                    )}
+                  </Card.Body>
+                </Card>
               </Col>
-            )}
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+            );
+          })
+        ) : (
+          <p>No shows available.</p>
+        )}
+        </Row>
+      </Col>
+    </Row>
+  </Container>
   );
 };
 
