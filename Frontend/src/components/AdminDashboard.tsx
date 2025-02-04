@@ -2,20 +2,20 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { TheatreShow, TheatreShowDate } from './Shows';
+import { useAdmin } from './AdminContext';
 import { Reservation } from './Reserve';
 
-interface adminDashboardProps {
-    isLoggedIn: boolean
-}
 
-const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProps) => {
+const AdminDashboard: React.FC = () => {
     //navigate to login screen if user accessed dashboard without being logged in
-    const navigate = useNavigate()
+    const { isLoggedIn } = useAdmin();
+    const navigate = useNavigate();
+  
     useEffect(() => {
-        if (!props.isLoggedIn) {
-            navigate("/Login");
-        }
-    }, [props.isLoggedIn, navigate]); 
+      if (!isLoggedIn) {
+        navigate("/Login");
+      }
+    }, [isLoggedIn, navigate]);
 
     const [reservations, setReservations] = useState<Reservation[]>([]);
     useEffect(() => {
