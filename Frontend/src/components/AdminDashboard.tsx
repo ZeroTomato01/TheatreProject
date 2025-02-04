@@ -62,7 +62,7 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
                 body: JSON.stringify(showToAdd)
             }).then(response => response.json())
             .then(data => console.log(data))
-            .catch(error => console.log(error + "aa" + "    " + JSON.stringify(showToAdd)))
+            .catch(error => console.log(error + "aa" + JSON.stringify(showToAdd)))
 
 
 
@@ -100,7 +100,7 @@ const AdminDashboard: React.FC<adminDashboardProps> = (props: adminDashboardProp
             <p>Shows</p>
             <button onClick={e => toggleIsAddingShow()}> {isAddingShow == false ? "Add Show" : "Cancel"} </button>
             {isAddingShow == true 
-                ? <form onSubmit={AddShow}>
+                ? <form onSubmit={e => AddShow()}>
                     <div>
                         Title: <input 
                         value={showToAdd.title}
