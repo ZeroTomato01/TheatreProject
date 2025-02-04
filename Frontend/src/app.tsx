@@ -44,7 +44,7 @@ const App: React.FC = () => {
       <CartProvider>
         <FavoriteProvider>
           <Router>
-          <MenuBar onFavoritesClick={handleFavoritesClick} isLoggedIn={isLoggedIn} onCartClick={handleCartClick} />
+          <MenuBar onFavoritesClick={handleFavoritesClick} onCartClick={handleCartClick} />
             <Routes>
               <Route path="/" element={<Navigate to="/Home" />} />
               <Route path="/Home" element={<Home />} />
@@ -54,9 +54,9 @@ const App: React.FC = () => {
               loginFormDataRef={loginFormDataRef}
               />} />
               <Route path="/AdminDashboard" element={<AdminDashboard />} />
-              <Route path="/Logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/Logout" element={<Logout  />} />
               <Route path="/Privacy" element={<Privacy />} />
-              <Route path="/Reserve/:showDateId" element={<Reserve />} />
+              <Route path="/Reserve" element={<Reserve />} />
               <Route path="/ShowDetails" element={<ShowDetails />} />
               <Route path="*" element={<NotFound />} /> 
             </Routes>

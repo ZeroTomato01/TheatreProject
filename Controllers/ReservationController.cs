@@ -13,20 +13,26 @@ namespace TheatreProject.Controllers
             _reservationService = reservationService;
         }
 
-        public IActionResult ViewReservationPage()
-        {
-            return View();
-        }
+        // public IActionResult ViewReservationPage()
+        // {
+        //     return View();
+        // }
 
         [HttpGet()]
-        public async Task<IActionResult> Get([FromQuery] int id = 0)
+        public async Task<IActionResult> Get([FromQuery] int? id = 0)
         {
-            var result = await _reservationService.Get(id);
-            if (result is not null)
+            if (id != null && id != 0)
             {
-                return Ok(result);
+                var result = await _reservationService.Get((int)id);
+                if (result is not null)
+                {
+                    return Ok(result);
+                }
+                return NotFound(result);}
+            else{
+                var result = await _reservationService.GetAll();
+             return Ok(result);
             }
-            return NotFound(result);
         }
 
         [HttpGet("batch")]
@@ -36,11 +42,12 @@ namespace TheatreProject.Controllers
             return Ok(result);
         }
 
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _reservationService.GetAll();
-            return Ok(result);
-        }
+        // [HttpGet()] //moved to Get
+        // public async Task<IActionResult> GetAll()
+        // {
+        //     var result = await _reservationService.GetAll();
+        //     return Ok(result);
+        // }
 
         [HttpPost()]
         protected async Task<IActionResult> Post([FromBody] Reservation reservation)

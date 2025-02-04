@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { TheatreShow, TheatreShowDate } from './Shows';
 import { useAdmin } from './AdminContext';
+import { Reservation } from './Reserve';
 
 
 const AdminDashboard: React.FC = () => {
@@ -15,6 +16,14 @@ const AdminDashboard: React.FC = () => {
         navigate("/Login");
       }
     }, [isLoggedIn, navigate]);
+
+    const [reservations, setReservations] = useState<Reservation[]>([]);
+    useEffect(() => {
+        fetch("/Reservation")
+            .then(response => response.json())
+            .then(data => setReservations(data))
+            .catch(error => console.error("Error fetching reservations:", error));
+    }, []); // Add empty dependency array
 
     //load in Shows and ShowDates
     const [shows, setShows] = useState<TheatreShow[]>([]);
@@ -435,8 +444,20 @@ const AdminDashboard: React.FC = () => {
                 <li>Loading shows...</li>
             )}
             </ul>
-
-
+            <div>
+                <h1>Reservations</h1>
+                {reservations.map((reservation) => (
+                    <div key={reservation.reservationId}>
+                        <p>Reservation ID: {reservation.reservationId}</p>
+                        <p>Tickets: {reservation.amountOfTickets}</p>
+                        <p>Status: {reservation.used ? "Used" : "Not Used"}</p>
+                        {reservation.theatreShowDateId && (
+                            <p>Show Date ID: {reservation.theatreShowDateId}</p>
+                        )}
+                        <hr /> {/* Add a horizontal line between reservations */}
+                    </div>
+                ))}
+            </div>
 
 
         </div>
