@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TheatreProject.Models;
 using TheatreProject.Services;
 
-[Route("api/Venue")]
-[ApiController]
+[Route($"/Venue")]
 public class VenueController : Controller
 {
     IVenueService _venueService;
@@ -13,11 +12,10 @@ public class VenueController : Controller
         _venueService = venueService;
 
     }
-    [HttpGet("GetAll")]
+    [HttpGet()]
     public async Task<IActionResult> GetAll()
     {
-        var venues = await _venueService.GetAll();
-        return Ok(venues);
+        return await _venueService.GetAll();
     }
 
     [HttpGet("{id}")]

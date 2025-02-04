@@ -56,7 +56,7 @@ const Shows: React.FC = () => {
       .catch(error => console.error("Error fetching show dates:", error));
 
     // fetch venues
-    fetch("api/Venue/GetAll")
+    fetch("/Venue")
       .then(response => response.json())
       .then(data => setVenues(data))
       .catch(error => console.error("Error fetching show dates:", error));
@@ -111,12 +111,8 @@ const Shows: React.FC = () => {
   };
 
   const getVenue = (venueId: number, venues: Venue[]) => {
-    for(let i = 0; i < venues.length; i++) {
-      if(venueId == venues[i].venueId)
-      {
-        return venues[i].name;
-      }
-    }
+    const venue = venues.find(v => v.venueId === venueId);
+    return venue ? venue.name : 'Unknown Venue';
   };
 
   return (
@@ -174,7 +170,7 @@ const Shows: React.FC = () => {
                       <Card.Text><strong>Venue:</strong> {getVenue(show.venueId ?? -1, venues)}</Card.Text>
                       <ListGroup variant="flush">
                         {showDates
-                          .filter(date => date.theatreShowId === show.theatreShowId)                          .map(showDate => (
+                          .filter(date => date.theatreShowId === show.theatreShowId).map(showDate => (
                             <ListGroup.Item key={showDate.theatreShowDateId}>
                               <strong>Date:</strong> {new Date(showDate.dateAndTime).toLocaleString()}
                               <Link 
@@ -195,7 +191,7 @@ const Shows: React.FC = () => {
                           ))}
                       </ListGroup>
                     </Card.Body>
-                  </Card>Í
+                  </Card>
                 </Col>
               ))
             ) : (
