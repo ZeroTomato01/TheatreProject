@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheatreProject.Models;
 
@@ -10,9 +11,11 @@ using TheatreProject.Models;
 namespace TheatreProject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250204165732_AddsecondVenue")]
+    partial class AddsecondVenue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -126,15 +129,6 @@ namespace TheatreProject.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Reservation");
-
-                    b.HasData(
-                        new
-                        {
-                            ReservationId = 1,
-                            AmountOfTickets = 1,
-                            TheatreShowDateId = 1,
-                            Used = false
-                        });
                 });
 
             modelBuilder.Entity("TheatreProject.Models.TheatreShow", b =>
@@ -210,19 +204,19 @@ namespace TheatreProject.Migrations
                         new
                         {
                             TheatreShowDateId = 1,
-                            DateAndTime = new DateTime(2025, 2, 11, 22, 3, 29, 679, DateTimeKind.Local).AddTicks(6490),
+                            DateAndTime = new DateTime(2025, 2, 11, 17, 57, 31, 631, DateTimeKind.Local).AddTicks(7103),
                             TheatreShowId = 1
                         },
                         new
                         {
                             TheatreShowDateId = 2,
-                            DateAndTime = new DateTime(2025, 1, 28, 22, 3, 29, 679, DateTimeKind.Local).AddTicks(6566),
+                            DateAndTime = new DateTime(2025, 1, 28, 17, 57, 31, 631, DateTimeKind.Local).AddTicks(7177),
                             TheatreShowId = 2
                         },
                         new
                         {
                             TheatreShowDateId = 3,
-                            DateAndTime = new DateTime(2025, 2, 7, 22, 3, 29, 679, DateTimeKind.Local).AddTicks(6585),
+                            DateAndTime = new DateTime(2025, 2, 7, 17, 57, 31, 631, DateTimeKind.Local).AddTicks(7197),
                             TheatreShowId = 2
                         });
                 });

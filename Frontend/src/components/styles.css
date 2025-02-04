@@ -25,6 +25,10 @@
   justify-content: space-between;
 }
 .menu-bar-left {
+  margin-right: auto;
+}
+
+.menu-bar-center {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -79,3 +83,23 @@
 .text-center {
   text-align: center !important;
 }
+
+/*cart drawer */
+.cart-drawer-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+}
+
+.cart-drawer-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.cart-drawer-footer h5 {
+  margin-bottom: 10px;
+}
+

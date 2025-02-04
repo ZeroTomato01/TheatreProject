@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TheatreProject.Models;
 using TheatreProject.Services;
 
@@ -10,6 +11,16 @@ public class VenueService : IVenueService
     public VenueService(DatabaseContext context)
     {
         _context = context;
+    }
+
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _context.Venue.ToArrayAsync();
+        if (result is not null)
+        {
+            return new OkObjectResult(result);
+        }
+        else return new BadRequestObjectResult($"no threatres were found in database");
     }
     public async Task<IActionResult> GetVenue(int id)
     {

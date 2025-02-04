@@ -5,6 +5,7 @@ namespace TheatreProject.Services;
 
 public interface IVenueService
 {
+    public Task<IActionResult> GetAll();
     public Task<IActionResult> GetVenue(int id);
 
     public Task<IActionResult> PostVenue(Venue venue);

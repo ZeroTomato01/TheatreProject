@@ -7,10 +7,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace TheatreProject.Services;
 
-public enum LoginStatus { IncorrectPassword, IncorrectUsername, Success }
-
-public enum ADMIN_SESSION_KEY { adminLoggedIn }
-
 public class LoginService : ILoginService
 {
 
@@ -21,7 +17,7 @@ public class LoginService : ILoginService
         _context = context;
     }
 
-    public async Task<LoginStatus> CheckCredentials(string username, string inputPassword)
+    public async Task<Admin> CheckCredentials(string username, string inputPassword)
     {
         var admin = await _context.Admin.FirstOrDefaultAsync(a => a.UserName == username);
         if (admin != null)
@@ -29,29 +25,10 @@ public class LoginService : ILoginService
             if (!string.IsNullOrEmpty(inputPassword))
             {
                 var debugstep = EncryptionHelper.EncryptPassword(inputPassword);
-                if (admin.Password == debugstep) return LoginStatus.Success;
-            }
-            return LoginStatus.IncorrectPassword;
-        }
-        return LoginStatus.IncorrectUsername;
-    }
-
-    public async Task<AdminDTO> GetAdminData(string username, string inputPassword)
-    {
-        if (await CheckCredentials(username, inputPassword) == LoginStatus.Success) //extra protection
-        {
-            var admin = await _context.Admin.FirstOrDefaultAsync(a => a.UserName == username);
-            if (admin != null)
-            {
-                return new AdminDTO{
-                    AdminId = admin.AdminId,
-                    UserName = admin.UserName,
-                    Email = admin.Email
-                };
+                if (admin.Password == debugstep) return admin;
             }
         }
         return null;
-        
     }
 }
 

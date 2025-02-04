@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useAdmin } from './AdminContext';
 
-interface RegisterProps {
-    setIsLoggedIn: (value: boolean) => void; 
-}
 
-const Register: React.FC<RegisterProps> = ({ setIsLoggedIn }) => {
+
+const Register: React.FC = () => {
+    const { setIsLoggedIn } = useAdmin();
     const [customer, setCustomer] = useState(
         {
             customerId: 0,

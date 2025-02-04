@@ -56,12 +56,34 @@ namespace TheatreProject.Models
             //     TheatreShowDates = {},
             //     Venue = {}});
 
+            modelBuilder.Entity<Reservation>()
+                .HasData(
+                new Reservation{
+                    ReservationId = 1,
+                    AmountOfTickets = 1,
+                    Used = false,
+                    TheatreShowDateId = 1
+
+                }
+            );
+
+
+
             modelBuilder.Entity<Venue>()
                 .HasData(
                 new Venue{
                     VenueId = 1, 
                     Name = "The Pen", 
                     Capacity = 300
+                }
+            );
+
+             modelBuilder.Entity<Venue>()
+                .HasData(
+                new Venue{
+                    VenueId = 2, 
+                    Name = "The Pigsty", 
+                    Capacity = 50
                 }
             );
 
