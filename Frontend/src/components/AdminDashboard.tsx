@@ -105,11 +105,21 @@ const AdminDashboard: React.FC = () => {
             theatreShowId: 0
         })
     const [isAddingShowDate, setIsAddingShowDate] = useState(false)
-    const toggleIsAddingShowDate = (show: TheatreShow) => {
+    const toggleIsAddingShowDate = async (show: TheatreShow) => {
         setIsAddingShowDate(!isAddingShowDate)
         if (!isAddingShowDate) {
             setShowDateToAdd({ ...showDateToAdd, theatreShowId: Number(show.theatreShowId)}); // Set the edited show only when entering edit mode
-          }
+            const response = await fetch("/TheatreShowDate/count")
+            if (response.ok){
+                var count = await response.json()
+                setShowDateToAdd({ ...showDateToAdd, theatreShowDateId: count + 1}); 
+            }
+            else{
+                console.log("couldn't fetch count of ShowDates")
+            }
+            
+        
+        }
     }
 
     const [editedShowDate, setEditedShowDate] = useState<TheatreShowDate>({...showDateToAdd}) //makes shallow copy with default values
@@ -134,9 +144,9 @@ const AdminDashboard: React.FC = () => {
             });
 
             if (!response.ok) {
-                console.log(`Error: ${await response.json()}`);} 
+                console.log("Error:", response.status, response.statusText)} 
             else {
-                console.log("Success:", await response.json());
+                console.log("Succes");
                 fetchShows()
                 fetchShowDates()}
         } 
@@ -157,9 +167,9 @@ const AdminDashboard: React.FC = () => {
                 });
         
                 if (!response.ok) {
-                    console.log(`Error: ${response.status} : ${response.statusText} : ${await response.json()}`);
+                    console.log(`Error: ${response.status} : ${response.statusText}`);
                 } else {
-                    console.log("Success:", await response.json());
+                    console.log("Success");
                     fetchShows()
                     fetchShowDates()
                 }
@@ -206,10 +216,10 @@ const AdminDashboard: React.FC = () => {
                 body: JSON.stringify(showDateToAdd),
             });
             if (!response.ok) {
-                console.log(`Error: ${response.status} : ${response.statusText} : ${await response.json()}`); 
+                console.log("Error:", response.status, response.statusText); 
             }
             else {
-                console.log("Success:", await response.json());
+                console.log("Success");
                 fetchShows()
                 fetchShowDates()}
         } 
@@ -229,9 +239,9 @@ const AdminDashboard: React.FC = () => {
                     body: JSON.stringify(editedShowDate),
                 });
             if (!response.ok) {
-                console.log("Error:", await response.json());
+                console.log("Error:", response.status, response.statusText);
             } else {
-                console.log("Success:", await response.json());
+                console.log("Success");
                 fetchShows()
                 fetchShowDates()
             }
@@ -373,13 +383,13 @@ const AdminDashboard: React.FC = () => {
                     <button onClick={e => toggleIsAddingShowDate(show)}> {isAddingShowDate == true && showDateToAdd.theatreShowId == show.theatreShowId ? "Cancel" : "Add ShowDate"} </button>
                     {isAddingShowDate == true && showDateToAdd.theatreShowId == show.theatreShowId
                         ?<form onSubmit={AddShowDate}>
-                            <div>
+                            {/* <div>
                             TheatreShowDateId: 
                                 <input 
                                     type="number"
                                     value={showDateToAdd.theatreShowDateId === 0 ? "" : showDateToAdd.theatreShowDateId} // Show empty when it's 0
                                     onChange={e => setShowDateToAdd({...showDateToAdd, theatreShowDateId: e.target.valueAsNumber})}/>
-                            </div>
+                            </div> */}
                             <div>
                                 Date and Time: <input 
                                 value={showDateToAdd.dateAndTime}

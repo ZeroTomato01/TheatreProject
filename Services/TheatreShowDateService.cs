@@ -26,6 +26,18 @@ public class TheatreShowDateService : ITheatreShowDateService
         
     }
 
+    public async Task<IActionResult> GetCount()
+    {
+        var DBTheatreShowDates = await _context.TheatreShowDate.ToArrayAsync();
+        if(DBTheatreShowDates is not null)
+        {
+            return new OkObjectResult(DBTheatreShowDates.Count());
+        }
+        else return new BadRequestObjectResult($"no threatrshowdates found in database");
+        
+    }
+
+
     public async Task<IActionResult> GetAllFuture()
     {
         var DBTheatreShowDates = await _context.TheatreShowDate.Where(showdate => DateTime.Compare(showdate.DateAndTime, DateTime.Now) == 1 ).ToArrayAsync();
