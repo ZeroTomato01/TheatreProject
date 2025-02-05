@@ -15,7 +15,7 @@ export interface Reservation {
 
 const Reserve: React.FC = () => {
     const location = useLocation();
-    const reservations: Reservation[] = location.state?.reservation;
+    const reservations: Reservation[] = location.state?.reservations;
 
     const [message, setMessage] = useState<string>(""); // Store a list of shows
 
@@ -25,7 +25,17 @@ const Reserve: React.FC = () => {
 
     return (
       <div>
-        
+        {reservations.map((reservation) => (
+          <div key={reservation.reservationId}>
+              <p>Reservation ID: {reservation.reservationId}</p>
+              <p>Tickets: {reservation.amountOfTickets}</p>
+              <p>Status: {reservation.used ? "Used" : "Not Used"}</p>
+              {reservation.theatreShowDateId && (
+                  <p>Show Date ID: {reservation.theatreShowDateId}</p>
+              )}
+              <hr /> {/* Add a horizontal line between reservations */}
+          </div>))
+          }
       </div>
       
     )

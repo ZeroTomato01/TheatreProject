@@ -42,12 +42,12 @@ namespace TheatreProject.Controllers
             return Ok(result);
         }
 
-        // [HttpGet()] //moved to Get
-        // public async Task<IActionResult> GetAll()
-        // {
-        //     var result = await _reservationService.GetAll();
-        //     return Ok(result);
-        // }
+        [HttpGet("count")] 
+        public async Task<IActionResult> GetCount()
+        {
+            var result = await _reservationService.GetAll();
+            return Ok(result.Count);
+        }
 
         [HttpPost()]
         protected async Task<IActionResult> Post([FromBody] Reservation reservation)
