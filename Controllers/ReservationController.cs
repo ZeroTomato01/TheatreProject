@@ -50,7 +50,7 @@ namespace TheatreProject.Controllers
         }
 
         [HttpPost()]
-        protected async Task<IActionResult> Post([FromBody] Reservation reservation)
+        public async Task<IActionResult> Post([FromBody] Reservation reservation)
         {
             bool result = await _reservationService.Post(reservation);
             if (result)
@@ -60,7 +60,7 @@ namespace TheatreProject.Controllers
             return BadRequest();
         }
         [HttpPost("batch")]
-        protected async Task<IActionResult> PostBatch([FromBody] List<Reservation> reservations)
+        public async Task<IActionResult> PostBatch([FromBody] List<Reservation> reservations)
         {
             var result = await _reservationService.PostBatch(reservations);
             if (result.Contains(true))

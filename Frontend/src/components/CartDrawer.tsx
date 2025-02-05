@@ -37,9 +37,10 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ show, onHide }) => {
         reservationId: count += 1, // Generate a unique ID (you can use a better method for production)
         amountOfTickets: item.count,
         theatreShowDateId: item.showDateId,
+        price: item.showPrice * item.count
       }));
       //setReservations(reservationItems);
-      navigate("/Reserve", { state: { reservations: reservationItems } });
+      navigate("/Reserve", { state: { reservations: reservationItems, totalPrice: totalPrice } });
     }
     
   };
