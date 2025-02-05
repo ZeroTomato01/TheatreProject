@@ -147,6 +147,7 @@ const AdminDashboard: React.FC = () => {
                 console.log("Error:", response.status, response.statusText)} 
             else {
                 console.log("Succes");
+                setIsAddingShow(false)
                 fetchShows()
                 fetchShowDates()}
         } 
@@ -170,6 +171,7 @@ const AdminDashboard: React.FC = () => {
                     console.log(`Error: ${response.status} : ${response.statusText}`);
                 } else {
                     console.log("Success");
+                    setIsEditingShow(false)
                     fetchShows()
                     fetchShowDates()
                 }
@@ -220,6 +222,7 @@ const AdminDashboard: React.FC = () => {
             }
             else {
                 console.log("Success");
+                setIsAddingShowDate(false)
                 fetchShows()
                 fetchShowDates()}
         } 
@@ -242,6 +245,7 @@ const AdminDashboard: React.FC = () => {
                 console.log("Error:", response.status, response.statusText);
             } else {
                 console.log("Success");
+                setIsEditingShowDate(false)
                 fetchShows()
                 fetchShowDates()
             }
